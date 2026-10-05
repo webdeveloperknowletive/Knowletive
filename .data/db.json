@@ -490,10 +490,10 @@
       "status": "New",
       "source": "Internship Portal",
       "privacy_consent": true,
-      "is_read": false,
-      "viewed_at": null,
+      "is_read": true,
+      "viewed_at": "2026-10-05T12:09:58.301Z",
       "created_at": "2026-10-05T05:46:13.969Z",
-      "updated_at": "2026-10-05T10:18:03.774Z"
+      "updated_at": "2026-10-05T12:09:58.301Z"
     }
   ],
   "resume_keyword_matches": [
@@ -4164,6 +4164,24 @@
       "ended_at": null,
       "device_type": "desktop",
       "referrer": ""
+    },
+    {
+      "id": "e08814c1-b118-4ddb-b116-d48ca9cd9d14",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "aa0d1836-4b8a-4d62-8f7a-c107879962fd",
+      "started_at": "2026-10-05T11:41:14.128Z",
+      "ended_at": null,
+      "device_type": "desktop",
+      "referrer": ""
+    },
+    {
+      "id": "51e06104-4a4e-4e42-a2e9-68e19b7d7af7",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "6576ca8f-6d5c-4aff-830a-c6e690b6dbe2",
+      "started_at": "2026-10-05T11:44:21.643Z",
+      "ended_at": null,
+      "device_type": "desktop",
+      "referrer": ""
     }
   ],
   "analytics_pageviews": [
@@ -4328,6 +4346,24 @@
       "page_title": "Knowletive | Training Minds. Placing Talents.",
       "started_at": "2026-10-05T10:40:17.390Z",
       "engaged_seconds": 9
+    },
+    {
+      "id": "b011b44879a8fb601d08c4ff4330c551",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "aa0d1836-4b8a-4d62-8f7a-c107879962fd",
+      "page_path": "/",
+      "page_title": "Knowletive | Training Minds. Placing Talents.",
+      "started_at": "2026-10-05T11:41:14.139Z",
+      "engaged_seconds": 9
+    },
+    {
+      "id": "1e35ab0d6b5840b63e10a134f850f0ce",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "6576ca8f-6d5c-4aff-830a-c6e690b6dbe2",
+      "page_path": "/",
+      "page_title": "Knowletive | Training Minds. Placing Talents.",
+      "started_at": "2026-10-05T11:44:21.665Z",
+      "engaged_seconds": 22
     }
   ],
   "analytics_sections": [
@@ -4627,6 +4663,33 @@
       "section_id": "stats",
       "engaged_seconds": 2,
       "viewed_at": "2026-10-05T10:40:27.186Z"
+    },
+    {
+      "id": "f9355a824b29c23ddcf120c4747d694d",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "aa0d1836-4b8a-4d62-8f7a-c107879962fd",
+      "page_path": "/",
+      "section_id": "hero",
+      "engaged_seconds": 9,
+      "viewed_at": "2026-10-05T11:41:23.467Z"
+    },
+    {
+      "id": "f5c84c2ec9a04369e03020d7a7d181c4",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "6576ca8f-6d5c-4aff-830a-c6e690b6dbe2",
+      "page_path": "/",
+      "section_id": "hero",
+      "engaged_seconds": 16,
+      "viewed_at": "2026-10-05T11:44:36.664Z"
+    },
+    {
+      "id": "5e55500c4fab218deabd3a921a87628c",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "6576ca8f-6d5c-4aff-830a-c6e690b6dbe2",
+      "page_path": "/",
+      "section_id": "stats",
+      "engaged_seconds": 4,
+      "viewed_at": "2026-10-05T12:06:45.987Z"
     }
   ],
   "analytics_events": [

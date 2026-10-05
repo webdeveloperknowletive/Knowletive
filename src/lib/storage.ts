@@ -8,8 +8,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 
-const STORAGE_DIR = path.resolve('.data/storage/candidate-resumes');
-const MEDIA_DIR = path.resolve('.data/storage/media');
+const STORAGE_DIR = process.env.VERCEL ? '/tmp/candidate-resumes' : path.resolve('.data/storage/candidate-resumes');
+const MEDIA_DIR = process.env.VERCEL ? '/tmp/media' : path.resolve('.data/storage/media');
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
 
