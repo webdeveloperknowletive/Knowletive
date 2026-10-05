@@ -435,67 +435,19 @@
   ],
   "candidates": [
     {
-      "id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "full_name": "1222",
-      "first_name": "1222",
-      "last_name": "",
-      "email": "amanbendkule2001@gmail.com",
+      "id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
+      "full_name": "AYUSH",
+      "first_name": "AYUSH",
+      "last_name": "Deore",
+      "email": "ayushkadam9001@gmail.com",
       "phone": "9923417573",
       "city": "Pune",
       "state": "Maharashtra",
       "country": "India",
-      "college": "Pune \tUniversity",
-      "graduation_year": 2019,
-      "experience_level": "1-3 Years",
-      "preferred_role": "MERN Developer",
-      "applied_role": "Junior Data Analyst",
-      "applied_role_id": "11111111-1111-1111-1111-111111111101",
-      "assigned_role_id": "11111111-1111-1111-1111-111111111103",
-      "application_type": "job",
-      "job_id": "33333333-3333-3333-3333-333333333301",
-      "skills": [
-        "Java",
-        "JavaScript",
-        "SQL",
-        "MySQL",
-        "MongoDB",
-        "Express",
-        "Git",
-        "GitHub"
-      ],
-      "resume_keywords": [
-        "express",
-        "mongodb",
-        "javascript"
-      ],
-      "resume_file_url": "/api/resumes/download?fileId=c331a99b-ebab-4867-b9b5-e17c1cd3c791",
-      "resume_file_name": "Aman_ResumeMain.pdf",
-      "resume_file_type": "application/pdf",
-      "resume_file_size": 544595,
-      "extracted_text": "A m a n B e n d k u l e\n+91-7020799983 \t⋄ Pune, \tMaharashtra\namanbendkule2001@gmail.com \t⋄ linkdein \t⋄\nGithub\nO B J E C T I V E\nMotivated \tand \ttechnically \tproficient \tSoftware \tdeveloper \tspecializing \tin \tHTML,CSS, JavaScript, MySQL,and\nExpress.js. \tPossessing \tfoundational knowledge \tof MERN.\nE D U C A T I O N\nH S C , \tPune \tUniversity\nBachelors \tComputer Application, \tB Y K College \tof \tCommerce\n2019\n2019-2022\nMaster In Computer Application, Dr Dy Patil institute Of Management and Research , Pimpri \t2022-2024\nS K I L L S\nFrontend Skills\nBackend Skills\nDatabase\nSoftwares\nHTML, \tCSS, \tJavascript, \tReactJS\nNodeJS, \tExpressJS , MySQL\nMongoDB\nGit, \tPostman\nE X P E R I E N C E\nW e b Devel op er (I ntern)\nSachitech\nJan 2023 \t- \tMar 2023\nNashik, Maharashtra\n• \tGained hands-on experience in web development using HTML, CSS, JavaScript, and various frameworks.\n• \tAcquired \tvaluable \tinsights into \tmobile \tapp \tdevelopment \tbest \tpractices and \tindustry \tstandards.\n• \tConducted thorough testing and debugging to ensure website stability and performance.\nP R O J E C T S\nFruit E-commerce website. The \twebsite \tshowcased \tthe \tfruits , vegetable ,etc. \tI use \tH T M L , \tCSS, \tJ S Along \tWith\nSQL\nClothing Ecommerce \tWebsite. The \twebsite \tfeatured \ta \twide \trange \tof clothing \tproducts , \ta \tcheckout \tprocess,\nand \tan \tintuitive \tuser \tinterface(UI).I used \ttechnologies such \tas JS P, \tJavaScript, \tSQL and \tJava\nL A N G U A G E S\n• \tEnglish\n• \tHind\n• \tMarathi\n\n-- 1 of 1 --",
-      "match_score": 48,
-      "status": "New",
-      "source": "Job Portal",
-      "privacy_consent": true,
-      "is_read": true,
-      "viewed_at": "2026-10-05T09:28:25.178Z",
-      "created_at": "2026-10-05T09:27:44.680Z",
-      "updated_at": "2026-10-05T09:28:25.178Z"
-    },
-    {
-      "id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
-      "full_name": "Ravina Deore",
-      "first_name": "Ravina",
-      "last_name": "Deore",
-      "email": "ayushkadam9001@gmail.com",
-      "phone": "7038704305",
-      "city": "Pune",
-      "state": "Maharashtra",
-      "country": "India",
       "college": "John College",
-      "graduation_year": 2025,
-      "experience_level": "1-3 Years",
-      "preferred_role": "Java Full Stack",
+      "graduation_year": 2026,
+      "experience_level": "3-5 Years",
+      "preferred_role": "Python Developer",
       "applied_role": "Data Analytics & BI Intern",
       "applied_role_id": "11111111-1111-1111-1111-111111111101",
       "assigned_role_id": "11111111-1111-1111-1111-111111111108",
@@ -508,6 +460,8 @@
         "PostgreSQL",
         "MySQL",
         "React",
+        "Node.js",
+        "Express",
         "HTML5",
         "CSS3",
         "Tailwind",
@@ -527,19 +481,19 @@
       ],
       "linkedin_url": "https://linkedin.com/in/ayush-kadam660",
       "github_url": "https://github.com/Ayu914545sh",
-      "resume_file_url": "/api/resumes/download?fileId=710d1206-efd6-470a-83a1-9f869948c506",
-      "resume_file_name": "Ayush_kadam_Fullstack_Resume.pdf",
+      "resume_file_url": "/api/resumes/download?fileId=80c85e02-2129-4af3-90a6-588e757bff9a",
+      "resume_file_name": "Ayush_Kadam.pdf",
       "resume_file_type": "application/pdf",
-      "resume_file_size": 86983,
-      "extracted_text": "AYUSH KADAM\nPython Full Stack Developer\nayushkadam9001@gmail.com \t+919145455889 \tPune, Maharashtra - 411046 \tlinkedin.com/in/ayush-kadam660\nhttps://github.com/Ayu914545sh\nOBJECTIVE\nMotivated Python Full Stack Developer with hands-on experience in building scalable web applications using Django, React.js,\nand REST APIs. Strong in frontend–backend integration, database management, and payment gateway integration. Passionate\nabout writing clean code and delivering efficient, user-centric solutions.\nTECHNICAL SKILLS & TOOLS\nLanguages: Python JavaScript (ES6+)\nFrameworks: Django Django REST Framework React.js\nWeb Technologies: HTML5 CSS3 Bootstrap Tailwind CSS\nDatabases: MySQL PostgreSQL\nTools & Platforms: GitHub Linux Google Colab Jupyter Notebook VS Code PythonAnywhere\nOthers: REST APIs | JWT Authentication | OAuth | Payment Gateway Integration\nPROJECTS\nTripMate, Python, Django, React, Tailwind CSS \t12/2025 – 01/2026\n•Built a full-stack carpooling application enabling users to publish, search, and book rides securely.\n•Developed RESTful APIs using Django REST Framework for ride management and real-time availability checking.\n•Implemented secure authentication using JWT and Google OAuth; integrated Razorpay/PayPal for payment processing.\nMeal Metrik, Tech used: Deep Learning, YOLOv8, Flask, Python \t07/2024 – 05/2025\n•Built an AI-powered diet tracking system using Flask and Python, enabling users to monitor daily calorie intake.\n•Implemented YOLOV8 for Indian food recognition, improving detection accuracy by 20%.\n•Designed a responsive HTML/CSS frontend for seamless user interaction.\n•Integrated REST APIs to connect backend ML models with the web interface.\nBig Mart Sales Prediction, Tech used: Machine Learning \t07/2023 – 05/2024\n•Developed an XGBoost-based predictive model to forecast sales across multiple stores.\n•Deployed model using Flask, providing real-time prediction results.\n•Analysed large datasets with Pandas and NumPy to identify key revenue patterns.\nEDUCATION\nSt. John College of Engineering and Management, University of Mumbai,\nBachelor of Engineering [Computer]\n01/2022 – 05/2025\n•CGPA: 7.4\nTarapur Vidya Mandir and Jr College, High School \t08/2019 – 03/2021\n•Percentage: 76.33\nCERTIFICATIONS\nDjango Essentials — It vedant (Jan2026)\nMastering python — It vedant(Nov2025)\nSQL — It vedant(Oct2025)\nReact.js — It vedant(Sep2025)\nJavaScript — It vedant(Aug2025)\nPrompt Engineering and AI — Excelr(Dec2024)\nData science — Testriq(Dec2024)\nSoft Skills\n•Problem Solving\n•Team Collaboration\n•Agile Methodology\n•Time Management\nACHIVEMENTS\nSmart India Hackathon \t01/10/2021\nParticipated in Smart India Hackathon 2021, contributing to problem analysis and solution design.\n|\n|\t|\n|\t|\t|\n|\n|\t|\t|\t|\t|\n\n-- 1 of 1 --",
+      "resume_file_size": 89879,
+      "extracted_text": "AYUSH KADAM\nPython Full Stack Developer\nayushkadam9001@gmail.com | +91 9145455889 | Pune, Maharashtra\ngithub.com/Ayu914545sh | linkedin.com/in/ayush-kadam660\nOBJECTIVE\nPython Full Stack Developer with hands-on experience building scalable web applications using Django, Re-\nact.js and REST APIs. Skilled in frontend–backend integration, database design, and developing user-focused\napplications.\nTECHNICAL SKILLS & TOOLS\nLanguages: Python, JavaScript (ES6+)\nFrameworks: Django, Django REST Framework, React.js, Node.js, Express.js\nWeb Technologies: HTML5, CSS3, Bootstrap, Tailwind CSS\nDatabases: MySQL, PostgreSQL\nTools & Platforms: GitHub, Linux, VS Code, Google Colab, Jupyter Notebook\nOthers: REST APIs, JWT Authentication, OAuth, Payment Gateway Integration\nEXPERIENCE\nFull Stack Developer Intern 01/2026 – Present\nVibgyor Advicorp Pvt. Ltd.\n• Developing a full-stack HRM system to manage employees, tasks, and performance reviews.\n• Building responsive dashboards using React.js and Bootstrap for administrative control.\n• Implementing RESTful APIs with Node.js and Express.js to handle backend business logic.\n• Designing normalized relational database schemas in MySQL to ensure data integrity.\nPROJECTS\nTripMate (Python, Django, React, Tailwind CSS) 12/2025 – 01/2026\n• Built a carpooling app enabling users to publish, search, and book rides securely.\n• Developed RESTful APIs for ride management and real-time availability.\n• Integrated JWT, Google OAuth, and Razorpay/PayPal for secure auth and payments.\nMeal Metrik (Deep Learning, YOLOv8, Flask, Python) 07/2024 – 05/2025\n• AI-powered diet tracking system implementing YOLOv8 for food recognition.\n• Improved detection accuracy by 20% and designed a responsive Flask-based frontend.\nBig Mart Sales Prediction (Machine Learning) 07/2023 – 05/2024\n• Developed an XGBoost predictive model to forecast sales across multiple stores.\n• Deployed model using Flask; analyzed large datasets with Pandas and NumPy.\nEDUCATION\nSt. John College of Engineering and Management 01/2022 – 05/2025\nBachelor of Engineering (Computer) – CGPA: 7.4\nTarapur Vidya Mandir and Jr College 08/2019 – 03/2021\nHigh School – 76.33%\nCERTIFICATIONS\nDjango Essentials – It Vedant 01/2026\nMastering Python – It Vedant 11/2025\nSQL – It Vedant 10/2025\nReact.js – It Vedant 09/2025\nJavaScript – It Vedant 08/2025\nPrompt Engineering and AI – Excelr 12/2024\nData Science – Testriq 12/2024\nACHIEVEMENTS\nSmart India Hackathon 2021 – Participated in national-level hackathon and contributed to solution design\nand problem analysis.\n\n-- 1 of 1 --",
       "match_score": 100,
       "status": "New",
       "source": "Internship Portal",
       "privacy_consent": true,
-      "is_read": true,
-      "viewed_at": "2026-10-05T05:47:04.705Z",
+      "is_read": false,
+      "viewed_at": null,
       "created_at": "2026-10-05T05:46:13.969Z",
-      "updated_at": "2026-10-05T05:47:04.705Z"
+      "updated_at": "2026-10-05T10:18:03.774Z"
     }
   ],
   "resume_keyword_matches": [
@@ -3424,724 +3378,364 @@
       "created_at": "2026-10-04T16:20:03.869Z"
     },
     {
-      "id": "cf8d9a98-39f3-4dc9-ad23-0bd8120c465d",
+      "id": "3e2bbddc-ffc1-411a-be14-ffeb5e009b7a",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111105",
       "keyword": "aws",
       "matched": false,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "05133404-ac1c-4c72-88b6-bd46439b13dd",
+      "id": "cb54ed6e-73d6-4e8d-b617-3122ad9a8bbb",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111105",
       "keyword": "docker",
       "matched": false,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "6624d254-1d1d-4864-8d4c-9f8546fb7c7e",
+      "id": "412367ae-64c6-4841-8f1a-1d1646d2e354",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111105",
       "keyword": "kubernetes",
       "matched": false,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "aec50f40-dd3e-40dc-b7fa-074e48a3c4ab",
+      "id": "7e347ed7-2f85-4f5b-9368-a0b95d7e2f97",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111105",
       "keyword": "ci/cd",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "69e21862-ddd1-4d0b-a03d-a2fc70acaf46",
+      "id": "c35ef77c-8568-4e9f-9298-baa5599fa1eb",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "sql",
       "matched": true,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "0d414737-d488-48c9-822b-ca186a23b283",
+      "id": "4d665764-35f8-43b0-8eea-f683aed4ed2e",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "power bi",
       "matched": false,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "8d07be4d-12a7-45e0-adc2-8b2af207dd2d",
+      "id": "5f0293fd-2437-499f-964a-d8da7e504d42",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "powerbi",
       "matched": false,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "f7e3d702-c784-494a-b712-d4d3c620cb6b",
+      "id": "df3aad64-e476-4485-88b2-442101a6b53a",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "excel",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "a172e927-0162-4ce9-880f-8fc4a9dd8453",
+      "id": "d74f59dc-4431-4900-9808-418894a3233c",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "advanced excel",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "4b745015-9b53-4454-8197-7ff5993c45ee",
+      "id": "3068c38f-2df3-4406-80d2-3c67d636c8d1",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "tableau",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "a8a3a996-1c38-43b2-8345-e252befb2ca0",
+      "id": "3629ecb6-c6bd-4632-90ce-9b02a908e255",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "python",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "34687fa3-2b29-40bc-8e6a-383bad43fda4",
+      "id": "2b319cf4-dea9-4318-adaf-b005a405960e",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "pandas",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "cb1b46e9-bd26-4d88-8027-acfb3c7a16b8",
+      "id": "b0833c88-7900-4651-9482-eecb4894fa01",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "numpy",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "44f8a9f0-dafc-4400-bc69-8beefa161047",
+      "id": "e32e11ca-3d30-4d07-aac7-035c422d0dba",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "dashboard",
       "matched": false,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "6f4d1c83-4cb1-426c-bcc9-f88315ed5ccd",
+      "id": "3bcdda47-708e-4828-ba1b-f06c4c6f4ef7",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "eda",
       "matched": false,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "f6a74c8c-b291-4382-8306-46103096b331",
+      "id": "b9fb6881-60f7-4e22-8b8b-941e8c2f5321",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "data cleaning",
       "matched": false,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "e42870c3-f9dc-42f8-bd02-955ccf493969",
+      "id": "561453a5-892f-4ebf-a16a-7722334d3156",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "statistics",
       "matched": false,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "5e243c41-50fa-40f3-8027-85b26f031ce5",
+      "id": "23064e64-83a6-49ed-9988-90a2fd3fe911",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111101",
       "keyword": "data analysis",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "4825c9b2-ebdd-4a5a-a3b2-286cec0fdf44",
+      "id": "0e6f0fc1-4803-4046-ba98-276e1a05fcfa",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "machine learning",
       "matched": true,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "b0abe6d3-3592-48f8-b917-0ecc15889a42",
+      "id": "da4c16da-d6c1-4475-9f01-e415715e3c3a",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "deep learning",
       "matched": true,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "b3b445db-1127-4597-93ed-e776730bc45a",
+      "id": "6038a776-b3a2-47e1-b0f1-0fd46f77bacd",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "python",
       "matched": true,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "bf5db128-993e-4391-8268-acaabc627892",
+      "id": "55218176-b8be-4ff2-827f-73f77d4fee55",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "tensorflow",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "f879dd5d-cb52-4ba6-a450-9d7a240ddcb1",
+      "id": "593701ef-c286-4df8-a11c-532d21896e47",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "pytorch",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "a2dbda4f-d9b8-4fbf-91e9-f720b4bbefb5",
+      "id": "44a595f6-b257-47ef-8535-f2473ef47115",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "scikit-learn",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "651591b5-3d81-4116-97ed-36d9f56e325b",
+      "id": "2ee9b98c-a108-4c3d-9f07-075828b32918",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "nlp",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "e166964f-f74c-4947-988f-85d15df2ff86",
+      "id": "3c93db20-64d0-4b64-a7c9-e987b38a98ab",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111102",
       "keyword": "pandas",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "2d6870be-8ae0-4139-8d93-fda915f89ba4",
+      "id": "70d66a3c-4c56-4897-876e-d170338c3060",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111104",
       "keyword": "java",
       "matched": false,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "7071ccf9-3500-45cd-9a5a-3c531dd4a1a1",
+      "id": "1e3527b1-e32f-41e7-acc4-457a3063f0ea",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111104",
       "keyword": "spring boot",
       "matched": false,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "3ec80463-d68c-4756-bcca-628a8dac8fd8",
+      "id": "f039bf12-f61d-45c0-85ec-47005254b19f",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111104",
       "keyword": "microservices",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "d5b6c644-6eb3-445e-ad62-9339d289fff0",
+      "id": "a8628eb6-7c39-468b-ac9e-7c666e23728f",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111104",
       "keyword": "mysql",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "1b066b01-7f7b-49b5-a0ca-c55684072002",
+      "id": "3831abb1-0b13-40bd-965f-bc62005cfd32",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111103",
       "keyword": "react",
       "matched": true,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "4b9ef593-4cdf-4eff-b089-6f9de505a607",
+      "id": "9000fc2f-6004-4e33-94fb-28c5346a1335",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111103",
       "keyword": "node",
-      "matched": false,
+      "matched": true,
       "weight": 5,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "7cde11aa-d15c-44ea-af8c-533175ed892b",
+      "id": "b62ddcfa-b939-43c0-b9bf-671806d6cd0e",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111103",
       "keyword": "express",
-      "matched": false,
+      "matched": true,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "54e4bdcc-0109-423f-932a-8f77459132e6",
+      "id": "c4a1701e-212f-4280-b222-01e81c7d8f17",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111103",
       "keyword": "mongodb",
       "matched": false,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "fee933b8-5357-4219-a6be-a992011f1e88",
+      "id": "7eed9aff-8c2c-4ef9-9839-566d4fed7ef4",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111103",
       "keyword": "javascript",
       "matched": true,
       "weight": 4,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "34c2119d-69cc-4d3f-bc54-7afce0ef73d4",
+      "id": "c78ab0be-5c56-460d-831f-53eff4ae5efd",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111103",
       "keyword": "rest api",
       "matched": false,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "8635cb16-e010-4719-8b16-377aaef43999",
+      "id": "acde8af5-1d42-4d1b-b958-c431cb91d692",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111108",
       "keyword": "python",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "05b5f09b-5c55-44e8-9294-7c3db0705bfb",
+      "id": "fc759086-c9ef-45f2-9750-a9c5884214df",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111108",
       "keyword": "sql",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "4cc0256f-7210-423b-893b-dd031dbf1f68",
+      "id": "18b226aa-2174-4a0e-ada8-202e849e97f3",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111108",
       "keyword": "django",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     },
     {
-      "id": "2beaa3b0-34ee-438d-90b8-061aad6b9abf",
+      "id": "373b7ee1-492d-45c5-a9f6-120b5107c1ab",
       "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
       "job_role_id": "11111111-1111-1111-1111-111111111108",
       "keyword": "django rest framework",
       "matched": true,
       "weight": 3,
-      "created_at": "2026-10-05T05:46:13.969Z"
-    },
-    {
-      "id": "d257bcb0-25bb-42ba-8d82-7d0b020bc4fb",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111105",
-      "keyword": "aws",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "17c25782-41ed-4682-8fc1-7b26324145bd",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111105",
-      "keyword": "docker",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "e25b7016-257d-48c2-a1d4-73bfc8ef088f",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111105",
-      "keyword": "kubernetes",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "a4d5a685-2b5b-4344-a016-074b748b1b9c",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111105",
-      "keyword": "ci/cd",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "89fb4b30-8f4e-4919-ab1e-387ea13556dc",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "sql",
-      "matched": true,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "80707e12-b069-4891-b748-5a38b05621e7",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "power bi",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "0419f501-c6d3-4b9e-ba76-8195b8d98f60",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "powerbi",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "322c03d5-ac38-4eb4-ac91-b72fd841baec",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "excel",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "067bce67-06f0-4a31-be09-cf9f0742a244",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "advanced excel",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "a7b054cb-8ad6-43b9-b736-61f954cac1f3",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "tableau",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "8ade542e-fd24-41a2-bd9c-69c53f3fc015",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "python",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "2b54b033-81dc-477d-893d-e6196a753dad",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "pandas",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "a1c892de-5a5d-484d-9585-f2a989bb21af",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "numpy",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "d26cc461-4d25-4429-8c26-27b955c682a8",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "dashboard",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "3b3b7dca-6fa5-4a5e-a466-bcd0c155e699",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "eda",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "e40c26d8-f819-4f13-85b9-30983c80fd8d",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "data cleaning",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "076dadbc-364a-437c-a2c7-3ee4e6491868",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "statistics",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "d3403910-a65e-44e3-9ec3-4e9b2dc6e22f",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111101",
-      "keyword": "data analysis",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "f790ae9a-09d4-4937-9158-23e6cbddb719",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "machine learning",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "bc97e2db-6896-41c1-a42e-b0064843b337",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "deep learning",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "6725998f-417a-4e05-83c6-8a1f6a73a45d",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "python",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "68b3cbbc-59cb-43a8-be5d-42da76fe54c5",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "tensorflow",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "e31514c5-d62c-4baa-bad1-6ff92636715f",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "pytorch",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "b9acaba7-010f-4b10-a071-2c5829e36fec",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "scikit-learn",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "4bf8db33-83f7-443d-9a0e-302fb23af411",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "nlp",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "06bc02f4-9fa0-4865-a161-4e907aba6cc8",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111102",
-      "keyword": "pandas",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "722d3135-ea4a-443e-b204-6d353103eb61",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111104",
-      "keyword": "java",
-      "matched": true,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "f3851ae2-b023-40c5-9019-2d5003d4db4b",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111104",
-      "keyword": "spring boot",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "8b7f5d1f-c139-4980-ab95-583397c66e78",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111104",
-      "keyword": "microservices",
-      "matched": false,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "1a4df022-55eb-4150-89d6-092a02007718",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111104",
-      "keyword": "mysql",
-      "matched": true,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "8657fd82-8365-4c0a-8c82-cafd29de3d78",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111103",
-      "keyword": "react",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "39afd9eb-e713-4567-852a-c6c63ef5d892",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111103",
-      "keyword": "node",
-      "matched": false,
-      "weight": 5,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "9be747d3-5619-43c1-b5c6-99713271ca99",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111103",
-      "keyword": "express",
-      "matched": true,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "c0879bfe-4e20-4c1d-aa03-ba83851e01d6",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111103",
-      "keyword": "mongodb",
-      "matched": true,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "6672b85a-2428-4d6c-8ca8-6687b9a89ede",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111103",
-      "keyword": "javascript",
-      "matched": true,
-      "weight": 4,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "7a1072d7-01c0-4c2d-bf1e-faa9bf6f4b30",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111103",
-      "keyword": "rest api",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "ef196de6-0433-40a8-afef-b018dca384f6",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111108",
-      "keyword": "python",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "688a1572-ce90-4e2d-b062-207af6d52a3e",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111108",
-      "keyword": "sql",
-      "matched": true,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "6ea16367-8ce2-41b5-8d8f-d3161db24879",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111108",
-      "keyword": "django",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
-    },
-    {
-      "id": "8a40de08-edbd-40ce-b787-e45d40727968",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "job_role_id": "11111111-1111-1111-1111-111111111108",
-      "keyword": "django rest framework",
-      "matched": false,
-      "weight": 3,
-      "created_at": "2026-10-05T09:27:44.680Z"
+      "created_at": "2026-10-05T10:18:03.774Z"
     }
   ],
   "leads": [],
@@ -4385,35 +3979,46 @@
   ],
   "applications": [
     {
-      "id": "4826275a-d550-4ad0-bcc5-07ff4cb39752",
-      "candidate_id": "b0d44038-98de-4782-9639-587ebb3169ee",
-      "application_type": "job",
-      "job_id": "33333333-3333-3333-3333-333333333301",
-      "internship_id": null,
-      "applied_role": "Junior Data Analyst",
+      "id": "9cef2e34-8414-48ec-8a85-9810b77998ed",
+      "candidate_id": "eff310fd-c924-4923-9cce-8e90083e7aa2",
+      "application_type": "internship",
+      "job_id": null,
+      "internship_id": "44444444-4444-4444-4444-444444444401",
+      "applied_role": "Data Analytics & BI Intern",
       "status": "New",
-      "resume_url": "/api/resumes/download?fileId=c331a99b-ebab-4867-b9b5-e17c1cd3c791",
-      "resume_file_name": "Aman_ResumeMain.pdf",
-      "resume_file_size": 544595,
-      "match_score": 48,
+      "resume_url": "/api/resumes/download?fileId=80c85e02-2129-4af3-90a6-588e757bff9a",
+      "resume_file_name": "Ayush_Kadam.pdf",
+      "resume_file_size": 89879,
+      "match_score": 100,
       "matched_keywords": [
-        "express",
-        "mongodb",
-        "javascript"
+        "python",
+        "sql",
+        "django",
+        "django rest framework"
       ],
       "skills": [
-        "Java",
+        "Python",
         "JavaScript",
         "SQL",
+        "PostgreSQL",
         "MySQL",
-        "MongoDB",
+        "React",
+        "Node.js",
         "Express",
-        "Git",
-        "GitHub"
+        "HTML5",
+        "CSS3",
+        "Tailwind",
+        "Pandas",
+        "NumPy",
+        "Machine Learning",
+        "Deep Learning",
+        "Linux",
+        "GitHub",
+        "REST APIs"
       ],
-      "source": "Job Portal",
-      "created_at": "2026-10-05T09:27:44.680Z",
-      "updated_at": "2026-10-05T09:27:44.692Z"
+      "source": "Internship Portal",
+      "created_at": "2026-10-05T10:18:03.774Z",
+      "updated_at": "2026-10-05T10:18:03.781Z"
     },
     {
       "id": "328ae05e-888f-4b70-82eb-76f9a01a274e",
@@ -4550,6 +4155,15 @@
       "ended_at": null,
       "device_type": "desktop",
       "referrer": "http://localhost:4321/admin/resumes?search=&type=&roleId=11111111-1111-1111-1111-111111111105&status="
+    },
+    {
+      "id": "53890515-9ed7-4826-b95b-2d4763ef898b",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "fe9cad8d-d2c5-4b80-98eb-23551506874a",
+      "started_at": "2026-10-05T10:40:17.375Z",
+      "ended_at": null,
+      "device_type": "desktop",
+      "referrer": ""
     }
   ],
   "analytics_pageviews": [
@@ -4623,7 +4237,7 @@
       "page_path": "/internship-jobs",
       "page_title": "Internship & Jobs | Knowletive",
       "started_at": "2026-10-05T09:23:38.239Z",
-      "engaged_seconds": 7
+      "engaged_seconds": 46
     },
     {
       "id": "a3ce80818acfe9d84511450676ee1ddf",
@@ -4696,6 +4310,24 @@
       "page_title": "Free Study Material & Resources | Knowletive",
       "started_at": "2026-10-05T09:34:18.615Z",
       "engaged_seconds": 46
+    },
+    {
+      "id": "83f329963c91360ffbe9b839f977f3e3",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "893815ca-f7b9-4c2a-9169-0196679f3698",
+      "page_path": "/placement-activities",
+      "page_title": "Placement & Activities | Knowletive",
+      "started_at": "2026-10-05T10:17:08.305Z",
+      "engaged_seconds": 5
+    },
+    {
+      "id": "5d68b10a28132662f56c652b002bb9e8",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "fe9cad8d-d2c5-4b80-98eb-23551506874a",
+      "page_path": "/",
+      "page_title": "Knowletive | Training Minds. Placing Talents.",
+      "started_at": "2026-10-05T10:40:17.390Z",
+      "engaged_seconds": 9
     }
   ],
   "analytics_sections": [
@@ -4959,6 +4591,42 @@
       "section_id": "courses",
       "engaged_seconds": 8,
       "viewed_at": "2026-10-05T09:42:21.251Z"
+    },
+    {
+      "id": "33892b1588fdb2489273bd5aa0af7679",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "893815ca-f7b9-4c2a-9169-0196679f3698",
+      "page_path": "/",
+      "section_id": "stats",
+      "engaged_seconds": 1,
+      "viewed_at": "2026-10-05T10:17:08.151Z"
+    },
+    {
+      "id": "26509610c71a99a69cefb493c8b56942",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "893815ca-f7b9-4c2a-9169-0196679f3698",
+      "page_path": "/placement-activities",
+      "section_id": "consultation",
+      "engaged_seconds": 3,
+      "viewed_at": "2026-10-05T10:17:13.735Z"
+    },
+    {
+      "id": "8ff7e71740fcab36d08a8c9cd6be215f",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "893815ca-f7b9-4c2a-9169-0196679f3698",
+      "page_path": "/internship-jobs",
+      "section_id": "upload-section",
+      "engaged_seconds": 35,
+      "viewed_at": "2026-10-05T10:17:30.352Z"
+    },
+    {
+      "id": "b34acc019ae7bfb439d35b6fbd37ba5e",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "fe9cad8d-d2c5-4b80-98eb-23551506874a",
+      "page_path": "/",
+      "section_id": "stats",
+      "engaged_seconds": 2,
+      "viewed_at": "2026-10-05T10:40:27.186Z"
     }
   ],
   "analytics_events": [
@@ -4985,6 +4653,18 @@
         "href": "#upload-section"
       },
       "created_at": "2026-10-05T09:26:43.529Z"
+    },
+    {
+      "id": "0c2e3587-70af-437d-829c-66e4d6faa0dc",
+      "visitor_id": "a5b155dd-6b4c-428f-a4fc-7e909fd98233",
+      "session_id": "893815ca-f7b9-4c2a-9169-0196679f3698",
+      "event_name": "cta_click",
+      "page_path": "/internship-jobs",
+      "metadata": {
+        "text": "Apply For Internship →",
+        "href": "#upload-section"
+      },
+      "created_at": "2026-10-05T10:17:58.986Z"
     }
   ]
 }
