@@ -1,0 +1,437 @@
+---
+// ============================================================
+// /admin/jobs
+// Manage Jobs with Dedicated Applicant Tracking
+// ============================================================
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { db } from '../../lib/db';
+
+const [jobs, roles, applications] = await Promise.all([
+  db.getJobs(false),
+  db.getJobRoles(false),
+  db.getApplications({ type: 'job' })
+]);
+
+const roleMap = new Map(roles.map(r => [r.id, r.role_name]));
+
+// Map applicant counts per job
+const applicantsCountMap = new Map<string, number>();
+applications.forEach(a => {
+  if (a.job_id) {
+    applicantsCountMap.set(a.job_id, (applicantsCountMap.get(a.job_id) || 0) + 1);
+  }
+});
+---
+
+<AdminLayout title="Job Opportunities Management" activeNav="jobs">
+  
+  <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-lg font-bold font-manrope text-[#0B1F3A]">Job Openings</h2>
+      <p class="text-xs text-[#64748B]">Published jobs immediately appear on the public Internship & Jobs page. Applicants are strictly tracked per job.</p>
+    </div>
+    
+    <button 
+      id="open-add-job-modal"
+      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0878E8] hover:bg-[#0764c2] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+      Post New Job Opening
+    </button>
+  </div>
+
+  <!-- Jobs List -->
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm whitespace-nowrap">
+        <thead class="bg-[#F7F9FC] text-[#64748B] text-[11px] font-bold uppercase tracking-wider border-b border-gray-100">
+          <tr>
+            <th class="py-3 px-6">Job Title</th>
+            <th class="py-3 px-6">Category / Role</th>
+            <th class="py-3 px-6">Company & Location</th>
+            <th class="py-3 px-6">Type & Exp</th>
+            <th class="py-3 px-6">Required Skills</th>
+            <th class="py-3 px-6">Applicants</th>
+            <th class="py-3 px-6">Publish Status</th>
+            <th class="py-3 px-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {jobs.map(job => {
+            const count = applicantsCountMap.get(job.id) || 0;
+            return (
+              <tr class="hover:bg-gray-50/60 transition-colors">
+                <td class="py-4 px-6 font-bold text-[#0B1F3A]">
+                  {job.title}
+                </td>
+                <td class="py-4 px-6 text-xs text-[#64748B]">
+                  {(job.job_role_id && roleMap.get(job.job_role_id)) || 'General'}
+                </td>
+                <td class="py-4 px-6 text-xs">
+                  <span class="font-semibold text-[#0B1F3A] block">{job.company}</span>
+                  <span class="text-gray-400 block">{job.location}</span>
+                </td>
+                <td class="py-4 px-6 text-xs text-[#64748B]">
+                  <span class="block text-[#0B1F3A] font-medium">{job.type}</span>
+                  <span class="text-gray-400">{job.experience}</span>
+                </td>
+                <td class="py-4 px-6 text-xs">
+                  <div class="flex flex-wrap gap-1 max-w-xs">
+                    {job.skills_required && job.skills_required.map(s => (
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-700">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </td>
+                <!-- Applicants Column -->
+                <td class="py-4 px-6 text-xs">
+                  <button 
+                    type="button"
+                    data-view-job-applicants={job.id}
+                    data-job-title={job.title}
+                    class="view-job-applicants-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0878E8] font-bold transition-all cursor-pointer border border-blue-200"
+                    title="View candidate applications for this job"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <span>{count} {count === 1 ? 'Applicant' : 'Applicants'}</span>
+                  </button>
+                </td>
+                <td class="py-4 px-6">
+                  <button 
+                    data-toggle-job-id={job.id} 
+                    data-current-active={job.is_active ? 'true' : 'false'}
+                    class={`toggle-job-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+                      job.is_active 
+                        ? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100' 
+                        : 'bg-gray-100 text-gray-500 border border-gray-200 hover:bg-gray-200'
+                    }`}
+                  >
+                    <span class={`w-1.5 h-1.5 rounded-full ${job.is_active ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                    {job.is_active ? 'Published' : 'Draft'}
+                  </button>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <div class="inline-flex items-center gap-2">
+                    <button 
+                      type="button"
+                      data-view-job-applicants={job.id}
+                      data-job-title={job.title}
+                      class="view-job-applicants-btn p-1.5 rounded-lg border border-gray-200 text-[#0878E8] hover:bg-blue-50 transition-colors cursor-pointer"
+                      title="View Applicants"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    </button>
+                    <button 
+                      data-delete-job-id={job.id} 
+                      class="delete-job-btn p-1.5 rounded-lg border border-gray-200 text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                      title="Delete Job"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+          {jobs.length === 0 && (
+            <tr>
+              <td colspan="8" class="p-12 text-center text-sm text-gray-400">
+                No job openings posted yet. Click "+ Post New Job Opening" to add one.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add Job Modal -->
+  <div id="add-job-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
+      <h3 class="text-lg font-bold font-manrope text-[#0B1F3A] mb-4">Post New Job Opening</h3>
+      
+      <form id="new-job-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Job Title *</label>
+          <input type="text" id="job-title" required placeholder="e.g. Junior Data Analyst" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Job Role Domain</label>
+            <select id="job-role-id" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none bg-white">
+              <option value="">Select Domain Role</option>
+              {roles.map(r => (
+                <option value={r.id}>{r.role_name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Hiring Company *</label>
+            <input type="text" id="job-company" required placeholder="e.g. Knowletive Client Partner" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Job Type</label>
+            <select id="job-type" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none bg-white">
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Contract">Contract</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Location *</label>
+            <input type="text" id="job-location" required placeholder="e.g. Pune, India" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Experience</label>
+            <input type="text" id="job-experience" value="0-2 Years" placeholder="e.g. 0-2 Years" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Required Skills (comma separated)</label>
+          <input type="text" id="job-skills" placeholder="SQL, Power BI, Python, Excel" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Job Description</label>
+          <textarea id="job-desc" rows="3" placeholder="Key responsibilities and qualifications..." class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" id="close-add-job-modal" class="px-4 py-2 border border-gray-200 text-xs font-semibold rounded-xl hover:bg-gray-50 cursor-pointer">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-[#0878E8] hover:bg-[#0764c2] text-white text-xs font-bold rounded-xl cursor-pointer">Publish Job</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dedicated Job Applicants Modal -->
+  <div id="job-applicants-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+    <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-5xl shadow-2xl max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 mb-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+            Job Applicants
+          </div>
+          <h3 id="job-modal-title" class="text-xl font-bold font-manrope text-[#0B1F3A]">Applicants</h3>
+        </div>
+        <button type="button" id="close-job-applicants-modal" class="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto flex-1 border border-gray-100 rounded-2xl relative">
+        <div id="job-applicants-loading" class="hidden p-8 text-center text-xs text-gray-500">
+          Loading applicants...
+        </div>
+        <table id="job-applicants-table" class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-[#F7F9FC] text-[#64748B] text-[11px] font-bold uppercase tracking-wider border-b border-gray-100">
+            <tr>
+              <th class="py-3 px-4">Candidate</th>
+              <th class="py-3 px-4">Phone</th>
+              <th class="py-3 px-4">Skills</th>
+              <th class="py-3 px-4">Match %</th>
+              <th class="py-3 px-4">Resume</th>
+              <th class="py-3 px-4">Status</th>
+              <th class="py-3 px-4">Applied Date</th>
+            </tr>
+          </thead>
+          <tbody id="job-applicants-tbody" class="divide-y divide-gray-100">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+        <div id="job-applicants-empty" class="hidden p-12 text-center text-sm text-gray-400">
+          <svg class="w-12 h-12 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <p class="font-bold text-[#0B1F3A]">No applicants for this job opening yet.</p>
+          <p class="text-xs text-gray-400 mt-1">Candidates who apply via this job card will appear here strictly separated from internship applicants.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('add-job-modal');
+    document.getElementById('open-add-job-modal')?.addEventListener('click', () => modal?.classList.remove('hidden'));
+    document.getElementById('close-add-job-modal')?.addEventListener('click', () => modal?.classList.add('hidden'));
+
+    // Post job
+    document.getElementById('new-job-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = (document.getElementById('job-title') as HTMLInputElement).value;
+      const jobRoleId = (document.getElementById('job-role-id') as HTMLSelectElement).value;
+      const company = (document.getElementById('job-company') as HTMLInputElement).value;
+      const type = (document.getElementById('job-type') as HTMLSelectElement).value;
+      const location = (document.getElementById('job-location') as HTMLInputElement).value;
+      const experience = (document.getElementById('job-experience') as HTMLInputElement).value;
+      const skillsRequired = (document.getElementById('job-skills') as HTMLInputElement).value.split(',').map(s => s.trim()).filter(Boolean);
+      const description = (document.getElementById('job-desc') as HTMLTextAreaElement).value;
+
+      try {
+        const res = await fetch('/api/admin/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, jobRoleId, company, type, location, experience, skillsRequired, description, isActive: true })
+        });
+        if (res.ok) window.location.reload();
+        else alert('Failed to create job.');
+      } catch {
+        alert('Network error.');
+      }
+    });
+
+    // Toggle active
+    document.querySelectorAll('.toggle-job-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = (e.currentTarget as HTMLElement);
+        const id = target.dataset.toggleJobId;
+        const currentActive = target.dataset.currentActive === 'true';
+
+        try {
+          const res = await fetch('/api/admin/jobs', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, isActive: !currentActive })
+          });
+          if (res.ok) window.location.reload();
+        } catch {
+          alert('Network error.');
+        }
+      });
+    });
+
+    // Delete job
+    document.querySelectorAll('.delete-job-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = (e.currentTarget as HTMLElement).dataset.deleteJobId;
+        if (!confirm('Are you sure you want to delete this job posting?')) return;
+
+        try {
+          const res = await fetch(`/api/admin/jobs?id=${id}`, { method: 'DELETE' });
+          if (res.ok) window.location.reload();
+        } catch {
+          alert('Error deleting job.');
+        }
+      });
+    });
+
+    // View Applicants Modal
+    const jobApplicantsModal = document.getElementById('job-applicants-modal');
+    const jobApplicantsTitle = document.getElementById('job-modal-title');
+    const jobApplicantsTbody = document.getElementById('job-applicants-tbody');
+    const jobApplicantsEmpty = document.getElementById('job-applicants-empty');
+    const jobApplicantsLoading = document.getElementById('job-applicants-loading');
+    const jobApplicantsTable = document.getElementById('job-applicants-table');
+
+    document.getElementById('close-job-applicants-modal')?.addEventListener('click', () => {
+      jobApplicantsModal?.classList.add('hidden');
+    });
+
+    document.querySelectorAll('.view-job-applicants-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = (e.currentTarget as HTMLElement);
+        const jobId = target.getAttribute('data-view-job-applicants') || '';
+        const title = target.getAttribute('data-job-title') || 'Job Opening';
+
+        if (jobApplicantsTitle) jobApplicantsTitle.textContent = `Applicants for: ${title}`;
+        if (jobApplicantsTbody) jobApplicantsTbody.innerHTML = '';
+        jobApplicantsEmpty?.classList.add('hidden');
+        jobApplicantsTable?.classList.remove('hidden');
+        jobApplicantsLoading?.classList.remove('hidden');
+        jobApplicantsModal?.classList.remove('hidden');
+
+        try {
+          const res = await fetch(`/api/admin/jobs/${jobId}/applications`);
+          const data = await res.json();
+          jobApplicantsLoading?.classList.add('hidden');
+
+          const apps = data.applications || [];
+          if (apps.length === 0) {
+            jobApplicantsEmpty?.classList.remove('hidden');
+            jobApplicantsTable?.classList.add('hidden');
+            return;
+          }
+
+          if (jobApplicantsTbody) {
+            jobApplicantsTbody.innerHTML = apps.map((app: any) => {
+              const cand = app.candidate || {};
+              const skills = Array.isArray(app.skills || cand.skills) ? (app.skills || cand.skills) : [];
+              const score = app.match_score || 0;
+              const date = new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+              return `
+                <tr class="hover:bg-gray-50/70 transition-colors">
+                  <td class="py-3 px-4">
+                    <span class="font-bold text-[#0B1F3A] block">${cand.full_name || 'Applicant'}</span>
+                    <span class="text-xs text-gray-500">${cand.email || ''}</span>
+                  </td>
+                  <td class="py-3 px-4 text-xs text-[#0B1F3A]">${cand.phone || 'N/A'}</td>
+                  <td class="py-3 px-4 text-xs">
+                    <div class="flex flex-wrap gap-1 max-w-[200px]">
+                      ${skills.slice(0, 3).map((s: string) => `<span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-700">${s}</span>`).join('')}
+                    </div>
+                  </td>
+                  <td class="py-3 px-4 text-xs font-bold text-blue-700">${score}%</td>
+                  <td class="py-3 px-4 text-xs">
+                    <a href="${app.resume_url}" target="_blank" class="inline-flex items-center gap-1 text-[#0878E8] hover:underline font-semibold">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                      Resume
+                    </a>
+                  </td>
+                  <td class="py-3 px-4 text-xs">
+                    <select data-app-status-id="${app.id}" class="app-status-select px-2.5 py-1 text-xs rounded-lg border border-gray-200 outline-none font-semibold ${
+                      app.status === 'Shortlisted' || app.status === 'Selected' ? 'text-green-700 bg-green-50' : 
+                      app.status === 'Rejected' ? 'text-red-700 bg-red-50' : 'text-blue-700 bg-blue-50'
+                    }">
+                      <option value="New" ${app.status === 'New' ? 'selected' : ''}>New</option>
+                      <option value="Needs Review" ${app.status === 'Needs Review' ? 'selected' : ''}>Needs Review</option>
+                      <option value="Shortlisted" ${app.status === 'Shortlisted' ? 'selected' : ''}>Shortlisted</option>
+                      <option value="Interviewing" ${app.status === 'Interviewing' ? 'selected' : ''}>Interviewing</option>
+                      <option value="Selected" ${app.status === 'Selected' ? 'selected' : ''}>Selected</option>
+                      <option value="Rejected" ${app.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                    </select>
+                  </td>
+                  <td class="py-3 px-4 text-xs text-gray-500">${date}</td>
+                </tr>
+              `;
+            }).join('');
+
+            // Attach status change listeners
+            jobApplicantsTbody.querySelectorAll('.app-status-select').forEach(sel => {
+              sel.addEventListener('change', async (ev) => {
+                const targetSel = ev.currentTarget as HTMLSelectElement;
+                const appId = targetSel.dataset.appStatusId;
+                const newStatus = targetSel.value;
+
+                try {
+                  const patchRes = await fetch('/api/admin/applications', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: appId, status: newStatus })
+                  });
+                  if (!patchRes.ok) {
+                    alert('Failed to update status.');
+                  }
+                } catch {
+                  alert('Network error while updating status.');
+                }
+              });
+            });
+          }
+        } catch (err) {
+          jobApplicantsLoading?.classList.add('hidden');
+          alert('Failed to load job applicants.');
+        }
+      });
+    });
+  </script>
+
+</AdminLayout>

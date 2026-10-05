@@ -1,0 +1,693 @@
+---
+// ============================================================
+// CareerPopupModal.astro
+// Professional Lead Generation Popup Modal for Homepage
+// Appears automatically 3 seconds after page load.
+// Respects session & submission frequency, 100% Knowletive branding.
+// ============================================================
+---
+
+<!-- Popup Backdrop & Container -->
+<div 
+  id="career-popup-backdrop" 
+  class="fixed inset-0 z-[9998] flex items-center justify-center p-3 sm:p-4 md:p-6 bg-[#05142D]/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 ease-out"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="career-popup-title"
+>
+  <!-- Modal Dialog -->
+  <div 
+    id="career-popup-dialog"
+    class="relative z-[9999] w-full max-w-[840px] max-h-[92vh] md:max-h-[88vh] bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row transform scale-95 transition-transform duration-300 ease-out border border-white/20"
+  >
+    <!-- Close Button (Min 44x44px touch target) -->
+    <button 
+      type="button" 
+      id="close-career-popup-btn"
+      class="absolute top-3 right-3 md:top-4 md:right-4 z-30 w-11 h-11 flex items-center justify-center rounded-full bg-slate-100 md:bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-black transition-all cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0878E8]"
+      aria-label="Close popup"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- LEFT COLUMN: Desktop Knowletive Branding & Visual Area (Hidden on mobile) -->
+    <div class="hidden md:flex flex-col justify-between w-[38%] bg-gradient-to-br from-[#0B1F3A] via-[#0D2547] to-[#07172E] p-7 lg:p-8 text-white relative overflow-hidden select-none">
+      <!-- Glow Orbs -->
+      <div class="absolute -top-12 -left-12 w-44 h-44 bg-[#0878E8]/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -right-12 w-44 h-44 bg-[#F47A16]/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Top Branding -->
+      <div class="relative z-10">
+        <img 
+          src="/images/knowletive-logo-optimized.png" 
+          alt="Knowletive Logo" 
+          class="h-10 w-auto object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] mb-6" 
+        />
+        
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F47A16]/15 border border-[#F47A16]/30 text-[#F47A16] font-extrabold text-[10px] tracking-widest uppercase mb-3">
+          ★ Career Launchpad
+        </span>
+
+        <h3 class="text-xl font-black font-manrope text-white leading-snug">
+          Build Your Future With Knowletive
+        </h3>
+        <p class="text-xs text-blue-100/75 mt-2 leading-relaxed font-sans">
+          Pune's trusted tech academy for hands-on industrial skills, internships, and enterprise placements.
+        </p>
+      </div>
+
+      <!-- Middle Trust Points -->
+      <div class="relative z-10 my-6 space-y-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <span class="text-xs font-semibold text-white/90">Career & Admission Guidance</span>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <div class="w-6 h-6 rounded-full bg-[#0878E8]/30 text-[#0878E8] flex items-center justify-center shrink-0 border border-[#0878E8]/40">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <span class="text-xs font-semibold text-white/90">Job & Internship Opportunities</span>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <div class="w-6 h-6 rounded-full bg-[#F47A16]/25 text-[#F47A16] flex items-center justify-center shrink-0 border border-[#F47A16]/40">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <span class="text-xs font-semibold text-white/90">Industry-Focused Training</span>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <div class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center shrink-0 border border-purple-500/30">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <span class="text-xs font-semibold text-white/90">Dedicated Placement Cell</span>
+        </div>
+      </div>
+
+      <!-- Bottom Badge -->
+      <div class="relative z-10 pt-4 border-t border-white/10 flex items-center gap-2 text-[11px] text-blue-200/70 font-medium">
+        <svg class="w-4 h-4 text-[#F47A16] shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+        <span>ISO 9001:2015 Certified Academy</span>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Lead Capture Form -->
+    <div class="w-full md:w-[62%] p-5 sm:p-6 md:p-8 flex flex-col justify-between overflow-y-auto bg-white">
+      
+      <!-- FORM VIEW -->
+      <div id="popup-form-view" class="w-full">
+        <!-- Mobile Logo (shown only on mobile) -->
+        <div class="flex items-center justify-between mb-3 md:hidden pr-10">
+          <img src="/images/knowletive-logo-optimized.png" alt="Knowletive Logo" class="h-8 w-auto object-contain" />
+        </div>
+
+        <!-- Header Content -->
+        <div>
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-[10px] md:text-[11px] tracking-wider uppercase mb-2 border border-[#0878E8]/20">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            CAREER OPPORTUNITY
+          </div>
+
+          <!-- Main Heading -->
+          <h2 id="career-popup-title" class="text-xl sm:text-2xl md:text-[24px] font-black text-[#0B1F3A] font-manrope leading-tight">
+            Find the Right <span class="text-[#F47A16]">Career Opportunity</span> for You.
+          </h2>
+
+          <!-- Supporting Text -->
+          <p class="text-xs sm:text-[13px] text-[#64748B] mt-1.5 mb-4 leading-relaxed font-sans">
+            Looking for a job, internship, training program, or career guidance? Share your details and our team will help you find the right path.
+          </p>
+        </div>
+
+        <!-- Inline Error Banner -->
+        <div id="popup-error-alert" class="hidden mb-3.5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
+          <svg class="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span id="popup-error-text">Please verify the form fields and try again.</span>
+        </div>
+
+        <!-- Form Elements -->
+        <form id="career-popup-form" class="space-y-3" novalidate>
+          <!-- Full Name -->
+          <div>
+            <label for="popup-fullname" class="sr-only">Full Name *</label>
+            <div class="relative">
+              <input 
+                type="text" 
+                id="popup-fullname" 
+                name="full_name" 
+                placeholder="Full Name *" 
+                required 
+                class="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-slate-50 border border-gray-200 text-xs sm:text-sm text-[#0B1F3A] placeholder-gray-400 focus:bg-white focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none transition-all"
+              />
+              <span id="err-popup-fullname" class="hidden text-[11px] text-red-500 mt-1 pl-1">Full Name is required (minimum 2 characters).</span>
+            </div>
+          </div>
+
+          <!-- Phone Number -->
+          <div>
+            <label for="popup-phone" class="sr-only">Phone Number *</label>
+            <div class="relative">
+              <input 
+                type="tel" 
+                id="popup-phone" 
+                name="phone" 
+                placeholder="10-Digit Mobile Number *" 
+                required 
+                maxlength="10"
+                inputmode="numeric"
+                pattern="[0-9]{10}"
+                class="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-slate-50 border border-gray-200 text-xs sm:text-sm text-[#0B1F3A] placeholder-gray-400 focus:bg-white focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none transition-all"
+              />
+              <span id="err-popup-phone" class="hidden text-[11px] text-red-500 mt-1 pl-1">Mobile number must contain exactly 10 digits.</span>
+            </div>
+          </div>
+
+          <!-- Email (Optional) -->
+          <div>
+            <label for="popup-email" class="sr-only">Email (Optional)</label>
+            <div class="relative">
+              <input 
+                type="email" 
+                id="popup-email" 
+                name="email" 
+                placeholder="Email Address (Optional)" 
+                class="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-slate-50 border border-gray-200 text-xs sm:text-sm text-[#0B1F3A] placeholder-gray-400 focus:bg-white focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none transition-all"
+              />
+              <span id="err-popup-email" class="hidden text-[11px] text-red-500 mt-1 pl-1">Please enter a valid email address.</span>
+            </div>
+          </div>
+
+          <!-- I am looking for * (Dropdown) -->
+          <div>
+            <label for="popup-opportunity" class="sr-only">I am looking for *</label>
+            <div class="relative">
+              <select 
+                id="popup-opportunity" 
+                name="opportunity" 
+                required 
+                class="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-slate-50 border border-gray-200 text-xs sm:text-sm text-[#0B1F3A] focus:bg-white focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none transition-all appearance-none cursor-pointer"
+              >
+                <option value="" disabled selected>I am looking for *</option>
+                <option value="Job">Job</option>
+                <option value="Internship">Internship</option>
+                <option value="Training / Course">Training / Course</option>
+                <option value="Career Counseling">Career Counseling</option>
+                <option value="Admission Guidance">Admission Guidance</option>
+                <option value="Overseas Education">Overseas Education</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </div>
+              <span id="err-popup-opportunity" class="hidden text-[11px] text-red-500 mt-1 pl-1">Please select an opportunity.</span>
+            </div>
+          </div>
+
+          <!-- Preferred Role / Course (Optional) -->
+          <div>
+            <label for="popup-role" class="sr-only">Preferred Role / Course</label>
+            <input 
+              type="text" 
+              id="popup-role" 
+              name="preferred_role" 
+              placeholder="Preferred Role / Course (e.g. Data Analyst, Java, Cloud)" 
+              class="w-full px-3.5 py-2.5 sm:py-3 rounded-xl bg-slate-50 border border-gray-200 text-xs sm:text-sm text-[#0B1F3A] placeholder-gray-400 focus:bg-white focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none transition-all"
+            />
+          </div>
+
+          <!-- Primary CTA Button -->
+          <div class="pt-1">
+            <button 
+              type="submit" 
+              id="popup-submit-btn" 
+              class="w-full py-3 sm:py-3.5 px-6 rounded-xl bg-[#F47A16] hover:bg-[#e06b0d] text-white font-extrabold text-xs sm:text-sm tracking-wide shadow-md shadow-[#F47A16]/20 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <span id="popup-btn-text">Get Free Guidance</span>
+              <svg id="popup-btn-spinner" class="hidden w-4 h-4 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </button>
+            <p class="text-[11px] text-gray-400 text-center mt-2 font-sans">
+              No spam. Our career team will contact you regarding your selected opportunity.
+            </p>
+          </div>
+        </form>
+
+        <!-- Optional Resume CTA -->
+        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap items-center justify-center gap-1.5 text-xs text-[#64748B]">
+          <span>Looking for a Job or Internship?</span>
+          <a 
+            href="/internship-jobs#resume-upload-form" 
+            id="popup-resume-link" 
+            class="text-[#0878E8] font-bold hover:text-[#0764c2] hover:underline inline-flex items-center gap-1 transition-colors"
+          >
+            Upload Resume Instead &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- SUCCESS CONFIRMATION VIEW (Shown after successful submission) -->
+      <div id="popup-success-view" class="hidden w-full py-8 text-center flex flex-col items-center justify-center my-auto">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 shadow-inner">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs uppercase tracking-wider mb-2 border border-emerald-200">
+          Request Received
+        </span>
+
+        <h3 class="text-2xl font-black text-[#0B1F3A] font-manrope">
+          Thank You!
+        </h3>
+
+        <p class="text-sm text-[#64748B] mt-2 mb-6 max-w-sm leading-relaxed">
+          Our career team will contact you shortly to discuss your selected opportunity and guide your next steps.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <a 
+            href="/courses" 
+            class="px-5 py-2.5 rounded-xl bg-[#0878E8] hover:bg-[#0764c2] text-white font-bold text-xs tracking-wide shadow-md transition-colors"
+          >
+            Explore Programs
+          </a>
+          <button 
+            type="button" 
+            id="popup-success-close-btn" 
+            class="px-5 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-100 text-[#0B1F3A] font-bold text-xs tracking-wide transition-colors cursor-pointer"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  import { isValidEmail } from '../lib/validators';
+  (() => {
+    // SSR safety check
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    // 1. Path Safety & Strict Route Check
+    // Show ONLY on homepage ("/" or "/index.html" with or without trailing slash)
+    // NEVER show on /admin, /admin/*, or admin login pages
+    const rawPath = window.location.pathname.toLowerCase();
+    const normalizedPath = rawPath.replace(/\/+$/, '') || '/';
+    const isHomepage = normalizedPath === '/' || normalizedPath === '/index.html';
+    const isAdminOrLogin = normalizedPath.startsWith('/admin') || normalizedPath.includes('/login');
+
+    if (!isHomepage || isAdminOrLogin) {
+      return;
+    }
+
+    // 2. Storage Safety Helpers
+    function getSessionItem(key: string): string | null {
+      try {
+        return sessionStorage.getItem(key);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function setSessionItem(key: string, val: string): void {
+      try {
+        sessionStorage.setItem(key, val);
+      } catch (_) {}
+    }
+
+    // 3. Clean up any stale legacy suppression keys from localStorage
+    // (Prevents old permanent locks from blocking users)
+    try {
+      const legacyKeys = [
+        'knowletive_popup_submitted',
+        'knowletive_popup_dismissed',
+        'popupShown',
+        'leadPopupShown',
+        'knowletiveLeadPopupShown',
+        'leadSubmitted'
+      ];
+      legacyKeys.forEach((key) => {
+        if (localStorage.getItem(key) !== null) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (_) {}
+
+    // 4. Session Frequency Checks
+    // Rules:
+    // - Show once per session
+    // - If closed in the same session, do not reopen
+    // - If submitted in the same session, do not reopen
+    // - Fresh / new session starts clean and allows the popup again
+    const isDismissed = getSessionItem('knowletive_popup_dismissed') === 'true';
+    const isSubmitted = getSessionItem('knowletive_popup_submitted') === 'true';
+
+    if (isDismissed || isSubmitted) {
+      return;
+    }
+
+    let isInitialized = false;
+
+    function initPopup() {
+      if (isInitialized) return;
+
+      const backdrop = document.getElementById('career-popup-backdrop');
+      const dialog = document.getElementById('career-popup-dialog');
+      const closeBtn = document.getElementById('close-career-popup-btn');
+      const form = document.getElementById('career-popup-form') as HTMLFormElement | null;
+      const formView = document.getElementById('popup-form-view');
+      const successView = document.getElementById('popup-success-view');
+      const successCloseBtn = document.getElementById('popup-success-close-btn');
+      const resumeLink = document.getElementById('popup-resume-link');
+      const submitBtn = document.getElementById('popup-submit-btn') as HTMLButtonElement | null;
+      const btnText = document.getElementById('popup-btn-text');
+      const btnSpinner = document.getElementById('popup-btn-spinner');
+      const errorAlert = document.getElementById('popup-error-alert');
+      const errorText = document.getElementById('popup-error-text');
+
+      // Field Elements
+      const inputName = document.getElementById('popup-fullname') as HTMLInputElement | null;
+      const inputPhone = document.getElementById('popup-phone') as HTMLInputElement | null;
+      const inputEmail = document.getElementById('popup-email') as HTMLInputElement | null;
+      const selectOpportunity = document.getElementById('popup-opportunity') as HTMLSelectElement | null;
+      const inputRole = document.getElementById('popup-role') as HTMLInputElement | null;
+
+      // Error labels
+      const errName = document.getElementById('err-popup-fullname');
+      const errPhone = document.getElementById('err-popup-phone');
+      const errEmail = document.getElementById('err-popup-email');
+      const errOpp = document.getElementById('err-popup-opportunity');
+
+      if (!backdrop || !dialog || !form) {
+        return;
+      }
+
+      isInitialized = true;
+      let isModalOpen = false;
+
+      // Open Modal
+      function openPopup() {
+        if (!backdrop || !dialog) return;
+        if (isModalOpen) return;
+        isModalOpen = true;
+
+        backdrop.style.visibility = 'visible';
+        backdrop.classList.remove('opacity-0', 'pointer-events-none');
+        backdrop.classList.add('opacity-100');
+        backdrop.style.opacity = '1';
+        backdrop.style.pointerEvents = 'auto';
+
+        dialog.classList.remove('scale-95');
+        dialog.classList.add('scale-100');
+        dialog.style.transform = 'scale(1)';
+
+        document.body.style.overflow = 'hidden';
+
+        // Auto focus on name input
+        setTimeout(() => inputName?.focus(), 150);
+      }
+
+      // Close Modal
+      function closePopup(rememberDismiss = true) {
+        if (!backdrop || !dialog) return;
+        if (!isModalOpen) return;
+        isModalOpen = false;
+
+        backdrop.classList.remove('opacity-100');
+        backdrop.classList.add('opacity-0', 'pointer-events-none');
+        backdrop.style.opacity = '0';
+        backdrop.style.pointerEvents = 'none';
+
+        dialog.classList.remove('scale-100');
+        dialog.classList.add('scale-95');
+        dialog.style.transform = 'scale(0.95)';
+
+        document.body.style.overflow = '';
+
+        if (rememberDismiss) {
+          setSessionItem('knowletive_popup_dismissed', 'true');
+        }
+
+        setTimeout(() => {
+          if (!isModalOpen) {
+            backdrop.style.visibility = 'hidden';
+          }
+        }, 320);
+      }
+
+      // 5. Trigger popup automatically 3 seconds after page load
+      setTimeout(() => {
+        openPopup();
+      }, 3000);
+
+      // Event Listeners for Closing
+      closeBtn?.addEventListener('click', () => closePopup(true));
+      successCloseBtn?.addEventListener('click', () => closePopup(false));
+
+      // Close on ESC key
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isModalOpen) {
+          closePopup(true);
+        }
+      });
+
+      // Close on backdrop outside click
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+          closePopup(true);
+        }
+      });
+
+      // Resume CTA click -> Close popup and navigate/scroll to resume upload form
+      resumeLink?.addEventListener('click', (e) => {
+        closePopup(true);
+        if (window.location.pathname.startsWith('/internship-jobs')) {
+          e.preventDefault();
+          const target = document.getElementById('resume-upload-form');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+
+      // Validation helpers
+      function validateForm(): boolean {
+        let isValid = true;
+
+        // Full Name (min 2 chars)
+        const nameVal = inputName?.value.trim() || '';
+        if (nameVal.length < 2) {
+          errName?.classList.remove('hidden');
+          inputName?.classList.add('border-red-400');
+          isValid = false;
+        } else {
+          errName?.classList.add('hidden');
+          inputName?.classList.remove('border-red-400');
+        }
+
+        // Phone (10 digits & valid Indian mobile starting with 6-9)
+        let phoneVal = (inputPhone?.value || '').replace(/\D/g, '');
+        if (phoneVal.startsWith('91') && phoneVal.length === 12) {
+          phoneVal = phoneVal.slice(2);
+        }
+        if (phoneVal.length !== 10) {
+          if (errPhone) {
+            errPhone.textContent = 'Mobile number must contain exactly 10 digits.';
+            errPhone.classList.remove('hidden');
+          }
+          inputPhone?.classList.add('border-red-400');
+          isValid = false;
+        } else if (!/^[6-9][0-9]{9}$/.test(phoneVal)) {
+          if (errPhone) {
+            errPhone.textContent = 'Please enter a valid 10-digit Indian mobile number.';
+            errPhone.classList.remove('hidden');
+          }
+          inputPhone?.classList.add('border-red-400');
+          isValid = false;
+        } else {
+          errPhone?.classList.add('hidden');
+          inputPhone?.classList.remove('border-red-400');
+        }
+
+        // Email (optional, validate only if filled)
+        const emailVal = inputEmail?.value.trim() || '';
+        if (emailVal) {
+          if (inputEmail) inputEmail.value = emailVal;
+          if (!isValidEmail(emailVal)) {
+            errEmail?.classList.remove('hidden');
+            inputEmail?.classList.add('border-red-400');
+            isValid = false;
+          } else {
+            errEmail?.classList.add('hidden');
+            inputEmail?.classList.remove('border-red-400');
+          }
+        } else {
+          errEmail?.classList.add('hidden');
+          inputEmail?.classList.remove('border-red-400');
+        }
+
+        // Opportunity (required)
+        const oppVal = selectOpportunity?.value || '';
+        if (!oppVal) {
+          errOpp?.classList.remove('hidden');
+          selectOpportunity?.classList.add('border-red-400');
+          isValid = false;
+        } else {
+          errOpp?.classList.add('hidden');
+          selectOpportunity?.classList.remove('border-red-400');
+        }
+
+        return isValid;
+      }
+
+      // Clear inline errors on input
+      inputName?.addEventListener('input', () => {
+        errName?.classList.add('hidden');
+        inputName.classList.remove('border-red-400');
+      });
+
+      // Strict real-time phone input, paste & keydown handling
+      inputPhone?.addEventListener('input', () => {
+        let clean = inputPhone.value.replace(/\D/g, '');
+        if (clean.length > 10) clean = clean.slice(0, 10);
+        inputPhone.value = clean;
+        errPhone?.classList.add('hidden');
+        inputPhone.classList.remove('border-red-400');
+      });
+
+      inputPhone?.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || (window as any).clipboardData)?.getData('text') || '';
+        let clean = text.replace(/\D/g, '');
+        if (clean.startsWith('91') && clean.length === 12) {
+          clean = clean.slice(2);
+        }
+        inputPhone.value = clean.slice(0, 10);
+        errPhone?.classList.add('hidden');
+        inputPhone.classList.remove('border-red-400');
+      });
+
+      inputPhone?.addEventListener('keydown', (e) => {
+        if (
+          ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter', 'Home', 'End'].includes(e.key) ||
+          e.ctrlKey || e.metaKey
+        ) {
+          return;
+        }
+        if (!/^[0-9]$/.test(e.key)) {
+          e.preventDefault();
+          return;
+        }
+        const hasSelection = inputPhone.selectionStart !== null && inputPhone.selectionEnd !== null && inputPhone.selectionStart !== inputPhone.selectionEnd;
+        if (inputPhone.value.length >= 10 && !hasSelection) {
+          e.preventDefault();
+        }
+      });
+
+      inputEmail?.addEventListener('input', () => {
+        errEmail?.classList.add('hidden');
+        inputEmail.classList.remove('border-red-400');
+      });
+      selectOpportunity?.addEventListener('change', () => {
+        errOpp?.classList.add('hidden');
+        selectOpportunity.classList.remove('border-red-400');
+      });
+
+      // Form Submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorAlert?.classList.add('hidden');
+
+        if (!validateForm()) {
+          return;
+        }
+
+        const fullName = inputName?.value.trim() || '';
+        const phone = (inputPhone?.value || '').replace(/\D/g, '');
+        const email = inputEmail?.value.trim() || '';
+        const opportunity = selectOpportunity?.value || '';
+        const preferredRole = inputRole?.value.trim() || '';
+
+        // Map opportunity to LeadType
+        let leadType = 'Other';
+        if (opportunity === 'Job') leadType = 'Job';
+        else if (opportunity === 'Internship') leadType = 'Internship';
+        else if (opportunity.includes('Training') || opportunity.includes('Course')) leadType = 'Course';
+        else if (opportunity.includes('Counseling')) leadType = 'Counseling';
+        else if (opportunity.includes('Admission')) leadType = 'Admission';
+        else if (opportunity.includes('Overseas')) leadType = 'Overseas Education';
+
+        // Set Loading State
+        if (submitBtn) submitBtn.disabled = true;
+        btnSpinner?.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'Submitting...';
+
+        try {
+          const response = await fetch('/api/leads', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+              fullName,
+              phone,
+              email,
+              leadType,
+              opportunityType: opportunity,
+              preferredRole,
+              source: 'Homepage Popup'
+            })
+          });
+
+          const resData = await response.json().catch(() => ({}));
+
+          if (!response.ok || !resData.success) {
+            throw new Error(resData.error || 'Failed to submit inquiry.');
+          }
+
+          // Success: Mark as submitted in sessionStorage ONLY (not permanent localStorage)
+          setSessionItem('knowletive_popup_submitted', 'true');
+
+          // Transition view to Success
+          formView?.classList.add('hidden');
+          successView?.classList.remove('hidden');
+
+        } catch (err: any) {
+          console.error('[Popup Submission Error]:', err);
+          if (errorAlert && errorText) {
+            errorText.textContent = "We couldn't submit your details right now. Please try again.";
+            errorAlert.classList.remove('hidden');
+          }
+        } finally {
+          // Reset button state
+          if (submitBtn) submitBtn.disabled = false;
+          btnSpinner?.classList.add('hidden');
+          if (btnText) btnText.textContent = 'Get Free Guidance';
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPopup);
+    } else {
+      initPopup();
+    }
+
+    document.addEventListener('astro:page-load', initPopup);
+  })();
+</script>

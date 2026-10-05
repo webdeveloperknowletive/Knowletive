@@ -1,0 +1,232 @@
+---
+// ============================================================
+// /admin/testimonials
+// Manage Student Story Reels, Videos, Posters & Dynamic Publishing
+// ============================================================
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { db } from '../../lib/db';
+
+const testimonials = await db.getTestimonials(false);
+---
+
+<AdminLayout title="Video Testimonials Management" activeNav="testimonials">
+  
+  <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-lg font-bold font-manrope text-[#0B1F3A]">Student Stories & Video Testimonials</h2>
+      <p class="text-xs text-[#64748B]">All published stories automatically update on the public website homepage carousel in real time.</p>
+    </div>
+    
+    <button 
+      id="open-add-testimonial-modal"
+      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0878E8] hover:bg-[#0764c2] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+      Add Story Reel
+    </button>
+  </div>
+
+  <!-- Testimonials Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {testimonials.map(item => (
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col justify-between group">
+        <div>
+          <!-- Thumbnail / Video Preview -->
+          <div class="relative aspect-[9/16] bg-slate-900 overflow-hidden">
+            <img 
+              src={item.poster_url || '/images/hero-students.jpg'} 
+              alt={item.student_name}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+
+            <div class="absolute top-3 left-3">
+              <span class={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
+                item.is_published ? 'bg-green-500/90 text-white' : 'bg-gray-800/90 text-gray-300'
+              }`}>
+                {item.is_published ? 'Live on Site' : 'Draft'}
+              </span>
+            </div>
+
+            <div class="absolute top-3 right-3">
+              <span class="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded backdrop-blur-sm">
+                Order #{item.display_order}
+              </span>
+            </div>
+
+            <div class="absolute bottom-3 left-3 right-3 text-white">
+              <h3 class="font-bold text-sm leading-tight drop-shadow">{item.student_name}</h3>
+              <p class="text-xs text-blue-200 drop-shadow">{item.program}</p>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <p class="text-xs text-[#64748B] line-clamp-2 italic">"{item.caption || 'No caption provided.'}"</p>
+          </div>
+        </div>
+
+        <div class="p-4 pt-0 border-t border-gray-50 flex items-center justify-between gap-2 mt-2">
+          <button 
+            data-toggle-testi-id={item.id} 
+            data-current-published={item.is_published ? 'true' : 'false'}
+            class="toggle-testi-btn text-xs font-bold text-[#0878E8] hover:underline"
+          >
+            {item.is_published ? 'Unpublish' : 'Publish'}
+          </button>
+
+          <button 
+            data-delete-testi-id={item.id}
+            class="delete-testi-btn p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            title="Delete Testimonial"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Add Testimonial Modal -->
+  <div id="add-testi-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
+      <h3 class="text-lg font-bold font-manrope text-[#0B1F3A] mb-4">Add Story Video / Testimonial</h3>
+      
+      <form id="new-testi-form" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Student Name *</label>
+            <input type="text" id="testi-name" required placeholder="e.g. Pooja Deshmukh" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Program / Course *</label>
+            <input type="text" id="testi-program" required placeholder="e.g. Data Analyst Program" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Video File (MP4, portrait 9:16 recommended)</label>
+          <input type="file" id="testi-video-file" accept="video/mp4" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-[#0878E8] hover:file:bg-blue-100" />
+          <p class="text-[11px] text-gray-400 mt-1">Or provide video URL below if already hosted.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Video URL (e.g. /videos/testimonials/...)</label>
+          <input type="text" id="testi-video-url" placeholder="/videos/testimonials/session-review-final.mp4" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Poster Thumbnail Image (Guarantees visible card without black screen)</label>
+          <input type="file" id="testi-poster-file" accept="image/jpeg,image/png,image/webp" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-[#0878E8] hover:file:bg-blue-100" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Poster URL (fallback if file not chosen)</label>
+            <input type="text" id="testi-poster-url" placeholder="/videos/testimonials/posters/priya-sharma.jpg" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Display Order</label>
+            <input type="number" id="testi-order" value={testimonials.length + 1} class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Caption / Testimonial Quote</label>
+          <textarea id="testi-caption" rows="2" placeholder="Secured placement at MNC within 3 months..." class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" id="close-add-testi-modal" class="px-4 py-2 border border-gray-200 text-xs font-semibold rounded-xl hover:bg-gray-50">Cancel</button>
+          <button type="submit" id="save-testi-btn" class="px-5 py-2 bg-[#0878E8] hover:bg-[#0764c2] text-white text-xs font-bold rounded-xl">Save & Publish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('add-testi-modal');
+    document.getElementById('open-add-testi-modal')?.addEventListener('click', () => modal?.classList.remove('hidden'));
+    document.getElementById('close-add-testi-modal')?.addEventListener('click', () => modal?.classList.add('hidden'));
+
+    // Save story
+    document.getElementById('new-testi-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById('save-testi-btn') as HTMLButtonElement;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Uploading...';
+
+      const formData = new FormData();
+      formData.append('studentName', (document.getElementById('testi-name') as HTMLInputElement).value);
+      formData.append('program', (document.getElementById('testi-program') as HTMLInputElement).value);
+      formData.append('caption', (document.getElementById('testi-caption') as HTMLTextAreaElement).value);
+      formData.append('videoUrl', (document.getElementById('testi-video-url') as HTMLInputElement).value);
+      formData.append('posterUrl', (document.getElementById('testi-poster-url') as HTMLInputElement).value);
+      formData.append('displayOrder', (document.getElementById('testi-order') as HTMLInputElement).value);
+      formData.append('isPublished', 'true');
+
+      const videoFile = (document.getElementById('testi-video-file') as HTMLInputElement).files?.[0];
+      if (videoFile) formData.append('videoFile', videoFile);
+
+      const posterFile = (document.getElementById('testi-poster-file') as HTMLInputElement).files?.[0];
+      if (posterFile) formData.append('posterFile', posterFile);
+
+      try {
+        const res = await fetch('/api/admin/testimonials', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          alert(data.error || 'Failed to save testimonial.');
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save & Publish';
+        }
+      } catch {
+        alert('Network error saving story.');
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save & Publish';
+      }
+    });
+
+    // Toggle publish
+    document.querySelectorAll('.toggle-testi-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = (e.currentTarget as HTMLElement);
+        const id = target.dataset.toggleTestiId;
+        const currentPublished = target.dataset.currentPublished === 'true';
+
+        try {
+          const res = await fetch('/api/admin/testimonials', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, isPublished: !currentPublished })
+          });
+          if (res.ok) window.location.reload();
+        } catch {
+          alert('Network error.');
+        }
+      });
+    });
+
+    // Delete testimonial
+    document.querySelectorAll('.delete-testi-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = (e.currentTarget as HTMLElement).dataset.deleteTestiId;
+        if (!confirm('Are you sure you want to delete this story reel?')) return;
+
+        try {
+          const res = await fetch(`/api/admin/testimonials?id=${id}`, { method: 'DELETE' });
+          if (res.ok) window.location.reload();
+        } catch {
+          alert('Network error deleting story.');
+        }
+      });
+    });
+  </script>
+
+</AdminLayout>

@@ -1,0 +1,201 @@
+---
+// AnalyticsTracker.astro
+// Lightweight, privacy-first analytics tracker
+---
+<script>
+  (function () {
+    // 1. Exclude Admin routes
+    if (window.location.pathname.startsWith('/admin')) return;
+
+    // 2. Identification (Privacy-friendly)
+    function generateUUID() {
+      return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c =>
+        (Number(c) ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> Number(c) / 4).toString(16)
+      );
+    }
+
+    let visitorId = localStorage.getItem('k_vid');
+    if (!visitorId) {
+      visitorId = generateUUID();
+      localStorage.setItem('k_vid', visitorId);
+    }
+
+    let sessionId = sessionStorage.getItem('k_sid');
+    let isNewSession = false;
+    if (!sessionId) {
+      sessionId = generateUUID();
+      sessionStorage.setItem('k_sid', sessionId);
+      isNewSession = true;
+    }
+
+    // 3. Device detection
+    function getDeviceType() {
+      const ua = navigator.userAgent;
+      if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return 'tablet';
+      if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) return 'mobile';
+      return 'desktop';
+    }
+
+    const deviceType = getDeviceType();
+    const referrer = document.referrer;
+    const url = window.location.href;
+    const pagePath = window.location.pathname;
+    const pageTitle = document.title;
+
+    // 4. Time Tracking State
+    let isActive = !document.hidden;
+    let pageEngagedMs = 0;
+    let lastActiveTime = Date.now();
+
+    const sectionsState: Record<string, { engagedMs: number, isVisible: boolean, enteredAt: number }> = {};
+    const events: any[] = [];
+
+    // 5. Visibility and Focus Management
+    function updateTimers() {
+      const now = Date.now();
+      if (isActive) {
+        const delta = now - lastActiveTime;
+        pageEngagedMs += delta;
+
+        // Update active sections
+        for (const sec in sectionsState) {
+          if (sectionsState[sec].isVisible) {
+            sectionsState[sec].engagedMs += delta;
+            sectionsState[sec].enteredAt = now; // reset enteredAt for next interval
+          }
+        }
+      }
+      lastActiveTime = now;
+    }
+
+    function handleVisibilityChange() {
+      updateTimers();
+      isActive = !document.hidden;
+      if (isActive) {
+        lastActiveTime = Date.now();
+        // re-enter sections
+        for (const sec in sectionsState) {
+          if (sectionsState[sec].isVisible) sectionsState[sec].enteredAt = Date.now();
+        }
+      }
+    }
+
+    window.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', () => { if(document.hidden) return; updateTimers(); isActive = true; lastActiveTime = Date.now(); });
+    window.addEventListener('blur', () => { updateTimers(); isActive = false; });
+
+    // 6. Section Observer
+    const observer = new IntersectionObserver((entries) => {
+      updateTimers(); // Make sure current time is accounted for before changing state
+      const now = Date.now();
+      entries.forEach(entry => {
+        const sectionId = entry.target.getAttribute('data-analytics-section') || entry.target.id;
+        if (!sectionId) return;
+
+        if (!sectionsState[sectionId]) {
+          sectionsState[sectionId] = { engagedMs: 0, isVisible: false, enteredAt: 0 };
+        }
+
+        if (entry.isIntersecting) {
+          sectionsState[sectionId].isVisible = true;
+          sectionsState[sectionId].enteredAt = now;
+        } else {
+          sectionsState[sectionId].isVisible = false;
+        }
+      });
+    }, { threshold: 0.5 });
+
+    // Initialize observer for marked sections
+    document.querySelectorAll('[data-analytics-section]').forEach(el => observer.observe(el));
+    // Fallback: observe major structural sections if data attributes aren't used
+    document.querySelectorAll('section').forEach(el => {
+      if (el.id && !el.hasAttribute('data-analytics-section')) {
+        observer.observe(el);
+      }
+    });
+
+    // 7. CTA Click Tracking
+    document.addEventListener('click', (e) => {
+      const target = (e.target as Element).closest('a, button');
+      if (!target) return;
+      
+      const text = target.textContent?.trim() || '';
+      const href = target.getAttribute('href');
+      
+      // Look for important CTAs based on text or classes
+      const isPrimaryCTA = target.classList.contains('btn-primary') || target.classList.contains('btn-secondary');
+      const hasImportantText = /explore|consultation|get started|apply|download|request|book|call|directions/i.test(text);
+
+      if (isPrimaryCTA || hasImportantText) {
+        events.push({
+          visitor_id: visitorId,
+          session_id: sessionId,
+          event_name: 'cta_click',
+          page_path: pagePath,
+          metadata: { text: text.substring(0, 50), href }
+        });
+        // Immediately sync on important click
+        syncAnalytics();
+      }
+    });
+
+    // 8. Data Sync
+    function syncAnalytics() {
+      updateTimers();
+      
+      const payload: any = {};
+      
+      if (isNewSession) {
+        payload.session = { visitor_id: visitorId, session_id: sessionId, device_type: deviceType, referrer, url };
+        isNewSession = false; // only send once per session start
+      }
+
+      payload.pageview = {
+        visitor_id: visitorId,
+        session_id: sessionId,
+        page_path: pagePath,
+        page_title: pageTitle,
+        engaged_seconds: Math.floor(pageEngagedMs / 1000)
+      };
+
+      const sectionsData = [];
+      for (const sec in sectionsState) {
+        // Only send if engaged for more than 1 second (1000ms) to filter fast scrolls
+        if (sectionsState[sec].engagedMs > 1000) {
+          sectionsData.push({
+            visitor_id: visitorId,
+            session_id: sessionId,
+            page_path: pagePath,
+            section_id: sec,
+            engaged_seconds: Math.floor(sectionsState[sec].engagedMs / 1000)
+          });
+        }
+      }
+      
+      if (sectionsData.length > 0) payload.sections = sectionsData;
+      
+      if (events.length > 0) {
+        payload.events = [...events];
+        events.length = 0; // clear sent events
+      }
+
+      fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(() => {});
+    }
+
+    // Sync periodically and on unload
+    setInterval(syncAnalytics, 15000);
+    window.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        syncAnalytics();
+      }
+    });
+    
+    // Initial sync
+    syncAnalytics();
+  })();
+</script>

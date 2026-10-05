@@ -1,0 +1,102 @@
+<div id="mobile-menu" class="fixed inset-0 bg-[#0B1F3A]/95 backdrop-blur-lg z-40 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col pt-20 pb-8 px-6 overflow-y-auto">
+  <div class="flex flex-col gap-6 h-full">
+    <nav class="flex-1">
+      <ul class="flex flex-col gap-4 text-white text-lg font-medium">
+        <li>
+          <div class="py-2 border-b border-white/10">
+            <a href="/services" class="mobile-link block mb-2 text-white font-medium hover:text-[#0878E8]">Services</a>
+            <div class="pl-4 flex flex-col gap-2">
+              <a href="/services/it-training-placement" class="mobile-link block text-sm text-gray-300">IT Training & Placement</a>
+              <a href="/services/industrial-internship" class="mobile-link block text-sm text-gray-300">Industrial Internship</a>
+              <a href="/services/it-projects-freshers" class="mobile-link block text-sm text-gray-300">IT Projects for Freshers</a>
+              <a href="/services/overseas-education" class="mobile-link block text-sm text-gray-300">Overseas Education</a>
+              <a href="/services/distance-learning" class="mobile-link block text-sm text-gray-300">Distance Learning</a>
+              <a href="/services/vocational-courses" class="mobile-link block text-sm text-gray-300">Vocational Courses</a>
+              <a href="/services/career-admission-counselling" class="mobile-link block text-sm text-gray-300">Career Counselling</a>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="py-2 border-b border-white/10">
+            <a href="/courses" class="mobile-link block mb-2 text-white font-medium hover:text-[#0878E8]">Courses</a>
+            <div class="pl-4 flex flex-col gap-2">
+              <a href="/courses/data-analysis" class="mobile-link block text-sm text-gray-300">Data Analysis</a>
+              <a href="/courses/data-science-ai-ml" class="mobile-link block text-sm text-gray-300">Data Science & AI/ML</a>
+              <a href="/courses/mern-stack" class="mobile-link block text-sm text-gray-300">MERN Stack Development</a>
+              <a href="/courses/java-full-stack" class="mobile-link block text-sm text-gray-300">Java Full Stack</a>
+              <a href="/courses/cloud-devops" class="mobile-link block text-sm text-gray-300">Cloud & DevOps</a>
+              <a href="/courses/banking" class="mobile-link block text-sm text-gray-300">Banking</a>
+              <a href="/courses/digital-marketing" class="mobile-link block text-sm text-gray-300">Digital Marketing</a>
+            </div>
+          </div>
+        </li>
+        <li><a href="/placement-activities" class="mobile-link block py-2 border-b border-white/10">Placement & Activities</a></li>
+        <li><a href="/internship-jobs" class="mobile-link block py-2 border-b border-white/10">Internship & Jobs</a></li>
+        <li><a href="/free-study-material" class="mobile-link block py-2 border-b border-white/10">Free Study Material</a></li>
+        <li><a href="/contact" class="mobile-link block py-2">Contact</a></li>
+      </ul>
+    </nav>
+    
+    <div class="mt-auto pt-6">
+      <a href="/contact" class="btn-primary w-full text-center py-4 text-lg">Book Free Consultation</a>
+      <a href="tel:+919970600116" class="mt-4 flex items-center justify-center gap-2 text-white font-medium hover:text-[#F47A16] transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+        +91 9970600116
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const links = document.querySelectorAll('.mobile-link');
+  let isOpen = false;
+
+  function toggleMenu() {
+    if (!menu || !btn) return;
+    isOpen = !isOpen;
+    btn.setAttribute('aria-expanded', String(isOpen));
+    
+    // Toggle Menu Visibility
+    if (isOpen) {
+      menu.classList.remove('translate-x-full');
+      menu.classList.add('translate-x-0');
+      document.body.style.overflow = 'hidden';
+      
+      // Animate Hamburger to X
+      if (btn.children.length >= 3) {
+        btn.children[0].classList.add('translate-y-2', 'rotate-45');
+        btn.children[1].classList.add('opacity-0');
+        btn.children[2].classList.add('-translate-y-2', '-rotate-45');
+      }
+    } else {
+      menu.classList.add('translate-x-full');
+      menu.classList.remove('translate-x-0');
+      document.body.style.overflow = '';
+      
+      // Revert Hamburger
+      if (btn.children.length >= 3) {
+        btn.children[0].classList.remove('translate-y-2', 'rotate-45');
+        btn.children[1].classList.remove('opacity-0');
+        btn.children[2].classList.remove('-translate-y-2', '-rotate-45');
+      }
+    }
+  }
+
+  btn?.addEventListener('click', toggleMenu);
+  
+  // Close menu when clicking a link
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      if (isOpen) toggleMenu();
+    });
+  });
+
+  // Close menu on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      toggleMenu();
+    }
+  });
+</script>

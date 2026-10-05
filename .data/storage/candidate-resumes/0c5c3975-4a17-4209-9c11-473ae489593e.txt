@@ -1,0 +1,7 @@
+Ayush Test Candidate 1
+Email: ayushtest1@example.com
+Phone: +91 9876543210
+Education: B.Tech Computer Science from COEP Pune, 2024
+Experience: 1 year as Junior Data Analyst
+Skills: Python, SQL, Power BI, Excel, Pandas, Tableau
+Summary: Enthusiastic data analyst with experience building BI dashboards and SQL ETL pipelines.

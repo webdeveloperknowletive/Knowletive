@@ -1,0 +1,211 @@
+---
+interface Props {
+  courseName: string;
+}
+
+const { courseName } = Astro.props;
+---
+
+<section data-analytics-section="inquiry-form" id="inquiry-form" class="section-padding bg-[#0B1F3A] text-white">
+  <div class="container-custom">
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
+      <!-- Form Info Side -->
+      <div class="md:w-5/12 bg-gradient-to-br from-[#0878E8] to-[#072B6F] p-10 text-white flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-30"></div>
+        <div class="relative z-10">
+          <h3 class="text-3xl font-manrope font-bold mb-4">Request Course Details</h3>
+          <p class="text-blue-100 mb-8">Fill out the form and our academic advisor will get in touch with you shortly.</p>
+          <ul class="space-y-4">
+            <li class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+              </div>
+              <a href="tel:+919970600116" class="hover:text-white transition-colors">+91 99706 00116</a>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              </div>
+              <a href="mailto:info@knowletive.com" class="hover:text-white transition-colors">info@knowletive.com</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Form Fields Side -->
+      <div class="md:w-7/12 p-10 bg-white">
+        <form id="course-inquiry-form" class="space-y-4" novalidate>
+          <input type="hidden" name="lead_type" value="Course" />
+          <input type="hidden" name="source" value={`Course Page: ${courseName}`} />
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-[#0B1F3A] mb-1">Full Name *</label>
+              <input type="text" name="full_name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none text-[#0B1F3A]" placeholder="e.g. Rahul Sharma" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-[#0B1F3A] mb-1">Phone Number *</label>
+              <input 
+                type="tel" 
+                id="course-inquiry-phone"
+                name="phone" 
+                required 
+                inputmode="numeric"
+                maxlength="10"
+                pattern="[0-9]{10}"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none text-[#0B1F3A]" 
+                placeholder="10-digit mobile number" 
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-[#0B1F3A] mb-1">Email Address *</label>
+            <input type="email" name="email" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none text-[#0B1F3A]" placeholder="rahul@example.com" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-[#0B1F3A] mb-1">Course of Interest</label>
+            <select name="course_interest" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none text-[#0B1F3A]">
+              <option value={courseName} selected>{courseName}</option>
+              <option value="Data Analysis">Data Analysis</option>
+              <option value="Data Science & AI/ML">Data Science & AI/ML</option>
+              <option value="MERN Stack Development">MERN Stack Development</option>
+              <option value="Java Full Stack">Java Full Stack</option>
+              <option value="Cloud & DevOps">Cloud & DevOps</option>
+              <option value="Banking">Banking</option>
+              <option value="Digital Marketing">Digital Marketing</option>
+              <option value="Other">Other / Career Counseling</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-[#0B1F3A] mb-1">Message (Optional)</label>
+            <textarea name="message" rows="3" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#0878E8] focus:ring-2 focus:ring-[#0878E8]/20 outline-none text-[#0B1F3A]" placeholder="Tell us about your background or specific questions..."></textarea>
+          </div>
+
+          <div id="course-form-msg" class="hidden p-3 rounded-lg text-sm"></div>
+
+          <button type="submit" id="course-form-btn" class="btn-primary w-full mt-4">Request Syllabus & Callback</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { isValidEmail } from '../lib/validators';
+
+  const form = document.getElementById('course-inquiry-form') as HTMLFormElement | null;
+  const btn = document.getElementById('course-form-btn') as HTMLButtonElement | null;
+  const msg = document.getElementById('course-form-msg') as HTMLElement | null;
+  const phoneInput = document.getElementById('course-inquiry-phone') as HTMLInputElement | null;
+
+  // Real-time phone sanitization & strict digit blocking
+  if (phoneInput) {
+    phoneInput.addEventListener('input', () => {
+      let clean = phoneInput.value.replace(/\D/g, '');
+      if (clean.length > 10) clean = clean.slice(0, 10);
+      phoneInput.value = clean;
+    });
+
+    phoneInput.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || (window as any).clipboardData)?.getData('text') || '';
+      let clean = text.replace(/\D/g, '');
+      if (clean.startsWith('91') && clean.length === 12) {
+        clean = clean.slice(2);
+      }
+      phoneInput.value = clean.slice(0, 10);
+    });
+
+    phoneInput.addEventListener('keydown', (e) => {
+      if (
+        ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter', 'Home', 'End'].includes(e.key) ||
+        e.ctrlKey || e.metaKey
+      ) {
+        return;
+      }
+      if (!/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+        return;
+      }
+      const hasSelection = phoneInput.selectionStart !== null && phoneInput.selectionEnd !== null && phoneInput.selectionStart !== phoneInput.selectionEnd;
+      if (phoneInput.value.length >= 10 && !hasSelection) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  if (form && btn && msg) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.className = 'hidden';
+
+      const rawPhone = phoneInput?.value || '';
+      let cleanPhone = rawPhone.replace(/\D/g, '');
+      if (cleanPhone.startsWith('91') && cleanPhone.length === 12) {
+        cleanPhone = cleanPhone.slice(2);
+      }
+
+      if (!cleanPhone) {
+        msg.textContent = 'Phone number is required.';
+        msg.className = 'p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200 block';
+        return;
+      }
+
+      if (cleanPhone.length !== 10) {
+        msg.textContent = 'Mobile number must contain exactly 10 digits.';
+        msg.className = 'p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200 block';
+        return;
+      }
+
+      if (!/^[6-9][0-9]{9}$/.test(cleanPhone)) {
+        msg.textContent = 'Please enter a valid 10-digit Indian mobile number.';
+        msg.className = 'p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200 block';
+        return;
+      }
+
+      const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement | null;
+      if (emailInput) {
+        const trimmedEmail = emailInput.value.trim();
+        emailInput.value = trimmedEmail; // trim before submit
+        if (!isValidEmail(trimmedEmail)) {
+          msg.textContent = 'Please enter a valid email address.';
+          msg.className = 'p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200 block';
+          return;
+        }
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting Request...';
+
+      const formData = new FormData(form);
+      formData.set('phone', cleanPhone);
+
+      try {
+        const res = await fetch('/api/leads', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to submit inquiry');
+        }
+
+        form.reset();
+        btn.textContent = 'Request Sent!';
+        msg.textContent = 'Thank you! Your course request has been received. Our senior academic counselor will call you within 24 hours.';
+        msg.className = 'p-3 rounded-lg text-sm bg-emerald-50 text-emerald-800 border border-emerald-200 block';
+
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = 'Request Syllabus & Callback';
+        }, 5000);
+      } catch (err: any) {
+        btn.disabled = false;
+        btn.textContent = 'Request Syllabus & Callback';
+        msg.textContent = err.message || 'Submission failed. Please check your network and try again.';
+        msg.className = 'p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200 block';
+      }
+    });
+  }
+</script>

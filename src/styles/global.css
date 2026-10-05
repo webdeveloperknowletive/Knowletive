@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: 'Inter', sans-serif;
+  --font-manrope: 'Manrope', sans-serif;
+}
+
+@layer base {
+  :root {
+    --color-navy-900: 7, 43, 111; /* #072B6F */
+    --color-blue-500: 8, 120, 232; /* #0878E8 */
+    --color-orange-500: 244, 122, 22; /* #F47A16 */
+    --color-bg-soft: 247, 249, 252; /* #F7F9FC */
+    --color-text-dark: 11, 31, 58; /* #0B1F3A */
+    --color-text-muted: 100, 116, 139; /* #64748B */
+
+    /* Header & Page Top Spacing System */
+    --header-height: 76px;
+    --page-top-gap-mobile: 20px;
+    --page-top-gap-tablet: 28px;
+    --page-top-gap-desktop: 36px;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-[#F7F9FC] text-[#0B1F3A] antialiased overflow-x-hidden w-full font-inter;
+  }
+
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-manrope font-bold tracking-tight text-inherit;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-3.5 bg-[#F47A16] hover:bg-[#d66710] text-white font-manrope font-bold text-sm md:text-base rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-3.5 bg-white border border-[#0878E8] text-[#0878E8] hover:bg-[#0878E8] hover:text-white font-manrope font-bold text-sm md:text-base rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-3.5 bg-transparent border border-gray-300 text-[#0B1F3A] hover:border-[#0878E8] hover:text-[#0878E8] font-manrope font-bold text-sm md:text-base rounded-full transition-all duration-300;
+  }
+
+  .section-padding {
+    @apply py-12 md:py-20 lg:py-28;
+  }
+
+  /* Universal First Section / Page Header Spacing below Fixed Navbar */
+  .page-header-spacing {
+    padding-top: calc(var(--header-height) + var(--page-top-gap-mobile));
+    padding-bottom: 3rem;
+  }
+  @media (min-width: 768px) {
+    .page-header-spacing {
+      padding-top: calc(var(--header-height) + var(--page-top-gap-tablet));
+      padding-bottom: 3.75rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .page-header-spacing {
+      padding-top: calc(var(--header-height) + var(--page-top-gap-desktop));
+      padding-bottom: 4.5rem;
+    }
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .glass-nav {
+    @apply bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm;
+  }
+  
+  .card-premium {
+    @apply bg-white rounded-2xl md:rounded-[24px] border border-gray-100 p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#072B6F] to-[#0878E8];
+  }
+  
+  .text-gradient-orange {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#F47A16] to-[#ff9842];
+  }
+}
+
+@layer utilities {
+  .fluid-hero {
+    font-size: clamp(2.25rem, 5vw + 1rem, 4.5rem);
+    line-height: 1.15;
+  }
+  .fluid-h2 {
+    font-size: clamp(1.85rem, 3.5vw + 1rem, 3.25rem);
+    line-height: 1.2;
+  }
+  .fluid-h3 {
+    font-size: clamp(1.35rem, 1.8vw + 1rem, 1.875rem);
+    line-height: 1.3;
+  }
+}

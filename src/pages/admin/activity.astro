@@ -1,0 +1,322 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getAdminSession } from '../../lib/auth';
+
+const session = getAdminSession(Astro.request);
+if (!session || session.role !== 'admin') {
+  return Astro.redirect('/login');
+}
+---
+
+<AdminLayout title="Website Analytics & Activity" activeNav="activity">
+  
+  <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h2 class="text-xl font-bold text-[#0B1F3A]">Visitor Analytics</h2>
+      <p class="text-sm text-slate-500">Real-time website engagement and traffic insights.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <select id="date-range-filter" class="bg-white border border-gray-200 text-sm rounded-xl px-4 py-2 text-slate-700 font-medium focus:ring-2 focus:ring-[#0878E8] focus:border-[#0878E8] outline-none shadow-sm cursor-pointer">
+        <option value="today">Today</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="7d" selected>Last 7 Days</option>
+        <option value="30d">Last 30 Days</option>
+      </select>
+      <button id="refresh-btn" class="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 text-slate-500 shadow-sm transition-colors" aria-label="Refresh data">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="loading-state" class="py-20 flex flex-col items-center justify-center">
+    <div class="w-8 h-8 border-4 border-[#0878E8]/30 border-t-[#0878E8] rounded-full animate-spin mb-4"></div>
+    <p class="text-slate-500 font-medium">Loading analytics data...</p>
+  </div>
+
+  <div id="error-state" class="hidden py-10 text-center bg-red-50 rounded-2xl border border-red-100 mb-8">
+    <p class="text-red-600 font-semibold mb-2">Failed to load analytics</p>
+    <button onclick="loadAnalytics()" class="text-sm text-red-500 hover:text-red-700 underline">Try again</button>
+  </div>
+
+  <div id="empty-state" class="hidden py-16 text-center bg-white rounded-2xl border border-gray-200 shadow-sm mb-8">
+    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-[#0878E8]">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+    </div>
+    <h3 class="text-lg font-bold text-[#0B1F3A] mb-1">No activity data available yet</h3>
+    <p class="text-slate-500 max-w-md mx-auto text-sm">Once visitors start interacting with your website, their activity and engagement metrics will appear here.</p>
+  </div>
+
+  <div id="analytics-content" class="hidden space-y-6">
+    <!-- Top Stats Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Total Visitors</p>
+        <p id="stat-total-visitors" class="text-2xl font-black text-[#0B1F3A]">0</p>
+        <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <svg class="w-16 h-16 text-[#0878E8]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Visitors Today</p>
+        <p id="stat-visitors-today" class="text-2xl font-black text-[#0B1F3A]">0</p>
+      </div>
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Unique Visitors</p>
+        <p id="stat-unique-visitors" class="text-2xl font-black text-[#0B1F3A]">0</p>
+      </div>
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Page Views</p>
+        <p id="stat-page-views" class="text-2xl font-black text-[#0B1F3A]">0</p>
+      </div>
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Avg Session</p>
+        <p id="stat-avg-session" class="text-2xl font-black text-[#0B1F3A]">0s</p>
+      </div>
+      <div class="bg-gradient-to-br from-[#0878E8] to-[#0A5BAA] p-4 rounded-2xl border border-[#0878E8] shadow-md shadow-[#0878E8]/20 relative overflow-hidden group text-white">
+        <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-green-400 animate-ping"></div>
+        <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-green-400"></div>
+        <p class="text-xs font-semibold text-blue-100 uppercase tracking-wider mb-1">Active Now (5m)</p>
+        <p id="stat-active-now" class="text-2xl font-black">0</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- Most Visited Pages -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
+          <h3 class="font-bold text-[#0B1F3A] flex items-center gap-2">
+            <svg class="w-4 h-4 text-[#F47A16]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            Most Visited Pages
+          </h3>
+        </div>
+        <div class="overflow-x-auto flex-1">
+          <table class="w-full text-left text-sm whitespace-nowrap">
+            <thead class="text-xs text-slate-500 uppercase bg-white border-b border-gray-100">
+              <tr>
+                <th class="px-6 py-3 font-semibold">Page Path</th>
+                <th class="px-6 py-3 font-semibold text-right">Visitors</th>
+                <th class="px-6 py-3 font-semibold text-right">Views</th>
+                <th class="px-6 py-3 font-semibold text-right">Avg Time</th>
+              </tr>
+            </thead>
+            <tbody id="table-pages" class="divide-y divide-gray-50 text-slate-700">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Most Engaged Sections -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
+          <h3 class="font-bold text-[#0B1F3A] flex items-center gap-2">
+            <svg class="w-4 h-4 text-[#0878E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            Most Engaged Sections
+          </h3>
+        </div>
+        <div class="overflow-x-auto flex-1">
+          <table class="w-full text-left text-sm whitespace-nowrap">
+            <thead class="text-xs text-slate-500 uppercase bg-white border-b border-gray-100">
+              <tr>
+                <th class="px-6 py-3 font-semibold">Section ID</th>
+                <th class="px-6 py-3 font-semibold">Page</th>
+                <th class="px-6 py-3 font-semibold text-right">Total Time</th>
+                <th class="px-6 py-3 font-semibold text-right">Avg Time</th>
+              </tr>
+            </thead>
+            <tbody id="table-sections" class="divide-y divide-gray-50 text-slate-700">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Small widgets row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Traffic Sources -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden p-6">
+        <h3 class="font-bold text-[#0B1F3A] mb-4">Traffic Sources</h3>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-700">Direct</span><span id="src-direct-pct" class="text-slate-500">0%</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div id="src-direct-bar" class="bg-[#0878E8] h-2 rounded-full" style="width: 0%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-700">Google / Search</span><span id="src-google-pct" class="text-slate-500">0%</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div id="src-google-bar" class="bg-[#F47A16] h-2 rounded-full" style="width: 0%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-700">Social Media</span><span id="src-social-pct" class="text-slate-500">0%</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div id="src-social-bar" class="bg-[#0B1F3A] h-2 rounded-full" style="width: 0%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-700">Referral & Other</span><span id="src-other-pct" class="text-slate-500">0%</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div id="src-other-bar" class="bg-slate-400 h-2 rounded-full" style="width: 0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Device Breakdown -->
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden p-6 flex flex-col justify-center items-center relative">
+        <h3 class="font-bold text-[#0B1F3A] self-start w-full mb-6">Device Breakdown</h3>
+        <div class="flex items-end justify-center gap-12 w-full flex-1 pb-4">
+          
+          <div class="flex flex-col items-center gap-3">
+            <p id="dev-mobile-pct" class="text-xl font-bold text-[#0B1F3A]">0%</p>
+            <div class="w-16 bg-gray-100 rounded-t-xl relative overflow-hidden flex items-end h-32">
+              <div id="dev-mobile-bar" class="w-full bg-[#0878E8] rounded-t-xl transition-all duration-1000 h-[0%]"></div>
+            </div>
+            <p class="text-sm font-semibold text-slate-500">Mobile</p>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <p id="dev-desktop-pct" class="text-xl font-bold text-[#0B1F3A]">0%</p>
+            <div class="w-16 bg-gray-100 rounded-t-xl relative overflow-hidden flex items-end h-32">
+              <div id="dev-desktop-bar" class="w-full bg-[#0B1F3A] rounded-t-xl transition-all duration-1000 h-[0%]"></div>
+            </div>
+            <p class="text-sm font-semibold text-slate-500">Desktop</p>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <p id="dev-tablet-pct" class="text-xl font-bold text-[#0B1F3A]">0%</p>
+            <div class="w-16 bg-gray-100 rounded-t-xl relative overflow-hidden flex items-end h-32">
+              <div id="dev-tablet-bar" class="w-full bg-[#F47A16] rounded-t-xl transition-all duration-1000 h-[0%]"></div>
+            </div>
+            <p class="text-sm font-semibold text-slate-500">Tablet</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function formatTime(seconds: number) {
+      if (seconds < 60) return `${Math.floor(seconds)}s`;
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}m ${s}s`;
+    }
+
+    async function loadAnalytics() {
+      const range = (document.getElementById('date-range-filter') as HTMLSelectElement).value;
+      const loading = document.getElementById('loading-state')!;
+      const error = document.getElementById('error-state')!;
+      const empty = document.getElementById('empty-state')!;
+      const content = document.getElementById('analytics-content')!;
+
+      loading.classList.remove('hidden');
+      error.classList.add('hidden');
+      empty.classList.add('hidden');
+      content.classList.add('hidden');
+
+      try {
+        const res = await fetch(`/api/admin/activity/overview?range=${range}`);
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+
+        if (data.cards.totalVisitors === 0 && data.cards.totalPageViews === 0) {
+          loading.classList.add('hidden');
+          empty.classList.remove('hidden');
+          return;
+        }
+
+        // Fill Cards
+        document.getElementById('stat-total-visitors')!.innerText = data.cards.totalVisitors.toLocaleString();
+        document.getElementById('stat-visitors-today')!.innerText = data.cards.visitorsToday.toLocaleString();
+        document.getElementById('stat-unique-visitors')!.innerText = data.cards.uniqueVisitors.toLocaleString();
+        document.getElementById('stat-page-views')!.innerText = data.cards.totalPageViews.toLocaleString();
+        document.getElementById('stat-avg-session')!.innerText = formatTime(data.cards.avgSessionSeconds);
+        document.getElementById('stat-active-now')!.innerText = data.cards.activeVisitors.toLocaleString();
+
+        // Fill Pages Table
+        const pagesTbody = document.getElementById('table-pages')!;
+        pagesTbody.innerHTML = '';
+        if (data.mostVisitedPages.length === 0) {
+          pagesTbody.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-slate-400">No page data</td></tr>`;
+        } else {
+          data.mostVisitedPages.forEach((p: any) => {
+            pagesTbody.innerHTML += `
+              <tr class="hover:bg-gray-50/50 transition-colors">
+                <td class="px-6 py-3 font-medium text-[#0B1F3A]">${p.path === '/' ? '/ (Home)' : p.path}</td>
+                <td class="px-6 py-3 text-right">${p.visitors}</td>
+                <td class="px-6 py-3 text-right">${p.views}</td>
+                <td class="px-6 py-3 text-right">${formatTime(p.avgTime)}</td>
+              </tr>
+            `;
+          });
+        }
+
+        // Fill Sections Table
+        const sectionsTbody = document.getElementById('table-sections')!;
+        sectionsTbody.innerHTML = '';
+        if (data.mostEngagedSections.length === 0) {
+          sectionsTbody.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-slate-400">No section data</td></tr>`;
+        } else {
+          data.mostEngagedSections.forEach((s: any) => {
+            const prettySection = s.section.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+            sectionsTbody.innerHTML += `
+              <tr class="hover:bg-gray-50/50 transition-colors">
+                <td class="px-6 py-3 font-medium text-[#0B1F3A] capitalize">${prettySection}</td>
+                <td class="px-6 py-3 text-slate-500">${s.path === '/' ? 'Home' : s.path}</td>
+                <td class="px-6 py-3 text-right font-semibold text-[#0878E8]">${formatTime(s.totalTime)}</td>
+                <td class="px-6 py-3 text-right">${formatTime(s.avgTime)}</td>
+              </tr>
+            `;
+          });
+        }
+
+        // Fill Sources
+        const totalSources = data.sources.direct + data.sources.google + data.sources.social + data.sources.referral + data.sources.other;
+        if (totalSources > 0) {
+          const others = data.sources.referral + data.sources.other;
+          document.getElementById('src-direct-pct')!.innerText = Math.round((data.sources.direct/totalSources)*100) + '%';
+          document.getElementById('src-direct-bar')!.style.width = Math.round((data.sources.direct/totalSources)*100) + '%';
+          
+          document.getElementById('src-google-pct')!.innerText = Math.round((data.sources.google/totalSources)*100) + '%';
+          document.getElementById('src-google-bar')!.style.width = Math.round((data.sources.google/totalSources)*100) + '%';
+          
+          document.getElementById('src-social-pct')!.innerText = Math.round((data.sources.social/totalSources)*100) + '%';
+          document.getElementById('src-social-bar')!.style.width = Math.round((data.sources.social/totalSources)*100) + '%';
+          
+          document.getElementById('src-other-pct')!.innerText = Math.round((others/totalSources)*100) + '%';
+          document.getElementById('src-other-bar')!.style.width = Math.round((others/totalSources)*100) + '%';
+        }
+
+        // Fill Devices
+        const totalDevices = data.devices.mobile + data.devices.desktop + data.devices.tablet;
+        if (totalDevices > 0) {
+          const mPct = Math.round((data.devices.mobile/totalDevices)*100);
+          const dPct = Math.round((data.devices.desktop/totalDevices)*100);
+          const tPct = Math.round((data.devices.tablet/totalDevices)*100);
+
+          document.getElementById('dev-mobile-pct')!.innerText = mPct + '%';
+          document.getElementById('dev-mobile-bar')!.style.height = mPct + '%';
+
+          document.getElementById('dev-desktop-pct')!.innerText = dPct + '%';
+          document.getElementById('dev-desktop-bar')!.style.height = dPct + '%';
+
+          document.getElementById('dev-tablet-pct')!.innerText = tPct + '%';
+          document.getElementById('dev-tablet-bar')!.style.height = tPct + '%';
+        }
+
+        loading.classList.add('hidden');
+        content.classList.remove('hidden');
+
+      } catch (err) {
+        console.error(err);
+        loading.classList.add('hidden');
+        error.classList.remove('hidden');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAnalytics();
+      document.getElementById('date-range-filter')?.addEventListener('change', loadAnalytics);
+      document.getElementById('refresh-btn')?.addEventListener('click', loadAnalytics);
+    });
+  </script>
+</AdminLayout>

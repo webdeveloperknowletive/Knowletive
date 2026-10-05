@@ -1,0 +1,17 @@
+
+ANANYA ROY
+Email: ananya.roy.analytics@gmail.com | Phone: +91 98111 22334 | Location: Pune, Maharashtra
+LinkedIn: https://linkedin.com/in/ananya-roy-da | GitHub: https://github.com/ananya-roy
+
+EDUCATION:
+Bachelor of Technology in Information Technology
+Pune Institute of Computer Technology (PICT) | 2024
+
+PROFESSIONAL SUMMARY:
+Analytical and detail-oriented Data Analyst with extensive experience in SQL, Python, Excel, Power BI, and Tableau. 
+
+TECHNICAL SKILLS:
+- Data Analysis & Cleaning: Excel, Advanced Excel, Statistics, EDA, MIS Reporting
+- Business Intelligence: Power BI, Tableau, Dashboards
+- Databases & Programming: SQL, MySQL, Python, Pandas, NumPy
+  

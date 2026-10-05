@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConsultationCTA from '../components/ConsultationCTA.astro';
+
+const documentCategories = [
+  {
+    category: "Identity & Domicile Proof",
+    items: [
+      { name: "Aadhaar Card", note: "Original + 3 attested photocopies (linked with active mobile number)." },
+      { name: "Maharashtra State Domicile Certificate", note: "Or Birth Certificate clearly stating birthplace within Maharashtra." },
+      { name: "Nationality Certificate", note: "Passport / Domicile Certificate / School Leaving Certificate indicating nationality." }
+    ]
+  },
+  {
+    category: "Academic Records",
+    items: [
+      { name: "SSC (Class 10th) Marksheet & Passing Certificate", note: "Used for date of birth verification." },
+      { name: "HSC (Class 12th) Marksheet & Passing Certificate", note: "Showing Physics, Chemistry, Mathematics / Biology marks." },
+      { name: "CET 2026 Score Card", note: "Color printout with percentile breakdown." },
+      { name: "CET 2026 Admit Card / Hall Ticket", note: "Signed copy by exam invigilator." },
+      { name: "Graduation Marksheets (for MBA / MCA)", note: "All semester grade cards & provisional degree certificate." }
+    ]
+  },
+  {
+    category: "Category & Reservation (If Applicable)",
+    items: [
+      { name: "Caste Certificate", note: "Issued by competent authority in Maharashtra State." },
+      { name: "Caste / Tribe Validity Certificate", note: "Mandatory for SC, ST, VJ/DT-NT, OBC, and SBC categories." },
+      { name: "Non-Creamy Layer (NCL) Certificate", note: "Valid up to 31st March 2027 (for VJ/NT, OBC, and SBC categories)." },
+      { name: "Economically Weaker Section (EWS) Certificate", note: "Valid for financial year 2025-2026." },
+      { name: "Disability Certificate (PwD)", note: "Minimum 40% benchmark disability from civil surgeon/district hospital." }
+    ]
+  },
+  {
+    category: "Institutional & Admission Documents",
+    items: [
+      { name: "School / College Leaving Certificate (TC)", note: "Original Transfer Certificate (mandatory during college reporting)." },
+      { name: "Migration Certificate", note: "Required if passing qualifying exam from CBSE, ICSE, or outside Maharashtra." },
+      { name: "CAP Seat Allotment Letter", note: "Downloaded after provisional seat confirmation in CAP round." },
+      { name: "Income Certificate", note: "Required for TFWS (Tuition Fee Waiver Scheme) and EBC scholarship benefits." }
+    ]
+  }
+];
+---
+
+<BaseLayout 
+  title="CET 2026 Required Documents Checklist | Knowletive" 
+  description="Comprehensive checklist of essential documents required for CET 2026 registration, CAP document verification, and college admission rounds."
+>
+  <!-- Hero -->
+  <section class="relative page-header-spacing pb-14 md:pb-20 bg-[#0B1F3A] text-white">
+    <div class="container-custom text-center max-w-4xl mx-auto">
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-200 mb-6 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <span>/</span>
+        <a href="/cet" class="hover:text-white transition-colors">CET 2026</a>
+        <span>/</span>
+        <span class="text-[#F47A16]">Documents Checklist</span>
+      </nav>
+
+      <h1 class="fluid-hero font-manrope font-extrabold mb-6">
+        CET 2026 Required <span class="text-[#F47A16]">Documents</span>
+      </h1>
+      <p class="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8">
+        Keep these documents organized and certified to ensure smooth Scrutiny Center verification during Centralized Admission Process (CAP) rounds.
+      </p>
+
+      <div class="flex items-center justify-center gap-4">
+        <a href="/contact" class="btn-primary py-3.5 px-8">Get Verification Assistance</a>
+        <a href="/cet" class="btn-secondary py-3.5 px-8 text-white border-white/20 hover:border-white">Back to CET Overview</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Document Checklist -->
+  <section class="section-padding bg-white">
+    <div class="container-custom max-w-4xl">
+      
+      <div class="space-y-12">
+        {documentCategories.map((group, idx) => (
+          <div>
+            <div class="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200">
+              <span class="w-8 h-8 rounded-lg bg-[#0878E8]/10 text-[#0878E8] font-bold text-sm flex items-center justify-center">
+                0{idx + 1}
+              </span>
+              <h2 class="text-2xl font-bold font-manrope text-[#0B1F3A]">{group.category}</h2>
+            </div>
+
+            <div class="space-y-4">
+              {group.items.map(item => (
+                <div class="card-premium border border-gray-100 p-6 flex items-start gap-4">
+                  <div class="w-7 h-7 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-[#0B1F3A] text-lg mb-1">{item.name}</h3>
+                    <p class="text-sm text-[#64748B] leading-relaxed">{item.note}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Advisory Box -->
+      <div class="mt-16 p-8 rounded-3xl bg-blue-50 border border-blue-100 text-[#072B6F]">
+        <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+          <svg class="w-6 h-6 text-[#0878E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Important Verification Tip
+        </h3>
+        <p class="text-sm leading-relaxed mb-4">
+          All caste and category certificates must be issued specifically by the Government of Maharashtra. Certificates from other states will qualify under Open/General category only unless covered by specific central norms.
+        </p>
+        <p class="text-xs text-[#64748B]">
+          Need help preparing or validating your documents? Our counseling team in Baner, Pune provides free pre-verification checks.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <ConsultationCTA />
+</BaseLayout>

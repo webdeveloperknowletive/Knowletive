@@ -1,0 +1,1176 @@
+{
+  "profiles": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "email": "admin@knowletive.com",
+      "full_name": "Knowletive Administrator",
+      "role": "admin",
+      "password_hash": "64231c34939e32f4f2c9e76e822527d5:2ff8bd838dc68274106ea1c63fd56828280b55fe9705c556ebb4c39145feeccb42e02d49b443978f89c8251af952cf943a6dd1ce1e13e1f32c2edb86856a2c02",
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    }
+  ],
+  "job_roles": [
+    {
+      "id": "11111111-1111-1111-1111-111111111101",
+      "role_name": "Data Analyst",
+      "slug": "data-analyst",
+      "category": "Data & Analytics",
+      "description": "Extracts, processes, and analyzes data using statistical tools and SQL/PowerBI to support decision making.",
+      "match_threshold": 40,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111102",
+      "role_name": "Data Scientist",
+      "slug": "data-scientist",
+      "category": "AI & Machine Learning",
+      "description": "Develops ML and statistical models using Python, predictive modeling, and deep learning architectures.",
+      "match_threshold": 40,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111103",
+      "role_name": "MERN Developer",
+      "slug": "mern-developer",
+      "category": "Software Engineering",
+      "description": "Builds scalable full stack web applications using MongoDB, Express, React, and Node.js.",
+      "match_threshold": 40,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111104",
+      "role_name": "Java Full Stack",
+      "slug": "java-full-stack",
+      "category": "Software Engineering",
+      "description": "Develops enterprise solutions using Java, Spring Boot, Hibernate, microservices, and modern frontend.",
+      "match_threshold": 40,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111105",
+      "role_name": "Cloud / DevOps",
+      "slug": "cloud-devops",
+      "category": "Cloud & Infrastructure",
+      "description": "Designs CI/CD pipelines, container orchestration, and cloud infrastructure on AWS/Azure/GCP.",
+      "match_threshold": 40,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111106",
+      "role_name": "Digital Marketing",
+      "slug": "digital-marketing",
+      "category": "Growth & Marketing",
+      "description": "Specializes in SEO, performance marketing, Meta/Google ads, analytics, and content generation.",
+      "match_threshold": 40,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111107",
+      "role_name": "Banking & Finance",
+      "slug": "banking",
+      "category": "Banking & Operations",
+      "description": "Banking operations, financial analysis, compliance, retail lending, and credit assessments.",
+      "match_threshold": 35,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111108",
+      "role_name": "Python Developer",
+      "slug": "python-developer",
+      "category": "Software Engineering",
+      "description": "Backend engineering, automated pipelines, REST APIs, and scripts using Python.",
+      "match_threshold": 40,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "d27d23f8-7ac0-4124-9db6-6b1b45b56217",
+      "role_name": "AWS",
+      "slug": "aws",
+      "category": "Technology",
+      "description": "",
+      "match_threshold": 79,
+      "is_active": true,
+      "created_at": "2026-10-03T09:28:42.763Z",
+      "updated_at": "2026-10-03T09:28:42.764Z"
+    }
+  ],
+  "role_keywords": [
+    {
+      "id": "de9cd242-3f15-46d1-b34b-b2fe429213c3",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "sql",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "d2052ff6-b369-4288-b73a-bcdd99dc93b8",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "power bi",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "da0befd4-98f9-4a1b-8ce3-4c5668a950ea",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "powerbi",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "0f2165d1-5397-4396-9e88-abef6a70466e",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "excel",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "43b1343a-ea43-438f-8264-21d9bc03978c",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "advanced excel",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "b0ac0490-6ae6-4fc9-9433-631f23d59f06",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "tableau",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "4cfc0544-551a-4abb-b76a-ac242a1ccca0",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "python",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "5acdb843-cded-4589-931f-8675bd3f8371",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "pandas",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "81f7e8ec-720a-4ce2-9f00-5ea7fa164ff4",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "numpy",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "1955a175-b3aa-48d2-9660-8833d5d40fbd",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "dashboard",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "762513e2-591b-4e0d-b857-5d9a25a3afce",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "eda",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "3c9bf1e5-06ee-476c-b920-01dca4f36295",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "data cleaning",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "35701099-2d4e-4094-8e02-f6c40545714b",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "statistics",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "1b23b84c-3f68-48d9-b1bb-a84561b0c65d",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "data analysis",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "ea7388b0-6c01-4191-b163-a60e52121413",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "machine learning",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "6d760fb9-318e-4c1c-a0db-54d1ccf36513",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "deep learning",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "c13c9d28-a412-4929-98d7-a0e6d92f2352",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "python",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "3136d4ff-94b4-47a0-8565-33b698b12dc9",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "tensorflow",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "990e6637-dba5-4d07-8d15-fe217a35f76b",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "pytorch",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "7cea01dd-ca57-4566-b3d8-b369186800dd",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "scikit-learn",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "94849155-b161-45b6-b380-2a2a1b379632",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "nlp",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "588988e1-440c-4b47-b401-e56e328962b6",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "pandas",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "a9b0f329-0fe7-4d5a-8107-bc79ff08f21a",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "react",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "2fbd9989-6716-481f-8b99-c94ddccf5413",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "node",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "a8f2959e-1e52-4855-a0fb-d64d71003b4f",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "express",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "fd766165-a63c-4b74-9532-d4907156198b",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "mongodb",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "af69c6a3-3972-45ad-99a8-015b9cd0dc86",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "javascript",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "bcec82a9-40cd-46a5-b06d-6f0704487d53",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "rest api",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "b20c0110-812f-41dc-84c8-1af590471412",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "java",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "dda5313b-7df5-48df-9583-f8d129523b89",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "spring boot",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "f33750f6-52dd-4f99-9d19-f842a6cbfb71",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "microservices",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "106852aa-6b03-46c3-855a-2ba42d6f40b5",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "mysql",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "13d2b6a1-e267-4a4e-b011-ca507ce1e3df",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "aws",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "ae0f7911-f62a-4db9-988e-d75775e55bd1",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "docker",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "d73f54f0-7cb2-4a5f-b0ed-57fee86d5f11",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "kubernetes",
+      "weight": 5,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "9b9f995c-8dc0-435e-a05b-0ca0216a3165",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "ci/cd",
+      "weight": 4,
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "08074ac3-4037-49f5-bc1b-c2e8fcf2737a",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "python",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T09:37:56.869Z"
+    },
+    {
+      "id": "61b5dd6e-f5f7-41ae-963d-527287ce55f0",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "sql",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T09:38:07.557Z"
+    },
+    {
+      "id": "850545f0-c9b7-413d-b63d-f3a896e2817a",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "django",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T09:38:31.803Z"
+    },
+    {
+      "id": "c68939ab-6fd9-4654-80b2-17d5fff26dbe",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "django rest framework",
+      "weight": 3,
+      "is_active": true,
+      "created_at": "2026-10-03T09:39:23.080Z"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "full_name": "Ananya Roy",
+      "first_name": "Ananya",
+      "last_name": "Roy",
+      "email": "ananya.roy.analytics@gmail.com",
+      "phone": "+919811122334",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "country": "India",
+      "college": "Information Technology\nPune Institute",
+      "graduation_year": 2024,
+      "experience_level": "Fresher",
+      "preferred_role": "Data Analyst",
+      "assigned_role_id": "11111111-1111-1111-1111-111111111101",
+      "skills": [
+        "Python",
+        "SQL",
+        "MySQL",
+        "Power BI",
+        "Tableau",
+        "Excel",
+        "Advanced Excel",
+        "Pandas",
+        "NumPy",
+        "Statistics",
+        "GitHub"
+      ],
+      "resume_keywords": [
+        "sql",
+        "power bi",
+        "excel",
+        "advanced excel",
+        "tableau",
+        "python",
+        "pandas",
+        "numpy",
+        "eda",
+        "statistics",
+        "data analysis"
+      ],
+      "linkedin_url": "https://linkedin.com/in/ananya-roy-da",
+      "github_url": "https://github.com/ananya-roy",
+      "resume_file_url": "/api/resumes/download?fileId=2021333a-7c98-4d48-b156-22af57383b2c",
+      "resume_file_name": "ananya_roy_resume.txt",
+      "resume_file_type": "text/plain",
+      "resume_file_size": 665,
+      "extracted_text": "\nANANYA ROY\nEmail: ananya.roy.analytics@gmail.com | Phone: +91 98111 22334 | Location: Pune, Maharashtra\nLinkedIn: https://linkedin.com/in/ananya-roy-da | GitHub: https://github.com/ananya-roy\n\nEDUCATION:\nBachelor of Technology in Information Technology\nPune Institute of Computer Technology (PICT) | 2024\n\nPROFESSIONAL SUMMARY:\nAnalytical and detail-oriented Data Analyst with extensive experience in SQL, Python, Excel, Power BI, and Tableau. \n\nTECHNICAL SKILLS:\n- Data Analysis & Cleaning: Excel, Advanced Excel, Statistics, EDA, MIS Reporting\n- Business Intelligence: Power BI, Tableau, Dashboards\n- Databases & Programming: SQL, MySQL, Python, Pandas, NumPy\n  ",
+      "match_score": 79,
+      "status": "New",
+      "source": "Website Careers",
+      "privacy_consent": true,
+      "created_at": "2026-10-03T13:23:18.225Z",
+      "updated_at": "2026-10-03T13:23:18.225Z"
+    }
+  ],
+  "resume_keyword_matches": [
+    {
+      "id": "d261b0b9-5fda-422c-b39c-3a2cda1fbb77",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "aws",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "5a981dc7-5af0-4a8d-a9ec-d9ff48d25e73",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "docker",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "f6f06c60-0987-41a6-bfdc-dffb029e8844",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "kubernetes",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "512af322-c1e1-4df0-9878-e95ff01b672a",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111105",
+      "keyword": "ci/cd",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "2e0fe1d5-b8cf-4d46-b360-b9737ac93f7a",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "sql",
+      "matched": true,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "0f79d18f-1d10-4914-a620-1f1f345f1df4",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "power bi",
+      "matched": true,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "621dbdc3-2190-4b15-9abf-c63451cdf6ac",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "powerbi",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "40848928-87c8-4646-84de-a5036b38d36d",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "excel",
+      "matched": true,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "de525512-25ed-44d1-b1c5-985117c3c1d9",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "advanced excel",
+      "matched": true,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "cf159e33-ee78-41ee-90cf-3ddd6ae2d30b",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "tableau",
+      "matched": true,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "908dc465-da35-458b-a0ab-195a08085ce3",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "python",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "18832ad7-8bf9-41a8-842f-c01457c5338c",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "pandas",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "41143cdf-631f-48bd-8bd6-8316c3155515",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "numpy",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "2b487cdb-3933-4a0d-8073-b39973d05b83",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "dashboard",
+      "matched": false,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "33f59a81-f8c0-4f6f-b104-84958e4ecc90",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "eda",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "eae5ff18-6731-4f4d-a9e6-5ed8949cc679",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "data cleaning",
+      "matched": false,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "f651d46c-2a5a-40c5-9c53-58b94178d74f",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "statistics",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "a7e21247-a836-48cb-9adf-7b4f630e4fef",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "keyword": "data analysis",
+      "matched": true,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "ca64f154-2464-4d26-8a39-ce9585aff11e",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "machine learning",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "ae9cae0b-ec49-420e-8410-13fdc3c1dff8",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "deep learning",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "9ea4ca4f-07c0-4a04-8bf6-74a7b24969a5",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "python",
+      "matched": true,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "29fec070-f8b3-4ae0-a3e0-54b4d36faca5",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "tensorflow",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "ad232e99-c2e2-4730-aea7-26e28f510e48",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "pytorch",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "a198f0b8-84f0-4bfa-826f-62f21a3384c5",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "scikit-learn",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "83182e06-4f8f-4ddd-bf5c-9b5f4732e193",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "nlp",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "0d4904bd-1e9a-44cb-8785-998bb13e9dcf",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111102",
+      "keyword": "pandas",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "eec62fd6-95a2-447e-8148-faff94468905",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "java",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "3c9d174b-a8fd-4f81-90d8-e607f711a7c6",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "spring boot",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "bdb2deac-8e46-41ac-9f55-e76e17941b9d",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "microservices",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "5af698a7-cdf5-4681-9c97-0408f839a972",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111104",
+      "keyword": "mysql",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "f68c2043-e3ae-4543-a1da-11be1820a8b4",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "react",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "c55517a4-b5d6-456c-bd63-eed59584f97a",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "node",
+      "matched": false,
+      "weight": 5,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "98ba0fd7-425c-416c-a019-2ab5691cf715",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "express",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "afb07062-1f94-4887-be68-1b58ab521f44",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "mongodb",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "7a77db75-ece3-4177-86b4-6b8c1b3738df",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "javascript",
+      "matched": false,
+      "weight": 4,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "b10e2303-1981-4937-87a1-6da8aa69275c",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "keyword": "rest api",
+      "matched": false,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "9773dd72-42cf-41a7-913c-7eab98d8e7b2",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "python",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "801f8e6b-6355-4f42-b6a9-90ac11f586dc",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "sql",
+      "matched": true,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "9714ed7b-fde0-47bb-a3a0-659f9b8832a2",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "django",
+      "matched": false,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    },
+    {
+      "id": "68e83926-1714-44ef-9890-3627e5dfa6fa",
+      "candidate_id": "b4f97822-3f13-4d5f-a289-80f7e72b6e20",
+      "job_role_id": "11111111-1111-1111-1111-111111111108",
+      "keyword": "django rest framework",
+      "matched": false,
+      "weight": 3,
+      "created_at": "2026-10-03T13:23:18.225Z"
+    }
+  ],
+  "leads": [
+    {
+      "id": "7d284104-42ac-4eb7-a395-e49a4c4f2bea",
+      "first_name": "Subscriber",
+      "last_name": "",
+      "email": "newsletter.test@gmail.com",
+      "phone": "N/A",
+      "lead_type": "Other",
+      "source": "Newsletter Footer",
+      "status": "New",
+      "privacy_consent": true,
+      "created_at": "2026-10-03T13:23:17.946Z",
+      "updated_at": "2026-10-03T13:23:17.946Z"
+    },
+    {
+      "id": "b8d03d60-47e7-43f3-ab42-89e70b2cf40d",
+      "first_name": "Aditya",
+      "last_name": "More",
+      "email": "aditya.more@analytics.org",
+      "phone": "+91 98450 33445",
+      "lead_type": "Course",
+      "course_interest": "Data Analysis",
+      "source": "Course Page: Data Analysis",
+      "status": "New",
+      "privacy_consent": true,
+      "created_at": "2026-10-03T13:23:17.937Z",
+      "updated_at": "2026-10-03T13:23:17.937Z"
+    },
+    {
+      "id": "6e8d41ea-5d0a-4e22-b6fc-901afeacc990",
+      "first_name": "Kavita",
+      "last_name": "Joshi",
+      "email": "kavita.joshi@somedomain.in",
+      "phone": "+91 98231 44556",
+      "lead_type": "eBook",
+      "course_interest": "Data Analysis",
+      "education": "B.E. Computer Engineering",
+      "college": "MIT World Peace University",
+      "graduation_year": 2024,
+      "current_status": "Fresher",
+      "opportunity_type": "Job",
+      "preferred_role": "Data Analyst",
+      "source": "Homepage eBook CTA",
+      "status": "New",
+      "privacy_consent": true,
+      "created_at": "2026-10-03T13:23:17.926Z",
+      "updated_at": "2026-10-03T13:23:17.926Z"
+    },
+    {
+      "id": "21ff5606-8593-4579-8378-abb14b0f5436",
+      "first_name": "Rohan",
+      "last_name": "Deshmukh",
+      "email": "rohan.deshmukh@example.com",
+      "phone": "+91 98900 11223",
+      "lead_type": "Contact",
+      "course_interest": "Data Science & AI/ML",
+      "message": "Requesting batch timings and fee structure.",
+      "source": "Contact Page Form",
+      "status": "New",
+      "privacy_consent": true,
+      "created_at": "2026-10-03T13:23:17.913Z",
+      "updated_at": "2026-10-03T13:23:17.913Z"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "33333333-3333-3333-3333-333333333301",
+      "title": "Junior Data Analyst",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "company": "Knowletive Placement Partner",
+      "location": "Pune, India",
+      "type": "Full-time",
+      "experience": "0-2 Years",
+      "description": "Responsible for data cleansing, automated Excel/Power BI reporting, SQL querying, and communicating actionable insights to department leaders.",
+      "skills_required": [
+        "SQL",
+        "Power BI",
+        "Excel",
+        "Python"
+      ],
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "33333333-3333-3333-3333-333333333302",
+      "title": "Associate MERN Stack Developer",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "company": "Tech Partner Solutions",
+      "location": "Pune / Remote",
+      "type": "Full-time",
+      "experience": "0-1 Years",
+      "description": "Develop modern client applications with React and Node.js REST services. Participate in sprint planning and code reviews.",
+      "skills_required": [
+        "React",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "JavaScript"
+      ],
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    }
+  ],
+  "internships": [
+    {
+      "id": "dca0d753-70fc-41ba-b589-6c84e04fd25f",
+      "title": "AWS",
+      "job_role_id": "d27d23f8-7ac0-4124-9db6-6b1b45b56217",
+      "department": "Tech",
+      "location": "baner",
+      "duration": "3-6 Months",
+      "description": "AWSSS",
+      "skills_required": [
+        "kubernet",
+        "docker"
+      ],
+      "is_active": true,
+      "created_at": "2026-10-03T09:42:28.790Z",
+      "updated_at": "2026-10-03T09:42:28.790Z"
+    },
+    {
+      "id": "44444444-4444-4444-4444-444444444401",
+      "title": "Data Analytics & BI Intern",
+      "job_role_id": "11111111-1111-1111-1111-111111111101",
+      "department": "Analytics Lab",
+      "location": "Baner, Pune",
+      "duration": "3-6 Months",
+      "description": "Hands-on live industry projects analyzing consumer trends, building Power BI executive dashboards, and executing SQL extraction queries.",
+      "skills_required": [
+        "Excel",
+        "SQL",
+        "Power BI"
+      ],
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    },
+    {
+      "id": "44444444-4444-4444-4444-444444444402",
+      "title": "Full Stack Web Development Intern",
+      "job_role_id": "11111111-1111-1111-1111-111111111103",
+      "department": "Software Engineering",
+      "location": "Baner, Pune",
+      "duration": "3-6 Months",
+      "description": "Build UI modules with React & Tailwind, write backend REST APIs with Express & MongoDB, and gain live deployment experience.",
+      "skills_required": [
+        "HTML/CSS",
+        "JavaScript",
+        "React",
+        "Node.js"
+      ],
+      "is_active": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "22222222-2222-2222-2222-222222222201",
+      "student_name": "Priya Sharma",
+      "program": "Data Science & AI/ML",
+      "caption": "Secured an offer as Associate Data Scientist after hands-on project portfolio coaching.",
+      "video_url": "/videos/testimonials/session-review-final.mp4",
+      "poster_url": "/uploads/testimonials/6ef3f574-3c9d-4f8a-8359-c466513e7a07.jpeg",
+      "display_order": 1,
+      "is_published": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T10:20:01.585Z",
+      "thumbnail_url": "/uploads/testimonials/6ef3f574-3c9d-4f8a-8359-c466513e7a07.jpeg"
+    },
+    {
+      "id": "22222222-2222-2222-2222-222222222202",
+      "student_name": "Rahul Mehta",
+      "program": "PEP Program",
+      "caption": "The Professional Employability Program transformed my corporate readiness and interview skills.",
+      "video_url": "/videos/testimonials/shrushti-review.mp4",
+      "poster_url": "/videos/testimonials/posters/rahul-mehta.jpg",
+      "display_order": 2,
+      "is_published": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T10:22:17.532Z",
+      "thumbnail_url": "/videos/testimonials/posters/rahul-mehta.jpg"
+    },
+    {
+      "id": "22222222-2222-2222-2222-222222222203",
+      "student_name": "Sneha Desai",
+      "program": "Data Analyst",
+      "caption": "Mastered Power BI and SQL dashboards. Cleared MNC technical rounds in the 1st attempt.",
+      "video_url": "/videos/testimonials/certificate-reel.mp4",
+      "poster_url": "/videos/testimonials/posters/sneha-desai.jpg",
+      "display_order": 3,
+      "is_published": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T05:10:00.048Z",
+      "thumbnail_url": "/videos/testimonials/posters/sneha-desai.jpg"
+    },
+    {
+      "id": "22222222-2222-2222-2222-222222222204",
+      "student_name": "Vikram Patil",
+      "program": "Business Consulting",
+      "caption": "Incredible guidance on business strategy, case interview prep, and corporate communication.",
+      "video_url": "/videos/testimonials/syllabus-review.mp4",
+      "poster_url": "/videos/testimonials/posters/vikram-patil.jpg",
+      "display_order": 4,
+      "is_published": true,
+      "created_at": "2026-10-03T05:10:00.048Z",
+      "updated_at": "2026-10-03T10:23:23.612Z",
+      "thumbnail_url": "/videos/testimonials/posters/vikram-patil.jpg"
+    }
+  ],
+  "media_library": [
+    {
+      "id": "9ce581cb-7d2d-4882-a991-7b34a8326815",
+      "type": "image",
+      "media_type": "image",
+      "title": "Data Handelling",
+      "category": "activities",
+      "is_published": true,
+      "display_order": 4,
+      "file_url": "/uploads/media/51f26ae5-2b40-450c-b666-0c7cb544f284.jpeg",
+      "file_name": "WhatsApp Image 2026-10-03 at 11.20.51 AM.jpeg",
+      "mime_type": "image/jpeg",
+      "file_size": 463881,
+      "created_at": "2026-10-03T08:31:38.292Z",
+      "updated_at": "2026-10-03T08:31:38.292Z"
+    },
+    {
+      "id": "7c72074b-6def-43f4-b6e3-56302769b9f8",
+      "type": "image",
+      "media_type": "image",
+      "title": "Journey",
+      "category": "activities",
+      "is_published": true,
+      "display_order": 4,
+      "file_url": "/uploads/media/5377035b-e92c-4847-8405-0d40e708b271.jpeg",
+      "file_name": "WhatsApp Image 2026-10-03 at 11.20.50 AM.jpeg",
+      "mime_type": "image/jpeg",
+      "file_size": 435989,
+      "created_at": "2026-10-03T08:28:48.168Z",
+      "updated_at": "2026-10-03T08:28:48.168Z"
+    },
+    {
+      "id": "666cebba-a652-4579-a6fa-eeaf3457e94f",
+      "type": "image",
+      "media_type": "image",
+      "title": "Why Buisness Analyst",
+      "category": "activities",
+      "is_published": true,
+      "display_order": 4,
+      "file_url": "/uploads/media/2891b7ba-a093-4c8e-884e-c4340a8c8690.jpeg",
+      "file_name": "WhatsApp Image 2026-10-03 at 11.20.50 AM.jpeg",
+      "mime_type": "image/jpeg",
+      "file_size": 478381,
+      "created_at": "2026-10-03T08:27:21.832Z",
+      "updated_at": "2026-10-03T08:27:21.833Z"
+    },
+    {
+      "id": "68c0e45f-b441-4678-ac77-eb798bbeffe9",
+      "type": "image",
+      "media_type": "image",
+      "title": "Buisness Analyst",
+      "category": "activities",
+      "is_published": true,
+      "display_order": 4,
+      "file_url": "/uploads/media/4adbd22f-65d4-4d03-bfa7-7ccbdae4ee9a.jpeg",
+      "file_name": "WhatsApp Image 2026-10-03 at 11.20.49 AM.jpeg",
+      "mime_type": "image/jpeg",
+      "file_size": 634460,
+      "created_at": "2026-10-03T08:26:12.524Z",
+      "updated_at": "2026-10-03T08:26:12.524Z"
+    },
+    {
+      "id": "07457b03-c2e9-4349-b5f2-cfd90c69ac9b",
+      "type": "image",
+      "media_type": "image",
+      "title": "Learn",
+      "category": "activities",
+      "is_published": true,
+      "display_order": 3,
+      "file_url": "/uploads/media/6de260d8-eef6-4796-b499-187ddccf5ade.jpeg",
+      "file_name": "WhatsApp Image 2026-10-03 at 11.20.49 AM.jpeg",
+      "mime_type": "image/jpeg",
+      "file_size": 612094,
+      "created_at": "2026-10-03T08:25:05.014Z",
+      "updated_at": "2026-10-03T08:25:05.014Z"
+    },
+    {
+      "id": "16d490bf-ef36-4b24-9a38-02892c9b9997",
+      "type": "image",
+      "media_type": "image",
+      "title": "MBA",
+      "category": "activities",
+      "is_published": true,
+      "display_order": 2,
+      "file_url": "/uploads/media/f813ac29-ffba-4637-bfc9-8eed2c9b2f13.jpeg",
+      "file_name": "WhatsApp Image 2026-10-03 at 11.20.46 AM.jpeg",
+      "mime_type": "image/jpeg",
+      "file_size": 1802335,
+      "created_at": "2026-10-03T06:28:06.557Z",
+      "updated_at": "2026-10-03T10:40:37.910Z",
+      "description": ""
+    },
+    {
+      "id": "b376e0f6-932d-4c7c-a7d1-da61dd502f5f",
+      "type": "image",
+      "media_type": "image",
+      "title": "Grow",
+      "category": "activities",
+      "is_published": true,
+      "display_order": 1,
+      "file_url": "/uploads/media/575e3dc8-322e-4787-8fd0-40037c36ee43.jpeg",
+      "file_name": "WhatsApp Image 2026-10-03 at 11.20.44 AM.jpeg",
+      "mime_type": "image/jpeg",
+      "file_size": 123965,
+      "created_at": "2026-10-03T06:14:46.900Z",
+      "updated_at": "2026-10-03T10:40:28.546Z",
+      "description": ""
+    }
+  ]
+}

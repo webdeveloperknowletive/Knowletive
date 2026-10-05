@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ConsultationCTA from '../../components/ConsultationCTA.astro';
+
+const benefits = [
+  { title: "Skill-Based Learning", desc: "Focus entirely on practical application rather than theory." },
+  { title: "Job-Oriented Curriculum", desc: "Content designed based on current local industry demands." },
+  { title: "Quick Certification", desc: "Shorter duration courses designed for fast employability." },
+  { title: "Hands-on Training", desc: "Work with the actual tools and software used in the industry." },
+  { title: "Career Development", desc: "Grooming, communication, and workplace etiquette." },
+  { title: "Certification Guidance", desc: "Prepare for industry-recognized vocational certificates." }
+];
+---
+
+<BaseLayout 
+  title="Vocational Courses | Knowletive Services" 
+  description="Career-focused vocational learning designed to develop practical skills that can be applied directly in the workplace."
+>
+  <!-- Hero -->
+  <section class="relative page-header-spacing pb-14 md:pb-20 bg-[#0B1F3A] text-white overflow-hidden border-b border-white/10">
+    <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      <div class="absolute inset-0" style="background-image: radial-gradient(#F47A16 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+
+    <div class="container-custom relative z-10 text-center max-w-4xl mx-auto">
+      <nav aria-label="Breadcrumb" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-200 mb-6 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <span>/</span>
+        <a href="/services" class="hover:text-white transition-colors">Services</a>
+        <span>/</span>
+        <span class="text-[#F47A16]">Vocational Courses</span>
+      </nav>
+
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-manrope font-extrabold tracking-tight mb-6">
+        Vocational Courses
+      </h1>
+      <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed mb-10">
+        Career-focused vocational learning designed to develop practical skills that can be applied directly in the workplace.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/contact" class="btn-primary">Book Consultation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Overview & Benefits -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-manrope font-bold text-[#0B1F3A] mb-4">What's Included</h2>
+        <p class="text-[#64748B] text-lg">Comprehensive support and resources to ensure you get the maximum value from our vocational courses service.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {benefits.map((item, index) => (
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div class="text-[#0878E8] font-bold text-xl mb-4 font-manrope">0{index + 1}.</div>
+            <h3 class="text-xl font-bold text-[#0B1F3A] mb-3">{item.title}</h3>
+            <p class="text-[#64748B] leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section-padding bg-white">
+    <div class="container-custom text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-manrope font-bold text-[#0B1F3A] mb-6">Ready to Get Started?</h2>
+      <p class="text-[#64748B] text-lg mb-10">Our process is simple. Contact us to discuss your goals, and we'll create a customized roadmap for your success.</p>
+      <a href="/contact" class="btn-primary">Connect With Us</a>
+    </div>
+  </section>
+
+  <ConsultationCTA />
+</BaseLayout>

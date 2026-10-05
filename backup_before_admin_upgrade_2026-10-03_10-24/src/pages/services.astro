@@ -1,0 +1,424 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Knowletive Services | IT Training, Internship, Projects & Career Guidance" 
+  description="Explore Knowletive services including IT training and placement assistance, industrial internships, IT projects for freshers, overseas education, distance learning, vocational courses and career counselling."
+>
+  
+  <!-- HERO SECTION -->
+  <section class="relative page-header-spacing pb-16 md:pb-24 bg-[#0B1F3A] overflow-hidden text-white border-b border-white/10">
+    <div class="absolute inset-0 z-0 opacity-20">
+      <div class="absolute inset-0" style="background-image: radial-gradient(#0878E8 1px, transparent 1px); background-size: 30px 30px; mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);"></div>
+    </div>
+
+    <div class="container-custom relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <!-- Left Content -->
+        <div class="text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white font-bold text-xs tracking-widest uppercase mb-6 backdrop-blur-sm">
+            Our Services
+          </div>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-manrope font-extrabold mb-6 leading-tight">
+            Everything You Need to Build<br/>
+            <span class="text-[#F47A16]">a Stronger Career.</span>
+          </h1>
+          <p class="text-blue-100/90 text-lg md:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-8">
+            From industry-ready IT training and internships to overseas education, vocational learning and career counselling, Knowletive provides end-to-end support for your professional journey.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+            <a href="#service-grid" class="btn-primary">Explore Services</a>
+            <a href="/contact" class="btn-outline border-white/30 text-white hover:bg-white/10 hover:text-white hover:border-white">Book Free Consultation</a>
+          </div>
+        </div>
+        
+        <!-- Right Visual (Career Journey Concept) -->
+        <div class="hidden lg:flex justify-center relative">
+          <div class="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] to-transparent z-10 w-12 left-0"></div>
+          <div class="absolute inset-0 bg-gradient-to-l from-[#0B1F3A] to-transparent z-10 w-12 right-0"></div>
+          
+          <div class="bg-[#072B6F]/50 backdrop-blur-md border border-white/10 p-8 rounded-3xl w-full max-w-md relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-[#F47A16]/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-[#0878E8]/20 rounded-full blur-3xl"></div>
+            
+            <div class="flex flex-col gap-6 relative z-10">
+              <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/10 transform transition hover:translate-x-2">
+                <div class="w-10 h-10 rounded-full bg-[#0878E8]/20 text-[#0878E8] flex items-center justify-center shrink-0">1</div>
+                <div>
+                  <h4 class="font-bold text-white font-manrope">Learn</h4>
+                  <p class="text-sm text-blue-200">Acquire industry-relevant skills</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/10 transform transition hover:translate-x-2 ml-4">
+                <div class="w-10 h-10 rounded-full bg-[#F47A16]/20 text-[#F47A16] flex items-center justify-center shrink-0">2</div>
+                <div>
+                  <h4 class="font-bold text-white font-manrope">Build</h4>
+                  <p class="text-sm text-blue-200">Develop portfolio-ready projects</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/10 transform transition hover:translate-x-2 ml-8">
+                <div class="w-10 h-10 rounded-full bg-[#10B981]/20 text-[#10B981] flex items-center justify-center shrink-0">3</div>
+                <div>
+                  <h4 class="font-bold text-white font-manrope">Experience</h4>
+                  <p class="text-sm text-blue-200">Gain practical industry exposure</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/10 transform transition hover:translate-x-2 ml-12">
+                <div class="w-10 h-10 rounded-full bg-[#8B5CF6]/20 text-[#8B5CF6] flex items-center justify-center shrink-0">4</div>
+                <div>
+                  <h4 class="font-bold text-white font-manrope">Grow</h4>
+                  <p class="text-sm text-blue-200">Launch your career successfully</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — SERVICE OVERVIEW GRID -->
+  <section id="service-grid" class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-manrope font-bold text-[#0B1F3A] mb-4">Career Support at Every Stage</h2>
+        <p class="text-[#64748B] text-lg">Choose the right path based on where you are today and where you want to go next.</p>
+      </div>
+
+      <!-- Bento Grid / Asymmetric Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
+        
+        <!-- 1. IT Training & Placement (Large) -->
+        <a href="/services/it-training-placement" class="card-premium group relative bg-[#072B6F] border-none text-white overflow-hidden min-h-[340px] flex flex-col justify-between p-8 md:col-span-2 lg:col-span-8">
+          <div class="absolute inset-0 bg-gradient-to-br from-[#0878E8]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-[#0878E8] group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              </div>
+              <span class="text-white/40 font-manrope font-bold text-xl">01</span>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-bold mb-3 text-white">IT Training & Placement</h3>
+            <p class="text-blue-100 text-base md:text-lg max-w-xl mb-6">
+              Industry-focused technical training designed to help learners build practical skills and prepare confidently for IT careers.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-8">
+              <span class="text-xs bg-white/10 px-3 py-1 rounded-full border border-white/10">Data Science</span>
+              <span class="text-xs bg-white/10 px-3 py-1 rounded-full border border-white/10">MERN Stack</span>
+              <span class="text-xs bg-white/10 px-3 py-1 rounded-full border border-white/10">Java</span>
+              <span class="text-xs bg-white/10 px-3 py-1 rounded-full border border-white/10">Placement Support</span>
+            </div>
+          </div>
+          <div class="relative z-10 flex items-center gap-2 text-[#F47A16] font-semibold group-hover:gap-4 transition-all">
+            Explore IT Training <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+        <!-- 2. Industrial Internship -->
+        <a href="/services/industrial-internship" class="card-premium group relative min-h-[300px] flex flex-col justify-between p-8 md:col-span-1 lg:col-span-4 bg-white border border-gray-100 hover:border-[#0878E8]/30">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-[#F47A16] group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              </div>
+              <span class="text-gray-300 font-manrope font-bold text-xl">02</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-[#0B1F3A]">Industrial Internship</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-4">
+              Gain practical industry exposure through structured internships bridging the gap between academia and work.
+            </p>
+            <ul class="text-xs text-[#64748B] space-y-1 mb-6">
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Live Projects</li>
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Expert Mentorship</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2 text-[#0878E8] font-semibold text-sm group-hover:gap-3 transition-all">
+            Explore Internships <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+        <!-- 3. IT Projects for Freshers -->
+        <a href="/services/it-projects-freshers" class="card-premium group relative min-h-[300px] flex flex-col justify-between p-8 md:col-span-1 lg:col-span-4 bg-white border border-gray-100 hover:border-[#0878E8]/30">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+              </div>
+              <span class="text-gray-300 font-manrope font-bold text-xl">03</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-[#0B1F3A]">IT Projects for Freshers</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-4">
+              Build practical and portfolio-ready IT projects that help demonstrate your technical skills during interviews.
+            </p>
+            <ul class="text-xs text-[#64748B] space-y-1 mb-6">
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Final Year Projects</li>
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Viva Prep Support</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2 text-[#0878E8] font-semibold text-sm group-hover:gap-3 transition-all">
+            Explore IT Projects <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+        <!-- 4. Overseas Education -->
+        <a href="/services/overseas-education" class="card-premium group relative min-h-[300px] flex flex-col justify-between p-8 md:col-span-1 lg:col-span-4 bg-white border border-gray-100 hover:border-[#0878E8]/30">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-[#0878E8] group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              </div>
+              <span class="text-gray-300 font-manrope font-bold text-xl">04</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-[#0B1F3A]">Overseas Education</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-4">
+              End-to-end guidance for studying abroad, from shortlisting universities to visa support.
+            </p>
+            <ul class="text-xs text-[#64748B] space-y-1 mb-6">
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> 15+ Countries</li>
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Visa & SOP Help</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2 text-[#0878E8] font-semibold text-sm group-hover:gap-3 transition-all">
+            Explore Overseas Ed <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+        <!-- 5. Distance Learning -->
+        <a href="/services/distance-learning" class="card-premium group relative min-h-[300px] flex flex-col justify-between p-8 md:col-span-1 lg:col-span-4 bg-white border border-gray-100 hover:border-[#0878E8]/30">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600 group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              </div>
+              <span class="text-gray-300 font-manrope font-bold text-xl">05</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-[#0B1F3A]">Distance Learning</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-4">
+              Flexible education guidance for students and working professionals to continue studying without disruption.
+            </p>
+            <ul class="text-xs text-[#64748B] space-y-1 mb-6">
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> UG & PG Support</li>
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Working Professionals</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2 text-[#0878E8] font-semibold text-sm group-hover:gap-3 transition-all">
+            Explore Distance Learning <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+        <!-- 6. Vocational Courses -->
+        <a href="/services/vocational-courses" class="card-premium group relative min-h-[300px] flex flex-col justify-between p-8 md:col-span-1 lg:col-span-6 bg-white border border-gray-100 hover:border-[#0878E8]/30">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              </div>
+              <span class="text-gray-300 font-manrope font-bold text-xl">06</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-[#0B1F3A]">Vocational Courses</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-4">
+              Career-focused vocational learning designed to develop practical skills for direct workplace application.
+            </p>
+            <ul class="text-xs text-[#64748B] space-y-1 mb-6">
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Quick Certification</li>
+              <li class="flex items-center gap-1"><svg class="w-3 h-3 text-[#10B981]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Skill-Based Learning</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2 text-[#0878E8] font-semibold text-sm group-hover:gap-3 transition-all">
+            Explore Vocational <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+        <!-- 7. Career & Admission Counselling -->
+        <a href="/services/career-admission-counselling" class="card-premium group relative min-h-[300px] flex flex-col justify-between p-8 md:col-span-1 lg:col-span-6 bg-white border border-gray-100 hover:border-[#0878E8]/30">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+              </div>
+              <span class="text-gray-300 font-manrope font-bold text-xl">07</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-[#0B1F3A]">Career & Admission Counselling</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6">
+              Personalized guidance to help students choose the right career, course, college or academic path based on their goals, interests and profile.
+            </p>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+              <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <div class="text-[#F47A16] font-bold text-sm mb-1">Career Mapping</div>
+                <div class="text-xs text-gray-500">Discover your ideal path</div>
+              </div>
+              <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <div class="text-[#F47A16] font-bold text-sm mb-1">Course Selection</div>
+                <div class="text-xs text-gray-500">Find high-ROI programs</div>
+              </div>
+              <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <div class="text-[#F47A16] font-bold text-sm mb-1">College Fit</div>
+                <div class="text-xs text-gray-500">Match based on profile</div>
+              </div>
+              <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <div class="text-[#F47A16] font-bold text-sm mb-1">Admission Strategy</div>
+                <div class="text-xs text-gray-500">Boost acceptance chances</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-[#0878E8] font-semibold text-sm group-hover:gap-3 transition-all">
+            Book Counselling <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CAREER JOURNEY SECTION -->
+  <section class="section-padding bg-white relative overflow-hidden border-t border-gray-100">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-manrope font-bold text-[#0B1F3A] mb-4">One Partner. Every Stage of Your Journey.</h2>
+        <p class="text-[#64748B] text-lg">We support you from initial discovery all the way to launching your professional career.</p>
+      </div>
+
+      <div class="relative">
+        <!-- Desktop Horizontal Line -->
+        <div class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-gray-200 via-[#0878E8] to-gray-200 -translate-y-1/2 z-0"></div>
+        <!-- Mobile Vertical Line -->
+        <div class="md:hidden absolute left-[31px] top-0 bottom-0 w-1 bg-gradient-to-b from-gray-200 via-[#0878E8] to-gray-200 z-0"></div>
+
+        <div class="flex flex-col md:flex-row justify-between gap-8 md:gap-4 relative z-10">
+          
+          <div class="flex md:flex-col items-center md:text-center gap-4 md:gap-6 bg-white p-4 md:w-1/5">
+            <div class="w-16 h-16 rounded-full bg-white border-4 border-gray-100 flex items-center justify-center font-bold text-[#0B1F3A] shadow-md z-10 shrink-0">01</div>
+            <div>
+              <h4 class="font-bold text-[#0B1F3A] mb-1">Discover Your Path</h4>
+              <p class="text-xs text-gray-500">Career Counselling</p>
+            </div>
+          </div>
+
+          <div class="flex md:flex-col items-center md:text-center gap-4 md:gap-6 bg-white p-4 md:w-1/5">
+            <div class="w-16 h-16 rounded-full bg-white border-4 border-[#0878E8] flex items-center justify-center font-bold text-[#0878E8] shadow-md shadow-blue-100 z-10 shrink-0">02</div>
+            <div>
+              <h4 class="font-bold text-[#0B1F3A] mb-1">Build Your Skills</h4>
+              <p class="text-xs text-gray-500">IT & Vocational Training</p>
+            </div>
+          </div>
+
+          <div class="flex md:flex-col items-center md:text-center gap-4 md:gap-6 bg-white p-4 md:w-1/5">
+            <div class="w-16 h-16 rounded-full bg-white border-4 border-[#F47A16] flex items-center justify-center font-bold text-[#F47A16] shadow-md shadow-orange-100 z-10 shrink-0">03</div>
+            <div>
+              <h4 class="font-bold text-[#0B1F3A] mb-1">Gain Experience</h4>
+              <p class="text-xs text-gray-500">Industrial Internship</p>
+            </div>
+          </div>
+
+          <div class="flex md:flex-col items-center md:text-center gap-4 md:gap-6 bg-white p-4 md:w-1/5">
+            <div class="w-16 h-16 rounded-full bg-white border-4 border-[#10B981] flex items-center justify-center font-bold text-[#10B981] shadow-md shadow-green-100 z-10 shrink-0">04</div>
+            <div>
+              <h4 class="font-bold text-[#0B1F3A] mb-1">Build Portfolio</h4>
+              <p class="text-xs text-gray-500">IT Projects</p>
+            </div>
+          </div>
+
+          <div class="flex md:flex-col items-center md:text-center gap-4 md:gap-6 bg-white p-4 md:w-1/5 relative">
+            <div class="w-16 h-16 rounded-full bg-[#0B1F3A] border-4 border-white flex items-center justify-center font-bold text-white shadow-lg z-10 shrink-0">05</div>
+            <div>
+              <h4 class="font-bold text-[#0B1F3A] mb-1">Launch Career</h4>
+              <p class="text-xs text-gray-500 mb-2">Placement Support</p>
+              <div class="text-xs font-bold text-gray-400">OR</div>
+              <p class="text-xs text-gray-500 mt-2">Higher Education</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- WHY CHOOSE KNOWLETIVE -->
+  <section class="section-padding bg-gray-50 border-b border-gray-100">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-manrope font-bold text-[#0B1F3A] mb-4">Why Choose Knowletive?</h2>
+        <p class="text-[#64748B] text-lg">We prioritize practical application over theory to build actual careers.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-[#0878E8]/10 text-[#0878E8] flex items-center justify-center mb-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <h4 class="font-bold text-[#0B1F3A] mb-2">Project-Based Learning</h4>
+          <p class="text-sm text-gray-500">Learn by building real-world applications</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-[#0878E8]/10 text-[#0878E8] flex items-center justify-center mb-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </div>
+          <h4 class="font-bold text-[#0B1F3A] mb-2">Experienced Mentors</h4>
+          <p class="text-sm text-gray-500">Guidance from industry professionals</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-[#0878E8]/10 text-[#0878E8] flex items-center justify-center mb-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          </div>
+          <h4 class="font-bold text-[#0B1F3A] mb-2">Internship Exposure</h4>
+          <p class="text-sm text-gray-500">Bridge the gap to the corporate world</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center">
+          <div class="w-10 h-10 mx-auto rounded-full bg-[#0878E8]/10 text-[#0878E8] flex items-center justify-center mb-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <h4 class="font-bold text-[#0B1F3A] mb-2">Placement Support</h4>
+          <p class="text-sm text-gray-500">Resume building & interview preparation</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO WE HELP -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-manrope font-bold text-[#0B1F3A] mb-4">Who Can Benefit?</h2>
+        <p class="text-[#64748B] text-lg">Our services are structured for learners at every career stage.</p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <div class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-full text-[#0B1F3A] font-semibold text-sm">Students</div>
+        <div class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-full text-[#0B1F3A] font-semibold text-sm">Fresh Graduates</div>
+        <div class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-full text-[#0B1F3A] font-semibold text-sm">Job Seekers</div>
+        <div class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-full text-[#0B1F3A] font-semibold text-sm">Working Professionals</div>
+        <div class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-full text-[#0B1F3A] font-semibold text-sm">Students Planning Abroad</div>
+        <div class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-full text-[#0B1F3A] font-semibold text-sm">Distance Learning Students</div>
+        <div class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-full text-[#0B1F3A] font-semibold text-sm">Career Switchers</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="bg-[#0B1F3A] rounded-3xl p-10 md:p-16 text-center text-white relative overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-30">
+          <div class="absolute inset-0" style="background-image: radial-gradient(#0878E8 2px, transparent 2px); background-size: 30px 30px; mask-image: radial-gradient(ellipse at center, black 50%, transparent 100%);"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-3xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-manrope font-bold mb-6 text-white">Not Sure Which Service Is Right for You?</h2>
+          <p class="text-blue-100 text-lg md:text-xl mb-10 leading-relaxed">
+            Tell us your goals and our team will help you choose the right path to accelerate your career.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/contact" class="btn-primary">Book Free Consultation</a>
+            <a href="tel:+919970600116" class="btn-outline border-white/30 text-white hover:bg-white/10 hover:text-white hover:border-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+              Call +91 9970600116
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

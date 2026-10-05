@@ -1,0 +1,4 @@
+Ayush QA Candidate 1
+Email: qa1@example.com
+Phone: 9111111111
+Skills: SQL, Power BI

@@ -1,0 +1,477 @@
+---
+// ============================================================
+// /admin/leads
+// Leads & Inquiries Management with Filters & Status Updates
+// ============================================================
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { db } from '../../lib/db';
+
+const url = Astro.url;
+const leadTypeFilter = url.searchParams.get('leadType') || '';
+const statusFilter = url.searchParams.get('status') || '';
+const search = url.searchParams.get('search') || '';
+
+const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter, search });
+---
+
+<AdminLayout title="Leads & Inquiries" activeNav="leads">
+  
+  <!-- Filter & Export Controls -->
+  <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    
+    <form method="GET" class="flex flex-wrap items-center gap-3 flex-1">
+      <div class="relative min-w-[220px] flex-1">
+        <input 
+          type="text" 
+          name="search" 
+          value={search} 
+          placeholder="Search name, email, phone..." 
+          class="w-full px-3.5 py-2 pl-9 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] focus:ring-1 focus:ring-[#0878E8] outline-none transition-all"
+        />
+        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+
+      <!-- Lead Type Filter -->
+      <select name="leadType" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Lead Types</option>
+        <option value="Contact" selected={leadTypeFilter === 'Contact'}>Contact Form</option>
+        <option value="Course" selected={leadTypeFilter === 'Course'}>Course Inquiry</option>
+        <option value="Counseling" selected={leadTypeFilter === 'Counseling'}>Counseling</option>
+        <option value="Admission" selected={leadTypeFilter === 'Admission'}>Admission</option>
+        <option value="Overseas Education" selected={leadTypeFilter === 'Overseas Education'}>Overseas Education</option>
+        <option value="Job" selected={leadTypeFilter === 'Job'}>Job</option>
+        <option value="Internship" selected={leadTypeFilter === 'Internship'}>Internship</option>
+        <option value="eBook" selected={leadTypeFilter === 'eBook'}>Free eBook</option>
+      </select>
+
+      <!-- Status Filter -->
+      <select name="status" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Statuses</option>
+        <option value="New" selected={statusFilter === 'New'}>New</option>
+        <option value="Contacted" selected={statusFilter === 'Contacted'}>Contacted</option>
+        <option value="Follow-up" selected={statusFilter === 'Follow-up'}>Follow-up</option>
+        <option value="Interested" selected={statusFilter === 'Interested'}>Interested</option>
+        <option value="Converted" selected={statusFilter === 'Converted'}>Converted</option>
+        <option value="Not Interested" selected={statusFilter === 'Not Interested'}>Not Interested</option>
+        <option value="Closed" selected={statusFilter === 'Closed'}>Closed</option>
+      </select>
+
+      <button type="submit" class="px-4 py-2 bg-[#0878E8] text-white text-xs font-bold rounded-xl hover:bg-[#0764c2] transition-colors cursor-pointer">
+        Apply Filters
+      </button>
+
+      {(leadTypeFilter || statusFilter || search) && (
+        <a href="/admin/leads" class="px-3 py-2 border border-gray-200 text-[#64748B] text-xs font-semibold rounded-xl hover:bg-gray-50 transition-colors">
+          Clear
+        </a>
+      )}
+    </form>
+
+    <!-- Export Buttons & Bulk Destructive Actions -->
+    <div class="flex flex-wrap items-center gap-2">
+      <a 
+        href={`/api/exports/leads?format=xlsx${leadTypeFilter ? `&leadType=${leadTypeFilter}` : ''}${statusFilter ? `&status=${statusFilter}` : ''}`} 
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-manrope font-bold text-xs shadow-sm transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        Export Leads (Excel)
+      </a>
+      <a 
+        href={`/api/exports/leads?format=csv${leadTypeFilter ? `&leadType=${leadTypeFilter}` : ''}${statusFilter ? `&status=${statusFilter}` : ''}`} 
+        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#0B1F3A] font-semibold text-xs transition-colors"
+      >
+        CSV
+      </a>
+
+      <!-- Visual separation from regular export buttons -->
+      <div class="h-6 w-px bg-gray-200 mx-1 hidden sm:block"></div>
+
+      <!-- Delete All Leads (Destructive Button) -->
+      <button 
+        type="button" 
+        id="btn-delete-all-leads" 
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-manrope font-bold text-xs shadow-sm transition-colors cursor-pointer focus:ring-2 focus:ring-red-400 focus:outline-none"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+        Delete All Leads
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Leads Table -->
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div class="p-4 px-6 border-b border-gray-100 bg-[#F7F9FC] flex items-center justify-between">
+      <span class="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+        Showing {leads.length} Leads & Inquiries
+      </span>
+      <span class="text-xs text-gray-400">Captured from all website inquiry endpoints</span>
+    </div>
+
+    {leads.length === 0 ? (
+      <div class="p-16 text-center text-[#64748B] text-sm">
+        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        <p class="font-bold text-[#0B1F3A]">No leads recorded yet.</p>
+        <p class="text-xs text-gray-400 mt-1">Submissions from contact, courses, or eBook forms will automatically appear here.</p>
+      </div>
+    ) : (
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-[#F7F9FC] text-[#64748B] text-[11px] font-bold uppercase tracking-wider border-b border-gray-100">
+            <tr>
+              <th class="py-3 px-6">Name</th>
+              <th class="py-3 px-6">Lead Type</th>
+              <th class="py-3 px-6">Contact</th>
+              <th class="py-3 px-6">Interest / Opportunity</th>
+              <th class="py-3 px-6">Education & College</th>
+              <th class="py-3 px-6">Message / Note</th>
+              <th class="py-3 px-6">Status</th>
+              <th class="py-3 px-6">Date</th>
+              <th class="py-3 px-6 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {leads.map((l) => (
+              <tr class="hover:bg-gray-50/60 transition-colors">
+                <td class="py-4 px-6 font-bold text-[#0B1F3A]">
+                  {l.first_name} {l.last_name}
+                </td>
+                <td class="py-4 px-6">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-50 text-[#0878E8] border border-blue-100">
+                    {l.lead_type}
+                  </span>
+                  <span class="text-[11px] text-gray-500 block mt-1 font-medium">
+                    {l.source || 'Website'}
+                  </span>
+                </td>
+                <td class="py-4 px-6 text-xs">
+                  <a href={`tel:${l.phone}`} class="font-medium text-[#0B1F3A] hover:underline block">{l.phone}</a>
+                  {l.email ? (
+                    <a href={`mailto:${l.email}`} class="text-gray-500 hover:text-[#0878E8] block">{l.email}</a>
+                  ) : (
+                    <span class="text-gray-400 italic block">No email provided</span>
+                  )}
+                </td>
+                <td class="py-4 px-6 text-xs text-[#64748B]">
+                  <span class="font-medium text-[#0B1F3A] block truncate max-w-xs">{l.opportunity_type || l.course_interest || l.service_interest || 'General'}</span>
+                  <span class="text-gray-400 block truncate max-w-xs">{l.preferred_role || l.career_goal || ''}</span>
+                </td>
+                <td class="py-4 px-6 text-xs text-[#64748B]">
+                  <span class="font-medium text-[#0B1F3A] block">{l.degree || l.education || 'N/A'}</span>
+                  <span class="text-gray-400 block truncate max-w-xs">{l.college || ''}</span>
+                </td>
+                <td class="py-4 px-6 text-xs text-[#64748B] max-w-xs truncate" title={l.message || ''}>
+                  {l.message || '—'}
+                </td>
+                <td class="py-4 px-6">
+                  <select 
+                    data-lead-id={l.id} 
+                    class="lead-status-select text-xs font-semibold px-2 py-1 rounded-lg border border-gray-200 bg-white outline-none cursor-pointer focus:border-[#0878E8]"
+                  >
+                    <option value="New" selected={l.status === 'New'}>New</option>
+                    <option value="Contacted" selected={l.status === 'Contacted'}>Contacted</option>
+                    <option value="Follow-up" selected={l.status === 'Follow-up'}>Follow-up</option>
+                    <option value="Interested" selected={l.status === 'Interested'}>Interested</option>
+                    <option value="Converted" selected={l.status === 'Converted'}>Converted</option>
+                    <option value="Not Interested" selected={l.status === 'Not Interested'}>Not Interested</option>
+                    <option value="Closed" selected={l.status === 'Closed'}>Closed</option>
+                  </select>
+                </td>
+                <td class="py-4 px-6 text-xs text-[#64748B]">
+                  {new Date(l.created_at).toLocaleDateString('en-IN')}
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button 
+                    data-delete-lead-id={l.id} 
+                    class="delete-lead-btn p-1.5 rounded-lg border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors" 
+                    title="Delete Lead"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+  </div>
+
+  <!-- MODAL STEP 1: INITIAL WARNING -->
+  <div id="modal-delete-leads-step1" class="fixed inset-0 z-50 bg-[#0B1F3A]/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 transform transition-all">
+      <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="text-lg font-bold text-[#0B1F3A] text-center mb-2">Delete All Leads & Inquiries?</h3>
+      <p class="text-xs text-gray-600 text-center mb-4 leading-relaxed">
+        This will permanently delete <strong class="text-red-600 font-bold">ALL lead and inquiry records</strong> from the system. This action cannot be undone.
+      </p>
+      
+      <div class="bg-red-50 border border-red-100 rounded-xl p-3.5 mb-6 text-center">
+        <span class="text-xs font-semibold text-red-700" id="step1-leads-count-text">
+          You are about to delete <strong class="font-bold">{leads.length}</strong> lead records.
+        </span>
+      </div>
+
+      <div class="flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          id="btn-cancel-leads-step1" 
+          class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-xs font-bold hover:bg-gray-50 transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          id="btn-continue-leads-step1" 
+          class="px-5 py-2.5 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition-colors cursor-pointer shadow-sm"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL STEP 2: STRICT FINAL CONFIRMATION -->
+  <div id="modal-delete-leads-step2" class="fixed inset-0 z-50 bg-[#0B1F3A]/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 transform transition-all">
+      <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </div>
+      <h3 class="text-lg font-bold text-red-600 text-center mb-1">Final Confirmation</h3>
+      <p class="text-xs text-gray-600 text-center mb-4 leading-relaxed">
+        Are you absolutely sure you want to permanently delete ALL leads and inquiries?
+      </p>
+
+      <!-- Impact Breakdown Box -->
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-3.5 mb-4 text-xs space-y-1.5 text-gray-700">
+        <div class="font-bold text-[#0B1F3A] mb-1">This action will delete:</div>
+        <div class="flex justify-between items-center py-0.5">
+          <span>Leads & Inquiries:</span>
+          <span class="font-bold text-red-600" id="impact-leads-count">{leads.length}</span>
+        </div>
+      </div>
+
+      <!-- Typed confirmation input -->
+      <div class="mb-4">
+        <label for="input-confirm-delete-leads" class="block text-xs font-semibold text-gray-700 mb-1.5">
+          To confirm, type <span class="font-mono font-bold text-red-600 select-all">DELETE ALL LEADS</span> below:
+        </label>
+        <input 
+          type="text" 
+          id="input-confirm-delete-leads" 
+          placeholder="Type DELETE ALL LEADS" 
+          autocomplete="off"
+          class="w-full px-3.5 py-2.5 text-xs font-mono rounded-xl border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all uppercase"
+        />
+      </div>
+
+      <div id="delete-leads-error" class="hidden mb-4 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium"></div>
+
+      <div class="flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          id="btn-cancel-leads-step2" 
+          class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-xs font-bold hover:bg-gray-50 transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          id="btn-confirm-delete-all-leads" 
+          disabled 
+          class="px-5 py-2.5 rounded-xl bg-red-600 text-white text-xs font-bold opacity-50 cursor-not-allowed transition-all inline-flex items-center gap-1.5"
+        >
+          <span id="btn-delete-leads-spinner" class="hidden">
+            <svg class="animate-spin -ml-1 mr-1.5 h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+          </span>
+          <span id="btn-delete-leads-text">Permanently Delete All</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.lead-status-select').forEach(el => {
+      el.addEventListener('change', async (e) => {
+        const target = e.target as HTMLSelectElement;
+        const leadId = target.dataset.leadId;
+        const status = target.value;
+
+        try {
+          const res = await fetch(`/api/admin/leads/${leadId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+          });
+          if (!res.ok) alert('Failed to update lead status.');
+        } catch {
+          alert('Network error updating lead status.');
+        }
+      });
+    });
+
+    document.querySelectorAll('.delete-lead-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = (e.currentTarget as HTMLElement);
+        const leadId = target.dataset.deleteLeadId;
+        if (!confirm('Are you sure you want to delete this lead inquiry?')) return;
+
+        try {
+          const res = await fetch(`/api/admin/leads/${leadId}`, { method: 'DELETE' });
+          if (res.ok) {
+            window.location.reload();
+          } else {
+            alert('Failed to delete lead.');
+          }
+        } catch {
+          alert('Error deleting lead.');
+        }
+      });
+    });
+
+    // ============================================================
+    // TWO-STEP BULK DELETE ALL LEADS CONTROLLER
+    // ============================================================
+    const REQUIRED_LEADS_PHRASE = 'DELETE ALL LEADS';
+    const btnOpenLeadsModal = document.getElementById('btn-delete-all-leads');
+    const modalLeadsStep1 = document.getElementById('modal-delete-leads-step1');
+    const modalLeadsStep2 = document.getElementById('modal-delete-leads-step2');
+    const btnCancelLeadsStep1 = document.getElementById('btn-cancel-leads-step1');
+    const btnContinueLeadsStep1 = document.getElementById('btn-continue-leads-step1');
+    const btnCancelLeadsStep2 = document.getElementById('btn-cancel-leads-step2');
+    const inputConfirmLeads = document.getElementById('input-confirm-delete-leads') as HTMLInputElement | null;
+    const btnConfirmDeleteLeads = document.getElementById('btn-confirm-delete-all-leads') as HTMLButtonElement | null;
+    const spinnerLeads = document.getElementById('btn-delete-leads-spinner');
+    const btnTextLeads = document.getElementById('btn-delete-leads-text');
+    const errorBoxLeads = document.getElementById('delete-leads-error');
+
+    const step1LeadsCountText = document.getElementById('step1-leads-count-text');
+    const impactLeads = document.getElementById('impact-leads-count');
+
+    // 1. Open Step 1 Modal
+    btnOpenLeadsModal?.addEventListener('click', () => {
+      modalLeadsStep1?.classList.remove('hidden');
+      modalLeadsStep1?.classList.add('flex');
+
+      // Fetch fresh live impact summary in background
+      fetch('/api/admin/leads/all').then(res => res.json()).then(data => {
+        if (step1LeadsCountText) step1LeadsCountText.innerHTML = `You are about to delete <strong class="font-bold">${data.leadsCount}</strong> lead records.`;
+        if (impactLeads) impactLeads.textContent = String(data.leadsCount);
+      }).catch(err => console.warn('Could not fetch leads impact summary ahead of modal:', err));
+    });
+
+    // 2. Cancel Step 1
+    btnCancelLeadsStep1?.addEventListener('click', () => {
+      modalLeadsStep1?.classList.add('hidden');
+      modalLeadsStep1?.classList.remove('flex');
+    });
+
+    // 3. Continue to Step 2
+    btnContinueLeadsStep1?.addEventListener('click', () => {
+      modalLeadsStep1?.classList.add('hidden');
+      modalLeadsStep1?.classList.remove('flex');
+
+      if (inputConfirmLeads) {
+        inputConfirmLeads.value = '';
+        inputConfirmLeads.disabled = false;
+      }
+      if (btnConfirmDeleteLeads) {
+        btnConfirmDeleteLeads.disabled = true;
+        btnConfirmDeleteLeads.classList.add('opacity-50', 'cursor-not-allowed');
+        btnConfirmDeleteLeads.classList.remove('cursor-pointer', 'hover:bg-red-700');
+      }
+      if (errorBoxLeads) {
+        errorBoxLeads.classList.add('hidden');
+        errorBoxLeads.textContent = '';
+      }
+      if (spinnerLeads && btnTextLeads) {
+        spinnerLeads.classList.add('hidden');
+        btnTextLeads.textContent = 'Permanently Delete All';
+      }
+
+      modalLeadsStep2?.classList.remove('hidden');
+      modalLeadsStep2?.classList.add('flex');
+      setTimeout(() => inputConfirmLeads?.focus(), 100);
+    });
+
+    // 4. Cancel Step 2
+    btnCancelLeadsStep2?.addEventListener('click', () => {
+      modalLeadsStep2?.classList.add('hidden');
+      modalLeadsStep2?.classList.remove('flex');
+      if (inputConfirmLeads) inputConfirmLeads.value = '';
+    });
+
+    // 5. Input Confirmation Validation (Strict exact match)
+    inputConfirmLeads?.addEventListener('input', () => {
+      const isExactMatch = inputConfirmLeads.value.trim() === REQUIRED_LEADS_PHRASE;
+      if (btnConfirmDeleteLeads) {
+        if (isExactMatch) {
+          btnConfirmDeleteLeads.disabled = false;
+          btnConfirmDeleteLeads.classList.remove('opacity-50', 'cursor-not-allowed');
+          btnConfirmDeleteLeads.classList.add('cursor-pointer', 'hover:bg-red-700');
+        } else {
+          btnConfirmDeleteLeads.disabled = true;
+          btnConfirmDeleteLeads.classList.add('opacity-50', 'cursor-not-allowed');
+          btnConfirmDeleteLeads.classList.remove('cursor-pointer', 'hover:bg-red-700');
+        }
+      }
+    });
+
+    // Block Enter key unless valid
+    inputConfirmLeads?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (inputConfirmLeads.value.trim() === REQUIRED_LEADS_PHRASE) {
+          btnConfirmDeleteLeads?.click();
+        }
+      }
+    });
+
+    // 6. Final Destructive Deletion Execution
+    btnConfirmDeleteLeads?.addEventListener('click', async () => {
+      if (inputConfirmLeads?.value.trim() !== REQUIRED_LEADS_PHRASE) return;
+
+      // Loading state
+      btnConfirmDeleteLeads.disabled = true;
+      if (inputConfirmLeads) inputConfirmLeads.disabled = true;
+      if (btnCancelLeadsStep2) (btnCancelLeadsStep2 as HTMLButtonElement).disabled = true;
+      if (spinnerLeads) spinnerLeads.classList.remove('hidden');
+      if (btnTextLeads) btnTextLeads.textContent = 'Deleting...';
+      if (errorBoxLeads) errorBoxLeads.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/admin/leads/all', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ confirmation: REQUIRED_LEADS_PHRASE })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          if (btnTextLeads) btnTextLeads.textContent = 'Deleted!';
+          // Reload page
+          setTimeout(() => {
+            window.location.reload();
+          }, 800);
+        } else {
+          throw new Error(data.error || 'Failed to delete leads.');
+        }
+      } catch (err: any) {
+        if (errorBoxLeads) {
+          errorBoxLeads.textContent = err.message || 'An unexpected error occurred during bulk deletion.';
+          errorBoxLeads.classList.remove('hidden');
+        }
+        btnConfirmDeleteLeads.disabled = false;
+        if (inputConfirmLeads) inputConfirmLeads.disabled = false;
+        if (btnCancelLeadsStep2) (btnCancelLeadsStep2 as HTMLButtonElement).disabled = false;
+        if (spinnerLeads) spinnerLeads.classList.add('hidden');
+        if (btnTextLeads) btnTextLeads.textContent = 'Permanently Delete All';
+      }
+    });
+  </script>
+
+</AdminLayout>

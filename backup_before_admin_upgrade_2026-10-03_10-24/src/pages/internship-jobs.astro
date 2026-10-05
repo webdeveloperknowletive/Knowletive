@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConsultationCTA from '../components/ConsultationCTA.astro';
+
+const pageTitle = "Internship & Jobs | Knowletive";
+const pageDescription = "Explore current internship opportunities, job openings, and career launching platforms for freshers and experienced professionals at Knowletive.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <!-- Hero Section -->
+  <section class="relative bg-[#0B1F3A] pt-32 pb-20 overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      <div class="absolute inset-0" style="background-image: radial-gradient(#10B981 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0878E8]/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="container-custom relative z-10 text-center max-w-4xl mx-auto">
+      <nav aria-label="Breadcrumb" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-200 mb-6 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-white">Internship & Jobs</span>
+      </nav>
+
+      <h1 class="fluid-hero font-manrope font-extrabold text-white mb-6">
+        Launch Your Career with <br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-[#0878E8]">Internships & Jobs</span>
+      </h1>
+
+      <p class="text-blue-100/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10">
+        Apply for industrial internships and full-time job openings in IT, software development, data science, and digital marketing.
+      </p>
+    </div>
+  </section>
+
+  <!-- Job Listings Section -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#10B981]/10 text-[#10B981] font-bold text-xs tracking-widest uppercase mb-4">
+          Current Openings
+        </div>
+        <h2 class="fluid-h2 text-[#0B1F3A] mb-4">Find the Right <span class="text-[#0878E8]">Opportunity</span></h2>
+        <p class="text-[#64748B] text-base md:text-lg">
+          Browse our latest industrial internships and full-time job roles.
+        </p>
+      </div>
+
+      <!-- No Openings State -->
+      <div class="bg-gray-50 rounded-3xl p-16 text-center border border-gray-200 border-dashed max-w-4xl mx-auto">
+        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-gray-100">
+          <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+        </div>
+        <h3 class="text-2xl font-bold text-[#0B1F3A] mb-3">No Current Openings</h3>
+        <p class="text-[#64748B] max-w-md mx-auto mb-8">
+          We currently don't have any active internship or job postings online. Please check back later or submit your resume to our HR team for future opportunities.
+        </p>
+        <a href="/contact" class="btn-primary py-3 px-8">Submit Your Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <ConsultationCTA />
+</BaseLayout>

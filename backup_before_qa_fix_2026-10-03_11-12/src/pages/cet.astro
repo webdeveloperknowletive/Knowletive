@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConsultationCTA from '../components/ConsultationCTA.astro';
+
+const timeline = [
+  { phase: "Phase 1", title: "Online Registration & Application", period: "Jan – Mar 2026", desc: "Filling online form, uploading photo & signature, and payment of exam fee." },
+  { phase: "Phase 2", title: "Admit Card (Hall Ticket) Release", period: "April 2026", desc: "Download hall ticket from state CET cell portal with allocated examination center." },
+  { phase: "Phase 3", title: "CET 2026 Examination Window", period: "April – May 2026", desc: "Computer-Based Test (CBT) across designated centers in Maharashtra." },
+  { phase: "Phase 4", title: "Result & Scorecard Declaration", period: "June 2026", desc: "Percentile calculation and score normalization release." },
+  { phase: "Phase 5", title: "Centralized Admission Process (CAP)", period: "July – Aug 2026", desc: "Option form filling, document verification, merit list, and college seat allotment." }
+];
+
+const highlights = [
+  { title: "MHT-CET (Engineering / Tech)", desc: "Admission to top engineering colleges across Maharashtra including COEP, VJTI, SPIT, and PICT." },
+  { title: "MAH-MBA / MMS CET", desc: "Gateway to premier business schools like JBIMS, SIMSREE, PUMBA, and Welingkar." },
+  { title: "MAH-MCA CET", desc: "Master of Computer Applications entrance for MCA colleges across the state." }
+];
+---
+
+<BaseLayout 
+  title="CET 2026 Guidance & Admission Counseling | Knowletive" 
+  description="Complete guide for CET 2026: exam pattern, key dates, CAP round process, college cutoffs, and required documents with Knowletive."
+>
+  <!-- Hero -->
+  <section class="relative page-header-spacing pb-14 md:pb-20 bg-[#072B6F] text-white overflow-hidden border-b border-white/10">
+    <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      <div class="absolute inset-0" style="background-image: radial-gradient(#0878E8 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+
+    <div class="container-custom relative z-10 text-center max-w-4xl mx-auto">
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-200 mb-6 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-[#F47A16]">Resources</span>
+        <span>/</span>
+        <span class="text-white">CET 2026</span>
+      </nav>
+
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F47A16]/20 border border-[#F47A16]/30 text-[#F47A16] font-bold text-xs tracking-widest uppercase mb-6 mx-auto">
+        State Entrance Examination
+      </div>
+
+      <h1 class="fluid-hero font-manrope font-extrabold text-white mb-6">
+        Master Your <span class="text-gradient-orange">CET 2026</span> Journey
+      </h1>
+
+      <p class="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+        Your trusted admission partner for MHT-CET, MBA-CET, and MCA-CET. From application support to CAP round choice filling and seat allotment.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/cet-documents" class="btn-primary w-full sm:w-auto px-8 py-4">View Required Documents</a>
+        <a href="/contact" class="btn-secondary w-full sm:w-auto px-8 py-4">Book CAP Counseling Session</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Streams Covered -->
+  <section class="py-16 bg-white border-b border-gray-100">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-2xl md:text-3xl font-manrope font-bold text-[#0B1F3A]">CET Examinations Covered</h2>
+        <p class="text-[#64748B] text-sm mt-2">Personalized guidance for all major Maharashtra Common Entrance Tests.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {highlights.map(item => (
+          <div class="p-8 rounded-2xl bg-gray-50 border border-gray-200">
+            <h3 class="font-bold text-xl text-[#0B1F3A] mb-3">{item.title}</h3>
+            <p class="text-sm text-[#64748B] leading-relaxed mb-6">{item.desc}</p>
+            <a href="/contact" class="text-xs font-bold uppercase tracking-wider text-[#0878E8] hover:text-[#072B6F] flex items-center gap-1">
+              Get Cutoff Details →
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="section-padding bg-[#F7F9FC]">
+    <div class="container-custom max-w-4xl">
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-xs tracking-widest uppercase mb-4">
+          Admission Calendar
+        </div>
+        <h2 class="fluid-h2 text-[#0B1F3A] mb-4">CET 2026 Process Timeline</h2>
+        <p class="text-[#64748B] text-base md:text-lg">Stay ahead of crucial deadlines so you never miss admission rounds.</p>
+      </div>
+
+      <div class="space-y-6">
+        {timeline.map((item, idx) => (
+          <div class="card-premium border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div class="flex items-start gap-4">
+              <span class="w-12 h-12 rounded-xl bg-[#072B6F] text-[#F47A16] font-bold text-base flex items-center justify-center shrink-0">
+                0{idx + 1}
+              </span>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-[#0878E8]">{item.period}</span>
+                <h3 class="text-lg font-bold text-[#0B1F3A] mt-0.5">{item.title}</h3>
+                <p class="text-sm text-[#64748B] mt-1">{item.desc}</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 bg-blue-50 text-[#072B6F] font-bold text-xs rounded-full shrink-0">
+              {item.phase}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ConsultationCTA />
+</BaseLayout>

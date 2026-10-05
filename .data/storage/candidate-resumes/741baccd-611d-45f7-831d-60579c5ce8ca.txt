@@ -1,0 +1,1 @@
+Candidate Two. Email: test2@example.com. Phone: 9876543211. Skills: React, Node.js, Express, MongoDB.

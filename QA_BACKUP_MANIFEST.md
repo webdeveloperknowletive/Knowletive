@@ -1,0 +1,23 @@
+# QA BACKUP MANIFEST
+
+- **Backup Date & Time:** 2026-10-03 11:12 IST
+- **Backup Directory:** `backup_before_qa_fix_2026-10-03_11-12`
+- **Original Project Path:** `c:\Users\ayush\Downloads\Knowletiveweb - Copy`
+- **Project Framework:** Astro v5/v7 SSR with `@astrojs/node` standalone adapter + Tailwind CSS
+- **Current Build Status:** Passing (`npm run build` completed with 0 errors)
+- **Backed Up Folders & Files:**
+  - `src/` (All components, layouts, pages, API routes, middleware, and libraries)
+  - `public/` (All static assets, fonts, icons, images, videos)
+  - `migrations/` (Versioned SQL migrations: 001, 002, 003)
+  - `scripts/` (QA test suite & utilities)
+  - `package.json` & `package-lock.json`
+  - `astro.config.mjs`
+  - `tsconfig.json`
+  - `.env.example`
+  - `CLAUDE.md` & `BACKUP_MANIFEST.md`
+- **Excluded:**
+  - `node_modules/`
+  - `dist/`
+  - `.astro/`
+  - `.git/`
+- **Phase Objective:** Full-project QA crawl, exhaustive page testing, broken link detection/repair, media validation, form submission checks, accessibility/mobile responsiveness audits, and production verification.

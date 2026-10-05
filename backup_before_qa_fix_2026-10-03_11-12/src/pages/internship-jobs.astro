@@ -1,0 +1,445 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConsultationCTA from '../components/ConsultationCTA.astro';
+import { db } from '../lib/db';
+
+const pageTitle = "Internship & Jobs | Knowletive";
+const pageDescription = "Explore current internship opportunities, job openings, and submit your resume for automated role matching at Knowletive.";
+
+let jobs: any[] = [];
+let internships: any[] = [];
+let roles: any[] = [];
+
+try {
+  jobs = await db.getJobs(true);
+  internships = await db.getInternships(true);
+  roles = await db.getJobRoles(true);
+} catch (e) {
+  console.error("Failed to load jobs/internships:", e);
+}
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <!-- Hero Section -->
+  <section class="relative bg-[#0B1F3A] pt-32 pb-20 overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      <div class="absolute inset-0" style="background-image: radial-gradient(#10B981 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0878E8]/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="container-custom relative z-10 text-center max-w-4xl mx-auto">
+      <nav aria-label="Breadcrumb" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-200 mb-6 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-white">Internship & Jobs</span>
+      </nav>
+
+      <h1 class="fluid-hero font-manrope font-extrabold text-white mb-6">
+        Launch Your Career with <br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-[#0878E8]">Internships & Jobs</span>
+      </h1>
+
+      <p class="text-blue-100/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10">
+        Apply for industrial internships and full-time job openings in IT, software development, data science, and business analytics. Upload your resume for automated matching.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="#upload-section" class="px-8 py-3.5 bg-gradient-to-r from-[#F47A16] to-[#E06605] text-white font-bold rounded-xl shadow-lg hover:shadow-orange-500/25 transition-all">
+          Upload Your Resume
+        </a>
+        <a href="#openings-section" class="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl backdrop-blur-md transition-all border border-white/20">
+          Browse Openings
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Openings Section -->
+  <section id="openings-section" class="section-padding bg-slate-50">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#10B981]/10 text-[#10B981] font-bold text-xs tracking-widest uppercase mb-4">
+          Current Openings
+        </div>
+        <h2 class="fluid-h2 text-[#0B1F3A] mb-4">Find the Right <span class="text-[#0878E8]">Opportunity</span></h2>
+        <p class="text-[#64748B] text-base md:text-lg">
+          Browse active opportunities below or submit your resume directly to our automated talent pool.
+        </p>
+      </div>
+
+      <!-- Jobs & Internships List -->
+      {jobs.length > 0 || internships.length > 0 ? (
+        <div class="space-y-12">
+          {jobs.length > 0 && (
+            <div>
+              <h3 class="text-2xl font-bold text-[#0B1F3A] mb-6 flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-blue-500"></span> Full-Time Roles
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {jobs.map((job) => (
+                  <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">{job.type || 'Full-time'}</span>
+                        <span class="text-xs text-slate-500">{job.location || 'Pune / Remote'}</span>
+                      </div>
+                      <h4 class="text-xl font-bold text-[#0B1F3A] mb-1">{job.title}</h4>
+                      <p class="text-sm font-medium text-slate-600 mb-4">{job.company || 'Knowletive Partner Network'}</p>
+                      <p class="text-sm text-slate-500 line-clamp-3 mb-4">{job.description}</p>
+                      
+                      {job.skills_required && job.skills_required.length > 0 && (
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                          {job.skills_required.slice(0, 4).map((skill: string) => (
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full font-medium">{skill}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <a href="#upload-section" class="w-full text-center py-2.5 px-4 bg-blue-50 hover:bg-[#0878E8] text-[#0878E8] hover:text-white rounded-xl font-bold text-sm transition-colors border border-blue-100">
+                      Apply For This Role &rarr;
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {internships.length > 0 && (
+            <div>
+              <h3 class="text-2xl font-bold text-[#0B1F3A] mb-6 flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span> Internship Programs
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {internships.map((internship) => (
+                  <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">Internship</span>
+                        <span class="text-xs text-slate-500">{internship.duration || '3-6 Months'}</span>
+                      </div>
+                      <h4 class="text-xl font-bold text-[#0B1F3A] mb-1">{internship.title}</h4>
+                      <p class="text-sm font-medium text-slate-600 mb-4">{internship.department || 'Technical Services'}</p>
+                      <p class="text-sm text-slate-500 line-clamp-3 mb-4">{internship.description}</p>
+                      
+                      {internship.skills_required && internship.skills_required.length > 0 && (
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                          {internship.skills_required.slice(0, 4).map((skill: string) => (
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full font-medium">{skill}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <a href="#upload-section" class="w-full text-center py-2.5 px-4 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-xl font-bold text-sm transition-colors border border-emerald-100">
+                      Apply For Internship &rarr;
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div class="bg-white rounded-3xl p-12 text-center border border-gray-200 border-dashed max-w-3xl mx-auto shadow-sm">
+          <div class="w-16 h-16 bg-blue-50 text-[#0878E8] rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-[#0B1F3A] mb-2">Continuous Hiring & Internship Intake</h3>
+          <p class="text-[#64748B] max-w-md mx-auto mb-6 text-sm">
+            We are continuously processing candidate applications for upcoming cohort batches and hiring partner drives. Submit your resume below for instant automated indexing!
+          </p>
+          <a href="#upload-section" class="inline-block py-2.5 px-6 bg-[#0878E8] text-white rounded-xl font-bold text-sm hover:bg-blue-600 transition-colors">
+            Drop Resume Below
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Resume Upload Section -->
+  <section id="upload-section" class="section-padding bg-white relative">
+    <div class="container-custom max-w-4xl mx-auto">
+      <div class="bg-gradient-to-br from-[#0B1F3A] to-[#152e50] rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute -top-24 -right-24 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="text-center max-w-2xl mx-auto mb-10 relative z-10">
+          <span class="inline-block px-3 py-1 bg-white/10 text-emerald-400 font-bold text-xs uppercase tracking-widest rounded-full mb-3 border border-white/10">
+            Automated Talent Pool
+          </span>
+          <h2 class="text-3xl md:text-4xl font-extrabold mb-4 font-manrope">
+            Submit Your Resume
+          </h2>
+          <p class="text-blue-100/80 text-sm md:text-base">
+            Upload your resume for evaluation against top industry roles. Supported formats: PDF, DOCX, TXT (up to 20MB).
+          </p>
+        </div>
+
+        <form id="resume-upload-form" class="space-y-6 relative z-10 max-w-2xl mx-auto">
+          <!-- Candidate Basic Details -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-blue-200 uppercase tracking-wider mb-2">Full Name *</label>
+              <input type="text" name="full_name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#F47A16] transition-all" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-blue-200 uppercase tracking-wider mb-2">Email Address *</label>
+              <input type="email" name="email" required placeholder="e.g. rahul@example.com" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#F47A16] transition-all" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-blue-200 uppercase tracking-wider mb-2">Phone Number *</label>
+              <input type="tel" name="phone" required placeholder="e.g. +91 98765 43210" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#F47A16] transition-all" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-blue-200 uppercase tracking-wider mb-2">Preferred Role *</label>
+              <select name="preferred_role" required class="w-full px-4 py-3 rounded-xl bg-[#0F2847] border border-white/20 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#F47A16] transition-all">
+                <option value="">Select Target Role</option>
+                {roles.map(r => (
+                  <option value={r.role_name}>{r.role_name}</option>
+                ))}
+                <option value="Other">Other / Open to Suggestions</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-blue-200 uppercase tracking-wider mb-2">Experience Level</label>
+              <select name="experience_level" class="w-full px-4 py-3 rounded-xl bg-[#0F2847] border border-white/20 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#F47A16] transition-all">
+                <option value="Fresher">Fresher / Final Year Student</option>
+                <option value="1-3 Years">1 - 3 Years</option>
+                <option value="3-5 Years">3 - 5 Years</option>
+                <option value="5+ Years">5+ Years</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-blue-200 uppercase tracking-wider mb-2">LinkedIn Profile (Optional)</label>
+              <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/username" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#F47A16] transition-all" />
+            </div>
+          </div>
+
+          <!-- Drag and Drop Resume Field -->
+          <div>
+            <label class="block text-xs font-semibold text-blue-200 uppercase tracking-wider mb-2">Upload Resume * (PDF, DOCX, TXT &bull; Max 20MB)</label>
+            <div id="drop-zone" class="border-2 border-dashed border-white/30 rounded-2xl p-8 text-center bg-white/5 hover:bg-white/10 hover:border-emerald-400 transition-all cursor-pointer relative group">
+              <input type="file" id="resume-file-input" name="resume" accept=".pdf,.docx,.txt" class="hidden" />
+              
+              <div id="drop-zone-idle">
+                <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
+                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                </div>
+                <p class="font-bold text-base text-white mb-1">Drop your resume here or <span class="text-[#F47A16] underline underline-offset-2">Browse File</span></p>
+                <p class="text-xs text-blue-200/70">Accepted: PDF, DOCX, TXT (Maximum: 20 MB)</p>
+              </div>
+
+              <!-- Selected File Display -->
+              <div id="drop-zone-selected" class="hidden flex-col items-center">
+                <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mb-2">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <p id="file-name" class="font-bold text-white text-sm max-w-xs truncate"></p>
+                <p id="file-size" class="text-xs text-blue-200/80 mb-3"></p>
+                <button type="button" id="remove-file-btn" class="px-3 py-1 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-xs font-semibold transition-colors">
+                  Remove File
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Progress -->
+          <div id="upload-progress" class="hidden">
+            <div class="flex justify-between text-xs text-blue-200 mb-1">
+              <span>Processing resume & matching keywords...</span>
+              <span id="upload-pct">100%</span>
+            </div>
+            <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+              <div class="bg-gradient-to-r from-emerald-400 to-[#0878E8] h-full w-full animate-pulse rounded-full"></div>
+            </div>
+          </div>
+
+          <!-- Privacy Consent Checkbox -->
+          <div class="flex items-start gap-3 pt-2">
+            <input type="checkbox" id="privacy-consent" name="consent" required class="mt-1 w-4 h-4 text-[#F47A16] rounded border-white/20 bg-white/10 focus:ring-0 focus:ring-offset-0" />
+            <label for="privacy-consent" class="text-xs text-blue-100/90 leading-relaxed">
+              I consent to Knowletive storing and reviewing my resume for relevant job, internship, and career opportunities in accordance with the <a href="/privacy" class="text-[#F47A16] hover:underline" target="_blank">Privacy Policy</a>.
+            </label>
+          </div>
+
+          <!-- Validation Error Message -->
+          <div id="upload-error" class="hidden p-4 rounded-xl bg-red-500/20 border border-red-500/30 text-red-200 text-xs"></div>
+
+          <!-- Success Alert -->
+          <div id="upload-success" class="hidden p-6 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-100 text-center space-y-2">
+            <div class="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h4 class="font-bold text-lg text-white">Resume Submitted Successfully!</h4>
+            <p class="text-xs text-emerald-200/90">
+              Your resume has been indexed and entered into our evaluation pipeline. Our placement coordinators will contact you for matching openings.
+            </p>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submit-btn" class="w-full py-4 bg-gradient-to-r from-[#F47A16] to-[#E06605] hover:brightness-110 text-white font-bold rounded-xl shadow-lg shadow-orange-500/25 transition-all text-base">
+            Submit Application & Resume
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <ConsultationCTA />
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('resume-upload-form') as HTMLFormElement;
+  const dropZone = document.getElementById('drop-zone') as HTMLElement;
+  const fileInput = document.getElementById('resume-file-input') as HTMLInputElement;
+  const dropIdle = document.getElementById('drop-zone-idle') as HTMLElement;
+  const dropSelected = document.getElementById('drop-zone-selected') as HTMLElement;
+  const fileNameDisplay = document.getElementById('file-name') as HTMLElement;
+  const fileSizeDisplay = document.getElementById('file-size') as HTMLElement;
+  const removeBtn = document.getElementById('remove-file-btn') as HTMLButtonElement;
+  const uploadProgress = document.getElementById('upload-progress') as HTMLElement;
+  const uploadError = document.getElementById('upload-error') as HTMLElement;
+  const uploadSuccess = document.getElementById('upload-success') as HTMLElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+  let selectedFile: File | null = null;
+  const MAX_SIZE = 20 * 1024 * 1024; // 20 MB
+
+  function formatBytes(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  function handleFile(file: File) {
+    uploadError.classList.add('hidden');
+    uploadError.textContent = '';
+
+    const allowedExtensions = ['.pdf', '.docx', '.txt'];
+    const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+
+    if (!allowedExtensions.includes(ext)) {
+      showError('Invalid file type. Please upload a PDF, DOCX, or TXT file.');
+      return;
+    }
+
+    if (file.size > MAX_SIZE) {
+      showError('File size exceeds the 20 MB maximum limit.');
+      return;
+    }
+
+    if (file.size === 0) {
+      showError('The selected file is empty.');
+      return;
+    }
+
+    selectedFile = file;
+    fileNameDisplay.textContent = file.name;
+    fileSizeDisplay.textContent = formatBytes(file.size);
+    dropIdle.classList.add('hidden');
+    dropSelected.classList.remove('hidden');
+  }
+
+  function resetFile() {
+    selectedFile = null;
+    fileInput.value = '';
+    dropSelected.classList.add('hidden');
+    dropIdle.classList.remove('hidden');
+  }
+
+  function showError(msg: string) {
+    uploadError.textContent = msg;
+    uploadError.classList.remove('hidden');
+  }
+
+  if (dropZone && fileInput) {
+    dropZone.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).id !== 'remove-file-btn') {
+        fileInput.click();
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-emerald-400', 'bg-white/10');
+    });
+
+    dropZone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-emerald-400', 'bg-white/10');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-emerald-400', 'bg-white/10');
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    removeBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      resetFile();
+    });
+  }
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      uploadError.classList.add('hidden');
+      uploadSuccess.classList.add('hidden');
+
+      if (!selectedFile) {
+        showError('Please upload your resume (PDF, DOCX, or TXT).');
+        return;
+      }
+
+      const formData = new FormData(form);
+      formData.set('resume', selectedFile);
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting & Extracting Details...';
+      uploadProgress.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/api/resumes/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to submit resume');
+        }
+
+        uploadProgress.classList.add('hidden');
+        uploadSuccess.classList.remove('hidden');
+        form.reset();
+        resetFile();
+        submitBtn.textContent = 'Submitted!';
+      } catch (err: any) {
+        uploadProgress.classList.add('hidden');
+        showError(err.message || 'Network error occurred while uploading.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Application & Resume';
+      }
+    });
+  }
+</script>

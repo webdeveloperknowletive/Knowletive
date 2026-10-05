@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Book pages (Blue) -->
+  <path d="M6 34C11 31 18 31 24 35C30 31 37 31 42 34V14C37 11 30 11 24 15C18 11 11 11 6 14V34Z" fill="#072B6F"/>
+  <path d="M24 15V35" stroke="#0878E8" stroke-width="2" stroke-linecap="round"/>
+  <!-- Figure / Talent Star (Orange) -->
+  <circle cx="24" cy="9" r="4" fill="#F47A16"/>
+  <path d="M16 23C18 17 21 15 24 15C27 15 30 17 32 23C29 20 27 19 24 19C21 19 19 20 16 23Z" fill="#F47A16"/>
+</svg>

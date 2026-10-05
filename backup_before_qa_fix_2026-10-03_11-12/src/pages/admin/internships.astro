@@ -1,0 +1,233 @@
+---
+// ============================================================
+// /admin/internships
+// Manage Internships with Live Publishing to Public Portal
+// ============================================================
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { db } from '../../lib/db';
+
+const [internships, roles] = await Promise.all([
+  db.getInternships(false),
+  db.getJobRoles(false)
+]);
+
+const roleMap = new Map(roles.map(r => [r.id, r.role_name]));
+---
+
+<AdminLayout title="Internship Opportunities" activeNav="internships">
+  
+  <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-lg font-bold font-manrope text-[#0B1F3A]">Internship Openings</h2>
+      <p class="text-xs text-[#64748B]">Published internships automatically display on the public Internship & Jobs page.</p>
+    </div>
+    
+    <button 
+      id="open-add-internship-modal"
+      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0878E8] hover:bg-[#0764c2] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+      Add Internship Program
+    </button>
+  </div>
+
+  <!-- Internships List -->
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm whitespace-nowrap">
+        <thead class="bg-[#F7F9FC] text-[#64748B] text-[11px] font-bold uppercase tracking-wider border-b border-gray-100">
+          <tr>
+            <th class="py-3 px-6">Program Title</th>
+            <th class="py-3 px-6">Department</th>
+            <th class="py-3 px-6">Role Domain</th>
+            <th class="py-3 px-6">Location & Duration</th>
+            <th class="py-3 px-6">Skills Covered</th>
+            <th class="py-3 px-6">Publish Status</th>
+            <th class="py-3 px-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {internships.map(item => (
+            <tr class="hover:bg-gray-50/60 transition-colors">
+              <td class="py-4 px-6 font-bold text-[#0B1F3A]">
+                {item.title}
+              </td>
+              <td class="py-4 px-6 text-xs text-[#64748B]">
+                {item.department}
+              </td>
+              <td class="py-4 px-6 text-xs text-[#64748B]">
+                {(item.job_role_id && roleMap.get(item.job_role_id)) || 'General'}
+              </td>
+              <td class="py-4 px-6 text-xs">
+                <span class="font-semibold text-[#0B1F3A] block">{item.location}</span>
+                <span class="text-gray-400 block">{item.duration}</span>
+              </td>
+              <td class="py-4 px-6 text-xs">
+                <div class="flex flex-wrap gap-1 max-w-xs">
+                  {item.skills_required && item.skills_required.map(s => (
+                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-700">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </td>
+              <td class="py-4 px-6">
+                <button 
+                  data-toggle-internship-id={item.id} 
+                  data-current-active={item.is_active ? 'true' : 'false'}
+                  class={`toggle-internship-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+                    item.is_active 
+                      ? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100' 
+                      : 'bg-gray-100 text-gray-500 border border-gray-200 hover:bg-gray-200'
+                  }`}
+                >
+                  <span class={`w-1.5 h-1.5 rounded-full ${item.is_active ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                  {item.is_active ? 'Published' : 'Draft'}
+                </button>
+              </td>
+              <td class="py-4 px-6 text-right">
+                <button 
+                  data-delete-internship-id={item.id} 
+                  class="delete-internship-btn p-1.5 rounded-lg border border-gray-200 text-red-500 hover:bg-red-50 transition-colors"
+                  title="Delete Internship"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+              </td>
+            </tr>
+          ))}
+          {internships.length === 0 && (
+            <tr>
+              <td colspan="7" class="p-12 text-center text-sm text-gray-400">
+                No internship opportunities posted yet. Click "+ Add Internship Program" to add one.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add Internship Modal -->
+  <div id="add-internship-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
+      <h3 class="text-lg font-bold font-manrope text-[#0B1F3A] mb-4">Post Internship Program</h3>
+      
+      <form id="new-internship-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Internship Title *</label>
+          <input type="text" id="internship-title" required placeholder="e.g. Data Analytics & Business Intelligence Intern" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Target Job Role</label>
+            <select id="internship-role-id" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none bg-white">
+              <option value="">Select Domain Role</option>
+              {roles.map(r => (
+                <option value={r.id}>{r.role_name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Department *</label>
+            <input type="text" id="internship-department" required placeholder="e.g. Analytics Lab" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Location *</label>
+            <input type="text" id="internship-location" required placeholder="e.g. Baner, Pune / Hybrid" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Duration</label>
+            <input type="text" id="internship-duration" value="3-6 Months" placeholder="e.g. 3-6 Months" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Skills Covered (comma separated)</label>
+          <input type="text" id="internship-skills" placeholder="Excel, SQL, Power BI, Python" class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#0B1F3A] mb-1">Program Description</label>
+          <textarea id="internship-desc" rows="3" placeholder="Projects, mentorship, stipend/certification details..." class="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 outline-none focus:border-[#0878E8]"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" id="close-add-internship-modal" class="px-4 py-2 border border-gray-200 text-xs font-semibold rounded-xl hover:bg-gray-50">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-[#0878E8] hover:bg-[#0764c2] text-white text-xs font-bold rounded-xl">Publish Internship</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('add-internship-modal');
+    document.getElementById('open-add-internship-modal')?.addEventListener('click', () => modal?.classList.remove('hidden'));
+    document.getElementById('close-add-internship-modal')?.addEventListener('click', () => modal?.classList.add('hidden'));
+
+    // Post internship
+    document.getElementById('new-internship-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = (document.getElementById('internship-title') as HTMLInputElement).value;
+      const jobRoleId = (document.getElementById('internship-role-id') as HTMLSelectElement).value;
+      const department = (document.getElementById('internship-department') as HTMLInputElement).value;
+      const location = (document.getElementById('internship-location') as HTMLInputElement).value;
+      const duration = (document.getElementById('internship-duration') as HTMLInputElement).value;
+      const skillsRequired = (document.getElementById('internship-skills') as HTMLInputElement).value.split(',').map(s => s.trim()).filter(Boolean);
+      const description = (document.getElementById('internship-desc') as HTMLTextAreaElement).value;
+
+      try {
+        const res = await fetch('/api/admin/internships', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, jobRoleId, department, location, duration, skillsRequired, description, isActive: true })
+        });
+        if (res.ok) window.location.reload();
+        else alert('Failed to create internship.');
+      } catch {
+        alert('Network error.');
+      }
+    });
+
+    // Toggle active
+    document.querySelectorAll('.toggle-internship-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = (e.currentTarget as HTMLElement);
+        const id = target.dataset.toggleInternshipId;
+        const currentActive = target.dataset.currentActive === 'true';
+
+        try {
+          const res = await fetch('/api/admin/internships', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, isActive: !currentActive })
+          });
+          if (res.ok) window.location.reload();
+        } catch {
+          alert('Network error.');
+        }
+      });
+    });
+
+    // Delete internship
+    document.querySelectorAll('.delete-internship-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = (e.currentTarget as HTMLElement).dataset.deleteInternshipId;
+        if (!confirm('Are you sure you want to delete this internship posting?')) return;
+
+        try {
+          const res = await fetch(`/api/admin/internships?id=${id}`, { method: 'DELETE' });
+          if (res.ok) window.location.reload();
+        } catch {
+          alert('Error deleting internship.');
+        }
+      });
+    });
+  </script>
+
+</AdminLayout>

@@ -1,0 +1,305 @@
+---
+// ============================================================
+// /admin/resumes
+// Resume & Candidate Management with Keyword Matching Badges
+// ============================================================
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { db } from '../../lib/db';
+
+const url = Astro.url;
+const roleFilter = url.searchParams.get('roleId') || '';
+const statusFilter = url.searchParams.get('status') || '';
+const search = url.searchParams.get('search') || '';
+
+const [candidates, roles, allKeywords] = await Promise.all([
+  db.getCandidates({ roleId: roleFilter, status: statusFilter, search }),
+  db.getJobRoles(false),
+  db.getAllKeywords(false)
+]);
+
+const roleMap = new Map(roles.map(r => [r.id, r.role_name]));
+---
+
+<AdminLayout title="Resumes & Candidates" activeNav="resumes">
+  
+  <!-- Filter & Actions Bar -->
+  <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    
+    <form method="GET" class="flex flex-wrap items-center gap-3 flex-1">
+      <!-- Search Input -->
+      <div class="relative min-w-[220px] flex-1">
+        <input 
+          type="text" 
+          name="search" 
+          value={search} 
+          placeholder="Search candidate name, email, phone..." 
+          class="w-full px-3.5 py-2 pl-9 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] focus:ring-1 focus:ring-[#0878E8] outline-none transition-all"
+        />
+        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+
+      <!-- Role Filter -->
+      <select name="roleId" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Job Roles</option>
+        {roles.map(r => (
+          <option value={r.id} selected={roleFilter === r.id}>{r.role_name}</option>
+        ))}
+      </select>
+
+      <!-- Status Filter -->
+      <select name="status" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Statuses</option>
+        <option value="New" selected={statusFilter === 'New'}>New</option>
+        <option value="Needs Review" selected={statusFilter === 'Needs Review'}>Needs Review</option>
+        <option value="Shortlisted" selected={statusFilter === 'Shortlisted'}>Shortlisted</option>
+        <option value="Interviewing" selected={statusFilter === 'Interviewing'}>Interviewing</option>
+        <option value="Selected" selected={statusFilter === 'Selected'}>Selected</option>
+        <option value="Rejected" selected={statusFilter === 'Rejected'}>Rejected</option>
+      </select>
+
+      <button type="submit" class="px-4 py-2 bg-[#0878E8] text-white text-xs font-bold rounded-xl hover:bg-[#0764c2] transition-colors cursor-pointer">
+        Apply Filters
+      </button>
+
+      {(roleFilter || statusFilter || search) && (
+        <a href="/admin/resumes" class="px-3 py-2 border border-gray-200 text-[#64748B] text-xs font-semibold rounded-xl hover:bg-gray-50 transition-colors">
+          Clear
+        </a>
+      )}
+    </form>
+
+    <!-- Export Action -->
+    <div class="flex items-center gap-2">
+      <a 
+        href={`/api/exports/candidates?format=xlsx${roleFilter ? `&roleId=${roleFilter}` : ''}${statusFilter ? `&status=${statusFilter}` : ''}`} 
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-manrope font-bold text-xs shadow-sm transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        Export Excel
+      </a>
+      <a 
+        href={`/api/exports/candidates?format=csv${roleFilter ? `&roleId=${roleFilter}` : ''}${statusFilter ? `&status=${statusFilter}` : ''}`} 
+        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#0B1F3A] font-semibold text-xs transition-colors"
+      >
+        CSV
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Candidates Table -->
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    
+    <div class="p-4 px-6 border-b border-gray-100 bg-[#F7F9FC] flex items-center justify-between">
+      <span class="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+        Showing {candidates.length} Candidate Profiles
+      </span>
+      <span class="text-xs text-gray-400">Deterministic Keyword Match Score (Not AI)</span>
+    </div>
+
+    {candidates.length === 0 ? (
+      <div class="p-16 text-center text-[#64748B] text-sm">
+        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <p class="font-bold text-[#0B1F3A]">No candidates found matching criteria.</p>
+        <p class="text-xs text-gray-400 mt-1">Try resetting filters or submit a test resume through the internship & careers portal.</p>
+      </div>
+    ) : (
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-[#F7F9FC] text-[#64748B] text-[11px] font-bold uppercase tracking-wider border-b border-gray-100">
+            <tr>
+              <th class="py-3 px-6">Candidate</th>
+              <th class="py-3 px-6">Matched Role</th>
+              <th class="py-3 px-6">Keyword Match</th>
+              <th class="py-3 px-6">Matched Keywords</th>
+              <th class="py-3 px-6">Education & College</th>
+              <th class="py-3 px-6">Experience</th>
+              <th class="py-3 px-6">Profiles</th>
+              <th class="py-3 px-6">Status</th>
+              <th class="py-3 px-6">Date</th>
+              <th class="py-3 px-6 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {candidates.map((c) => {
+              const roleTitle = (c.assigned_role_id && roleMap.get(c.assigned_role_id)) || 'Needs Review';
+              const matchedKw = Array.isArray(c.resume_keywords) ? c.resume_keywords : [];
+              return (
+                <tr class="hover:bg-gray-50/60 transition-colors">
+                  <!-- Name & Email -->
+                  <td class="py-4 px-6">
+                    <a href={`/admin/candidates/${c.id}`} class="font-bold text-[#0B1F3A] hover:text-[#0878E8] transition-colors block">
+                      {c.full_name}
+                    </a>
+                    <span class="text-xs text-gray-500 block">{c.email}</span>
+                    <span class="text-[11px] text-gray-400 block">{c.phone}</span>
+                  </td>
+
+                  <!-- Matched Role -->
+                  <td class="py-4 px-6">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#0878E8] border border-blue-100">
+                      {roleTitle}
+                    </span>
+                  </td>
+
+                  <!-- Match % -->
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-2">
+                      <div class="w-14 bg-gray-100 h-2 rounded-full overflow-hidden">
+                        <div 
+                          class={`h-full rounded-full ${c.match_score >= 60 ? 'bg-green-500' : c.match_score >= 40 ? 'bg-[#0878E8]' : 'bg-amber-500'}`} 
+                          style={`width: ${c.match_score}%`}
+                        ></div>
+                      </div>
+                      <span class="text-xs font-bold text-[#0B1F3A]">{c.match_score}%</span>
+                    </div>
+                  </td>
+
+                  <!-- Matched Keywords Chips (Green) -->
+                  <td class="py-4 px-6 max-w-xs">
+                    <div class="flex flex-wrap gap-1 max-w-[220px]">
+                      {matchedKw.slice(0, 3).map(kw => (
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-50 text-green-700 border border-green-200">
+                          {kw} ✓
+                        </span>
+                      ))}
+                      {matchedKw.length > 3 && (
+                        <span class="text-[10px] text-gray-400 font-semibold self-center">
+                          +{matchedKw.length - 3} more
+                        </span>
+                      )}
+                      {matchedKw.length === 0 && (
+                        <span class="text-xs text-gray-400 italic">None matched</span>
+                      )}
+                    </div>
+                  </td>
+
+                  <!-- Education -->
+                  <td class="py-4 px-6 text-xs text-[#64748B]">
+                    <span class="font-medium text-[#0B1F3A] block">{c.degree || 'Degree not specified'}</span>
+                    <span class="truncate max-w-[160px] block text-gray-400">{c.college || 'College not specified'}</span>
+                  </td>
+
+                  <!-- Experience -->
+                  <td class="py-4 px-6 text-xs font-medium text-[#0B1F3A]">
+                    {c.years_experience !== undefined ? `${c.years_experience} Yrs` : 'Fresher'}
+                  </td>
+
+                  <!-- Social Links -->
+                  <td class="py-4 px-6 text-xs">
+                    <div class="flex items-center gap-2">
+                      {c.linkedin_url && (
+                        <a href={c.linkedin_url} target="_blank" class="text-blue-600 hover:text-blue-800" title="LinkedIn Profile">
+                          <span class="font-bold text-[11px] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">in</span>
+                        </a>
+                      )}
+                      {c.github_url && (
+                        <a href={c.github_url} target="_blank" class="text-gray-700 hover:text-black" title="GitHub Profile">
+                          <span class="font-bold text-[11px] bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200">GH</span>
+                        </a>
+                      )}
+                      {!c.linkedin_url && !c.github_url && <span class="text-gray-400 text-xs">—</span>}
+                    </div>
+                  </td>
+
+                  <!-- Status Dropdown Trigger -->
+                  <td class="py-4 px-6">
+                    <select 
+                      data-candidate-id={c.id} 
+                      class="candidate-status-select text-xs font-semibold px-2.5 py-1 rounded-lg border border-gray-200 bg-white outline-none cursor-pointer focus:border-[#0878E8]"
+                    >
+                      <option value="New" selected={c.status === 'New'}>New</option>
+                      <option value="Needs Review" selected={c.status === 'Needs Review'}>Needs Review</option>
+                      <option value="Shortlisted" selected={c.status === 'Shortlisted'}>Shortlisted</option>
+                      <option value="Interviewing" selected={c.status === 'Interviewing'}>Interviewing</option>
+                      <option value="Selected" selected={c.status === 'Selected'}>Selected</option>
+                      <option value="Rejected" selected={c.status === 'Rejected'}>Rejected</option>
+                    </select>
+                  </td>
+
+                  <!-- Date -->
+                  <td class="py-4 px-6 text-xs text-[#64748B]">
+                    {new Date(c.created_at).toLocaleDateString('en-IN')}
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="py-4 px-6 text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                      <a 
+                        href={`/admin/candidates/${c.id}`} 
+                        class="p-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#0878E8] hover:border-[#0878E8] transition-colors" 
+                        title="View Full Profile & Matching"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                      </a>
+                      <a 
+                        href={c.resume_file_url} 
+                        target="_blank" 
+                        class="p-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#0878E8] hover:border-[#0878E8] transition-colors" 
+                        title="Download Protected Resume"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                      </a>
+                      <button 
+                        data-delete-id={c.id} 
+                        class="delete-candidate-btn p-1.5 rounded-lg border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors" 
+                        title="Delete Record"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+  </div>
+
+  <script>
+    // Status update listeners
+    document.querySelectorAll('.candidate-status-select').forEach(el => {
+      el.addEventListener('change', async (e) => {
+        const target = e.target as HTMLSelectElement;
+        const candidateId = target.dataset.candidateId;
+        const status = target.value;
+
+        try {
+          const res = await fetch(`/api/admin/candidates/${candidateId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+          });
+          if (!res.ok) alert('Failed to update status.');
+        } catch {
+          alert('Network error updating status.');
+        }
+      });
+    });
+
+    // Delete candidate listener
+    document.querySelectorAll('.delete-candidate-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = (e.currentTarget as HTMLElement);
+        const candidateId = target.dataset.deleteId;
+        if (!confirm('Are you sure you want to permanently delete this candidate record and associated file?')) return;
+
+        try {
+          const res = await fetch(`/api/admin/candidates/${candidateId}`, { method: 'DELETE' });
+          if (res.ok) {
+            window.location.reload();
+          } else {
+            alert('Failed to delete candidate.');
+          }
+        } catch {
+          alert('Error deleting candidate.');
+        }
+      });
+    });
+  </script>
+
+</AdminLayout>

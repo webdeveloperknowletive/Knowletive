@@ -1,0 +1,317 @@
+---
+// ============================================================
+// Knowletive Admin Layout
+// Responsive Sidebar, Header, RBAC Navigation & Toast Alerts
+// ============================================================
+
+import '../styles/global.css';
+import { getAdminSession } from '../lib/auth';
+import { db } from '../lib/db';
+
+interface Props {
+  title: string;
+  activeNav?: string;
+}
+
+const { title, activeNav = 'dashboard' } = Astro.props;
+const session = getAdminSession(Astro.request);
+
+let initialCounts = { candidates: 0, leads: 0 };
+if (session) {
+  try {
+    initialCounts = await db.getUnreadCounts();
+  } catch (err) {
+    console.error('[AdminLayout Initial Unread Counts Error]:', err);
+  }
+}
+---
+
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#F7F9FC]">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{initialCounts.candidates + initialCounts.leads > 0 ? `(${initialCounts.candidates + initialCounts.leads > 99 ? '99+' : initialCounts.candidates + initialCounts.leads}) ` : ''}{title} | Knowletive Admin</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body class="h-full font-inter text-[#0B1F3A] flex flex-col md:flex-row antialiased">
+
+    <!-- Mobile Top Header -->
+    <header class="md:hidden bg-[#0B1F3A] text-white px-4 py-3 flex items-center justify-between z-30 sticky top-0 border-b border-[#1a2d4c]">
+      <div class="flex items-center gap-2">
+        <img src="/images/knowletive-logo-optimized.png" alt="Knowletive" class="h-8 w-auto invert brightness-200" />
+        <span class="text-xs font-bold uppercase tracking-widest text-[#F47A16] px-2 py-0.5 rounded bg-white/10">Admin</span>
+      </div>
+      <button id="mobile-toggle-btn" class="p-2 text-white hover:text-[#0878E8] focus:outline-none relative" aria-label="Toggle navigation">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        <span id="mobile-menu-badge" class={`absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#F47A16] rounded-full ring-2 ring-[#0B1F3A] ${initialCounts.candidates + initialCounts.leads > 0 ? '' : 'hidden'}`}></span>
+      </button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#0B1F3A] text-white flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:h-screen md:shrink-0 border-r border-[#1a2d4c]">
+      
+      <!-- Brand Header -->
+      <div class="p-6 border-b border-white/10 flex items-center justify-between">
+        <a href="/admin" class="flex items-center gap-2">
+          <img src="/images/knowletive-logo-optimized.png" alt="Knowletive Logo" class="h-9 w-auto object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]" />
+        </a>
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#F47A16] bg-[#F47A16]/10 border border-[#F47A16]/30 px-2 py-0.5 rounded-full">Admin</span>
+      </div>
+
+      <!-- User Profile Badge -->
+      <div class="px-6 py-4 border-b border-white/5 bg-white/[0.02] flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-[#0878E8] flex items-center justify-center font-bold text-white text-sm shadow">
+          {session ? session.fullName.charAt(0).toUpperCase() : 'A'}
+        </div>
+        <div class="overflow-hidden">
+          <p class="text-xs font-bold text-white truncate">{session?.fullName || 'Administrator'}</p>
+          <p class="text-[11px] text-blue-200/60 truncate">{session?.email || 'admin@knowletive.com'}</p>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1 scrollbar-hide text-sm">
+        
+        <a href="/admin" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'dashboard' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          <span class="flex-1">Dashboard</span>
+        </a>
+
+        <a href="/admin/resumes" class={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'resumes' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span class="truncate">Resumes / Candidates</span>
+          </div>
+          <span 
+            id="sidebar-candidates-badge" 
+            class={`shrink-0 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold bg-[#F47A16] text-white flex items-center justify-center shadow-sm ml-auto ${initialCounts.candidates > 0 ? '' : 'hidden'}`}
+          >
+            {initialCounts.candidates > 99 ? '99+' : initialCounts.candidates}
+          </span>
+        </a>
+
+        <a href="/admin/leads" class={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'leads' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span class="truncate">Leads & Inquiries</span>
+          </div>
+          <span 
+            id="sidebar-leads-badge" 
+            class={`shrink-0 min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold bg-[#F47A16] text-white flex items-center justify-center shadow-sm ml-auto ${initialCounts.leads > 0 ? '' : 'hidden'}`}
+          >
+            {initialCounts.leads > 99 ? '99+' : initialCounts.leads}
+          </span>
+        </a>
+
+        <a href="/admin/roles" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'roles' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+          <span class="flex-1">Roles & Keywords</span>
+        </a>
+
+        <a href="/admin/jobs" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'jobs' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          <span class="flex-1">Jobs</span>
+        </a>
+
+        <a href="/admin/internships" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'internships' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span class="flex-1">Internships</span>
+        </a>
+
+        <a href="/admin/testimonials" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'testimonials' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          <span class="flex-1">Testimonials / Stories</span>
+        </a>
+
+        <a href="/admin/media" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'media' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          <span class="flex-1">Media Library</span>
+        </a>
+
+        <a href="/admin/exports" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'exports' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <span class="flex-1">Exports (Excel / CSV)</span>
+        </a>
+
+        <a href="/admin/activity" class={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${activeNav === 'activity' ? 'bg-[#0878E8] text-white shadow-md' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          <span class="flex-1">Activity</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="p-4 border-t border-white/10 space-y-2">
+        <a href="/" target="_blank" class="flex items-center gap-2 text-xs text-blue-200/70 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-white/5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          View Public Website
+        </a>
+
+        <button id="logout-btn" class="flex items-center gap-2 text-xs font-semibold text-red-300 hover:text-red-100 hover:bg-red-500/20 transition-colors w-full px-3 py-2 rounded-lg">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          Logout
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      
+      <!-- Topbar Desktop -->
+      <div class="hidden md:flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+        <div>
+          <h1 class="text-xl font-bold font-manrope text-[#0B1F3A]">{title}</h1>
+          <p class="text-xs text-[#64748B]">Knowletive Operations Management Console</p>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <a href="/admin/exports" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-semibold text-[#0B1F3A] hover:bg-gray-50 transition-colors">
+            <svg class="w-4 h-4 text-[#0878E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Quick Export
+          </a>
+          <div class="w-px h-6 bg-gray-200"></div>
+          <span id="server-health-indicator" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-50 text-gray-600 border border-gray-200 transition-all">
+            <span id="server-health-dot" class="w-2 h-2 rounded-full bg-gray-400"></span>
+            <span id="server-health-text">Checking...</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Page Slot Container -->
+      <main class="flex-1 p-4 md:p-8">
+        <slot />
+      </main>
+
+    </div>
+
+    <!-- Backdrop for Mobile Sidebar -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
+
+    <script>
+      // Server Live Health Check
+      async function checkServerHealth() {
+        const ind = document.getElementById('server-health-indicator');
+        const dot = document.getElementById('server-health-dot');
+        const text = document.getElementById('server-health-text');
+        if (!ind || !dot || !text) return;
+
+        try {
+          const res = await fetch('/api/health');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'ok') {
+              ind.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200 transition-all';
+              dot.className = 'w-2 h-2 rounded-full bg-green-500 animate-pulse';
+              text.textContent = 'Server Live';
+              return;
+            }
+          }
+          throw new Error('Unhealthy');
+        } catch {
+          ind.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200 transition-all';
+          dot.className = 'w-2 h-2 rounded-full bg-red-500';
+          text.textContent = 'Server Offline';
+        }
+      }
+
+      checkServerHealth();
+      setInterval(checkServerHealth, 30000);
+
+      // Real-time Notification Badges Poller & Handler
+      const candidateBadge = document.getElementById('sidebar-candidates-badge');
+      const leadBadge = document.getElementById('sidebar-leads-badge');
+      const mobileMenuBadge = document.getElementById('mobile-menu-badge');
+
+      function formatBadgeCount(count: number): string {
+        if (count > 99) return '99+';
+        return String(count);
+      }
+
+      function updateBadgeUI(el: HTMLElement | null, count: number) {
+        if (!el) return;
+        const num = Number(count) || 0;
+        if (num <= 0) {
+          el.classList.add('hidden');
+          el.textContent = '';
+        } else {
+          el.classList.remove('hidden');
+          el.textContent = formatBadgeCount(num);
+        }
+      }
+
+      const rawBaseTitle = document.title.replace(/^\(\d+\+?\)\s*/, '');
+      function updateDocTitle(total: number) {
+        if (total > 0) {
+          const prefix = total > 99 ? '(99+)' : `(${total})`;
+          document.title = `${prefix} ${rawBaseTitle}`;
+        } else {
+          document.title = rawBaseTitle;
+        }
+      }
+
+      async function refreshNotificationCounts() {
+        try {
+          const res = await fetch('/api/admin/notifications/counts', {
+            headers: { 'Cache-Control': 'no-cache' }
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          const candCount = Number(data.candidates) || 0;
+          const leadCount = Number(data.leads) || 0;
+          const total = candCount + leadCount;
+
+          updateBadgeUI(candidateBadge, candCount);
+          updateBadgeUI(leadBadge, leadCount);
+          if (mobileMenuBadge) {
+            if (total > 0) mobileMenuBadge.classList.remove('hidden');
+            else mobileMenuBadge.classList.add('hidden');
+          }
+          updateDocTitle(total);
+        } catch (err) {
+          console.error('[Notification Poller Error]:', err);
+        }
+      }
+
+      // Initial client sync
+      refreshNotificationCounts();
+
+      // Safe Polling every 20 seconds
+      setInterval(refreshNotificationCounts, 20000);
+
+      // Event-driven reactive update (e.g., when an item is marked read)
+      window.addEventListener('refresh-notifications', () => {
+        refreshNotificationCounts();
+      });
+
+      // Sidebar mobile toggle
+      const sidebar = document.getElementById('admin-sidebar');
+      const toggleBtn = document.getElementById('mobile-toggle-btn');
+      const backdrop = document.getElementById('sidebar-backdrop');
+
+      function toggleSidebar() {
+        sidebar?.classList.toggle('-translate-x-full');
+        backdrop?.classList.toggle('hidden');
+      }
+
+      toggleBtn?.addEventListener('click', toggleSidebar);
+      backdrop?.addEventListener('click', toggleSidebar);
+
+      // Logout handler
+      const logoutBtn = document.getElementById('logout-btn');
+      logoutBtn?.addEventListener('click', async () => {
+        try {
+          await fetch('/api/auth/logout', { method: 'POST' });
+          window.location.href = '/';
+        } catch {
+          window.location.href = '/';
+        }
+      });
+    </script>
+  </body>
+</html>

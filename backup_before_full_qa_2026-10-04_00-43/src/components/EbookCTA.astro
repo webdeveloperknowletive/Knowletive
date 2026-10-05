@@ -1,0 +1,303 @@
+---
+// ============================================================
+// Knowletive Free eBook Lead Generation & Career Guide Download
+// Enhanced Lead Capture Form Connected to Database
+// ============================================================
+---
+
+<section class="py-0 relative my-8 md:my-14">
+  <div class="container-custom">
+    <div class="bg-gradient-to-br from-[#0B1F3A] to-[#072B6F] rounded-3xl overflow-hidden shadow-2xl border border-[#0878E8]/20 relative">
+      
+      <!-- Background glow -->
+      <div class="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#0878E8]/20 rounded-full blur-[100px] pointer-events-none"></div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-12 p-8 sm:p-10 md:p-12 items-center relative z-10">
+        
+        <!-- Left Content & Enhanced Form -->
+        <div>
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F47A16]/20 text-[#F47A16] font-bold text-xs tracking-widest uppercase mb-4 border border-[#F47A16]/30">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            Free Career & Services Guide
+          </div>
+          <h2 class="text-3xl md:text-4xl font-manrope font-extrabold text-white mb-2 leading-tight">
+            Make Smarter <span class="text-gradient-orange">Career Decisions.</span>
+          </h2>
+          <p class="text-blue-100 text-sm md:text-base mb-6 max-w-xl leading-relaxed">
+            Download Knowletive's comprehensive edition covering IT roadmaps, industry certifications, internship frameworks, and hiring company requirements.
+          </p>
+          
+          <!-- Success Card (Shown only after DB save) -->
+          <div id="ebook-success" class="hidden p-6 rounded-2xl bg-white/10 border border-green-400/40 text-white space-y-4 max-w-xl">
+            <div class="flex items-center gap-3 text-green-400 font-bold text-lg">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>Inquiry Saved & Download Ready!</span>
+            </div>
+            <p class="text-blue-100 text-sm">
+              Thank you! Your information has been registered with our senior academic counselors. Your free copy is downloading now.
+            </p>
+            <a 
+              href="/downloads/Knowletive_Career_Guide.pdf" 
+              download="Knowletive_Career_Guide.pdf" 
+              class="btn-primary inline-flex items-center justify-center gap-2 w-full py-3 text-sm font-bold shadow-lg"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Click Here If Download Didn't Start Automatically
+            </a>
+          </div>
+
+          <!-- Enhanced Lead Form -->
+          <form class="space-y-3.5 max-w-xl" id="ebook-form">
+            
+            <!-- Row 1: Name & Email -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ebook-name" class="block text-[11px] font-bold text-blue-200 mb-1">Full Name <span class="text-[#F47A16]">*</span></label>
+                <input type="text" id="ebook-name" name="name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" autocomplete="name" />
+              </div>
+              <div>
+                <label for="ebook-email" class="block text-[11px] font-bold text-blue-200 mb-1">Email Address <span class="text-[#F47A16]">*</span></label>
+                <input type="email" id="ebook-email" name="email" required placeholder="rahul@example.com" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" autocomplete="email" />
+              </div>
+            </div>
+
+            <!-- Row 2: Phone & Current Status -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ebook-phone" class="block text-[11px] font-bold text-blue-200 mb-1">Phone Number <span class="text-[#F47A16]">*</span></label>
+                <input type="tel" id="ebook-phone" name="phone" required placeholder="+91 98765 43210" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" autocomplete="tel" />
+              </div>
+              <div>
+                <label for="ebook-status" class="block text-[11px] font-bold text-blue-200 mb-1">Current Status <span class="text-[#F47A16]">*</span></label>
+                <select id="ebook-status" name="currentStatus" required class="w-full px-4 py-2.5 bg-[#0B1F3A] border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#F47A16] transition-colors text-xs">
+                  <option value="" disabled selected>Select status</option>
+                  <option value="Student">Student (College / Final Year)</option>
+                  <option value="Fresher">Fresher Graduate</option>
+                  <option value="Working Professional">Working Professional</option>
+                  <option value="Career Switcher">Career Switcher</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 3: Education & College -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ebook-education" class="block text-[11px] font-bold text-blue-200 mb-1">Current Degree / Qualification <span class="text-[#F47A16]">*</span></label>
+                <input type="text" id="ebook-education" name="education" required placeholder="e.g. B.Tech CS, BCA, B.Sc, MCA" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" />
+              </div>
+              <div>
+                <label for="ebook-college" class="block text-[11px] font-bold text-blue-200 mb-1">College / University</label>
+                <input type="text" id="ebook-college" name="college" placeholder="e.g. Pune University / SPPU" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" />
+              </div>
+            </div>
+
+            <!-- Row 4: Opportunity Looking For & Interested Course -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ebook-opportunity" class="block text-[11px] font-bold text-blue-200 mb-1">Opportunity Looking For <span class="text-[#F47A16]">*</span></label>
+                <select id="ebook-opportunity" name="opportunityType" required class="w-full px-4 py-2.5 bg-[#0B1F3A] border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#F47A16] transition-colors text-xs">
+                  <option value="" disabled selected>Select opportunity</option>
+                  <option value="Training + Placement (PEP)">Training + Placement (Flagship PEP)</option>
+                  <option value="Industrial Internship">Industrial Internship</option>
+                  <option value="Immediate Job Placement">Immediate Job Placement</option>
+                  <option value="Career Counseling">1-on-1 Career Counseling</option>
+                  <option value="Admission Guidance">College / CET Admission Guidance</option>
+                  <option value="Overseas Education">Overseas Education & Master's</option>
+                  <option value="Skill Upgrade">Technical Skill Upgrade</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="ebook-course" class="block text-[11px] font-bold text-blue-200 mb-1">Interested Course / Domain</label>
+                <select id="ebook-course" name="courseInterest" class="w-full px-4 py-2.5 bg-[#0B1F3A] border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#F47A16] transition-colors text-xs">
+                  <option value="">Select Domain (Optional)</option>
+                  <option value="Data Analyst">Data Analyst</option>
+                  <option value="Data Science & AI/ML">Data Science & AI/ML</option>
+                  <option value="MERN Stack">MERN Stack Development</option>
+                  <option value="Java Full Stack">Java Full Stack</option>
+                  <option value="Cloud & DevOps">Cloud & DevOps</option>
+                  <option value="Digital Marketing">Digital Marketing</option>
+                  <option value="Banking">Banking & Financial Services</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 5: Preferred Role & Location -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ebook-role" class="block text-[11px] font-bold text-blue-200 mb-1">Preferred Job Role</label>
+                <input type="text" id="ebook-role" name="preferredRole" placeholder="e.g. Data Analyst, Web Developer" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" />
+              </div>
+              <div>
+                <label for="ebook-location" class="block text-[11px] font-bold text-blue-200 mb-1">Preferred Location</label>
+                <input type="text" id="ebook-location" name="preferredLocation" placeholder="e.g. Pune, Mumbai, Remote" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" />
+              </div>
+            </div>
+
+            <!-- Row 6: LinkedIn & Career Goal -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ebook-linkedin" class="block text-[11px] font-bold text-blue-200 mb-1">LinkedIn Profile (optional)</label>
+                <input type="url" id="ebook-linkedin" name="linkedinUrl" placeholder="https://linkedin.com/in/..." class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" />
+              </div>
+              <div>
+                <label for="ebook-goal" class="block text-[11px] font-bold text-blue-200 mb-1">Career Goal / Note (optional)</label>
+                <input type="text" id="ebook-goal" name="careerGoal" placeholder="e.g. Targeting MNC placement in 6 months" class="w-full px-4 py-2.5 bg-white/5 border border-white/15 rounded-xl text-white placeholder-blue-200/40 focus:outline-none focus:border-[#F47A16] focus:bg-white/10 transition-colors text-xs" />
+              </div>
+            </div>
+
+            <!-- Privacy Consent Checkbox -->
+            <div class="flex items-start gap-2 pt-1">
+              <input type="checkbox" id="ebook-consent" name="consent" required checked class="mt-1 rounded text-[#F47A16] focus:ring-[#F47A16]" />
+              <label for="ebook-consent" class="text-[11px] text-blue-200/70 leading-relaxed">
+                I consent to Knowletive storing my information and sending me relevant course updates and placement notifications. View <a href="/privacy" class="text-white underline">Privacy Policy</a>. <span class="text-[#F47A16]">*</span>
+              </label>
+            </div>
+            
+            <p id="ebook-error" class="text-xs text-red-400 hidden"></p>
+
+            <button type="submit" id="ebook-submit" class="btn-primary w-full justify-center mt-3 group py-3 text-sm cursor-pointer shadow-lg shadow-[#F47A16]/20">
+              <span>Submit & Download Free eBook</span>
+              <svg class="w-4 h-4 group-hover:translate-y-0.5 transition-transform ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            </button>
+            <p class="text-[11px] text-blue-200/40 text-center mt-1">Verified PDF format · Instant download upon submission</p>
+          </form>
+        </div>
+
+        <!-- Right Visual Book Mockup -->
+        <div class="relative flex justify-center lg:justify-end">
+          <div class="w-full max-w-[280px] aspect-[3/4] bg-white rounded-r-3xl rounded-l-md shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 border border-gray-200 p-2 relative">
+             <div class="absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-gray-200 to-transparent rounded-l-md opacity-50 z-20 pointer-events-none"></div>
+             
+             <div class="w-full h-full bg-[#072B6F] rounded-r-2xl rounded-l-sm flex flex-col items-center justify-between p-6 text-center text-white relative overflow-hidden">
+                <div class="w-full text-left">
+                  <span class="text-[11px] font-bold tracking-widest text-[#F47A16] uppercase">Knowletive Press</span>
+                </div>
+
+                <div>
+                  <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-3 mx-auto border border-white/20">
+                     <svg class="w-6 h-6 text-[#F47A16]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                  </div>
+                  <h3 class="font-manrope font-extrabold text-xl mb-1 text-white">The Ultimate Career & Services Guide</h3>
+                  <p class="text-blue-200 text-xs">Training Minds. Placing Talents.</p>
+                </div>
+                
+                <div class="w-full border-t border-white/10 pt-3 flex items-center justify-between text-xs text-blue-200/80">
+                  <span>Edition 2026</span>
+                  <span class="text-green-400 font-semibold">Free Edition</span>
+                </div>
+             </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const ebForm = document.getElementById('ebook-form') as HTMLFormElement | null;
+  const ebSuccess = document.getElementById('ebook-success') as HTMLDivElement | null;
+  const ebError = document.getElementById('ebook-error') as HTMLParagraphElement | null;
+  const ebSubmit = document.getElementById('ebook-submit') as HTMLButtonElement | null;
+
+  if (ebForm && ebSuccess && ebError && ebSubmit) {
+    ebForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = (document.getElementById('ebook-name') as HTMLInputElement)?.value.trim();
+      const email = (document.getElementById('ebook-email') as HTMLInputElement)?.value.trim();
+      const phone = (document.getElementById('ebook-phone') as HTMLInputElement)?.value.trim();
+      const currentStatus = (document.getElementById('ebook-status') as HTMLSelectElement)?.value;
+      const education = (document.getElementById('ebook-education') as HTMLInputElement)?.value.trim();
+      const college = (document.getElementById('ebook-college') as HTMLInputElement)?.value.trim();
+      const opportunityType = (document.getElementById('ebook-opportunity') as HTMLSelectElement)?.value;
+      const courseInterest = (document.getElementById('ebook-course') as HTMLSelectElement)?.value;
+      const preferredRole = (document.getElementById('ebook-role') as HTMLInputElement)?.value.trim();
+      const preferredLocation = (document.getElementById('ebook-location') as HTMLInputElement)?.value.trim();
+      const linkedinUrl = (document.getElementById('ebook-linkedin') as HTMLInputElement)?.value.trim();
+      const careerGoal = (document.getElementById('ebook-goal') as HTMLInputElement)?.value.trim();
+
+      if (!name || !email || !phone || !education || !opportunityType || !currentStatus) {
+        ebError.textContent = 'Please fill out all required fields marked with an asterisk (*).';
+        ebError.classList.remove('hidden');
+        return;
+      }
+
+      if (!email.includes('@') || !email.includes('.')) {
+        ebError.textContent = 'Please enter a valid email address.';
+        ebError.classList.remove('hidden');
+        return;
+      }
+
+      const digitsOnly = phone.replace(/\D/g, '');
+      if (digitsOnly.length < 7) {
+        ebError.textContent = 'Please enter a valid phone number.';
+        ebError.classList.remove('hidden');
+        return;
+      }
+
+      ebError.classList.add('hidden');
+      ebSubmit.disabled = true;
+      ebSubmit.textContent = 'Saving Inquiry & Preparing Download...';
+
+      try {
+        const nameParts = name.split(/\s+/);
+        const firstName = nameParts[0] || name;
+        const lastName = nameParts.slice(1).join(' ') || '';
+
+        const payload = {
+          firstName,
+          lastName,
+          email,
+          phone,
+          leadType: 'eBook',
+          currentStatus,
+          education,
+          college,
+          opportunityType,
+          courseInterest,
+          preferredRole,
+          preferredLocation,
+          linkedinUrl: linkedinUrl || undefined,
+          careerGoal: careerGoal || undefined,
+          source: 'Free Career Guide Form',
+          privacyConsent: true
+        };
+
+        const res = await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || data.error) {
+          ebError.textContent = data.error || 'Failed to record details. Download was not initiated.';
+          ebError.classList.remove('hidden');
+          ebSubmit.disabled = false;
+          ebSubmit.textContent = 'Submit & Download Free eBook';
+          return;
+        }
+
+        // Only trigger download upon successful persistence
+        ebForm.classList.add('hidden');
+        ebSuccess.classList.remove('hidden');
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = '/downloads/Knowletive_Career_Guide.pdf';
+        downloadLink.download = 'Knowletive_Career_Guide.pdf';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      } catch (err) {
+        ebError.textContent = 'Network error saving inquiry. Please try again.';
+        ebError.classList.remove('hidden');
+        ebSubmit.disabled = false;
+        ebSubmit.textContent = 'Submit & Download Free eBook';
+      }
+    });
+  }
+</script>

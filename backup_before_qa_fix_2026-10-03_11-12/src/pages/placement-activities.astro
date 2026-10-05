@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Placements from '../components/Placements.astro';
+import ConsultationCTA from '../components/ConsultationCTA.astro';
+
+const pageTitle = "Placement & Activities | Knowletive";
+const pageDescription = "Career outcomes beyond the classroom. Explore our placement records, hiring partners, student activities, and career development initiatives at Knowletive.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <!-- Hero Section -->
+  <section class="relative bg-[#0B1F3A] pt-32 pb-20 overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+      <div class="absolute inset-0" style="background-image: radial-gradient(#F47A16 1px, transparent 1px); background-size: 30px 30px;"></div>
+    </div>
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0878E8]/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="container-custom relative z-10 text-center max-w-4xl mx-auto">
+      <nav aria-label="Breadcrumb" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-200 mb-6 bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-white">Placement & Activities</span>
+      </nav>
+
+      <h1 class="fluid-hero font-manrope font-extrabold text-white mb-6">
+        Career Outcomes <br/>
+        <span class="text-gradient-orange">Beyond the Classroom</span>
+      </h1>
+
+      <p class="text-blue-100/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10">
+        Discover how Knowletive prepares students for the corporate world through dedicated placement support, industry interactions, and engaging student activities.
+      </p>
+    </div>
+  </section>
+
+  <!-- Placement Section -->
+  <Placements />
+
+  <!-- Activities Placeholder -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-xs tracking-widest uppercase mb-4">
+          Student Life
+        </div>
+        <h2 class="fluid-h2 text-[#0B1F3A] mb-4">Workshops & <span class="text-[#0878E8]">Activities</span></h2>
+        <p class="text-[#64748B] text-base md:text-lg">
+          We believe in holistic development. Engage in workshops, technical seminars, hackathons, and industry visits.
+        </p>
+      </div>
+
+      <div class="bg-gray-50 rounded-3xl p-12 text-center border border-gray-200 border-dashed">
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        <h3 class="text-xl font-bold text-[#0B1F3A] mb-2">Activities Gallery</h3>
+        <p class="text-[#64748B]">Photos and updates from our recent events, workshops, and industry visits will be updated here soon.</p>
+      </div>
+    </div>
+  </section>
+
+  <ConsultationCTA />
+</BaseLayout>

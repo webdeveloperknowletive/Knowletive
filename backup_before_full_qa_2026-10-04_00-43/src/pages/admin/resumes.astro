@@ -1,0 +1,593 @@
+---
+// ============================================================
+// /admin/resumes
+// Resume & Candidate Management with Keyword Matching Badges
+// ============================================================
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { db } from '../../lib/db';
+
+const url = Astro.url;
+const typeFilter = url.searchParams.get('type') || '';
+const roleFilter = url.searchParams.get('roleId') || '';
+const statusFilter = url.searchParams.get('status') || '';
+const search = url.searchParams.get('search') || '';
+
+let [candidates, roles, allKeywords] = await Promise.all([
+  db.getCandidates({ roleId: roleFilter, status: statusFilter, search }),
+  db.getJobRoles(false),
+  db.getAllKeywords(false)
+]);
+
+if (typeFilter === 'job' || typeFilter === 'internship') {
+  candidates = candidates.filter(c => (c.application_type || 'job') === typeFilter);
+}
+
+const roleMap = new Map(roles.map(r => [r.id, r.role_name]));
+---
+
+<AdminLayout title="Resumes & Candidates" activeNav="resumes">
+  
+  <!-- Filter & Actions Bar -->
+  <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    
+    <form method="GET" class="flex flex-wrap items-center gap-3 flex-1">
+      <!-- Search Input -->
+      <div class="relative min-w-[220px] flex-1">
+        <input 
+          type="text" 
+          name="search" 
+          value={search} 
+          placeholder="Search candidate name, email, phone..." 
+          class="w-full px-3.5 py-2 pl-9 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] focus:ring-1 focus:ring-[#0878E8] outline-none transition-all"
+        />
+        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+
+      <!-- Application Type Filter -->
+      <select name="type" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Types (Jobs & Internships)</option>
+        <option value="job" selected={typeFilter === 'job'}>Jobs Only</option>
+        <option value="internship" selected={typeFilter === 'internship'}>Internships Only</option>
+      </select>
+
+      <!-- Role Filter -->
+      <select name="roleId" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Job Roles</option>
+        {roles.map(r => (
+          <option value={r.id} selected={roleFilter === r.id}>{r.role_name}</option>
+        ))}
+      </select>
+
+      <!-- Status Filter -->
+      <select name="status" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Statuses</option>
+        <option value="New" selected={statusFilter === 'New'}>New</option>
+        <option value="Needs Review" selected={statusFilter === 'Needs Review'}>Needs Review</option>
+        <option value="Shortlisted" selected={statusFilter === 'Shortlisted'}>Shortlisted</option>
+        <option value="Interviewing" selected={statusFilter === 'Interviewing'}>Interviewing</option>
+        <option value="Selected" selected={statusFilter === 'Selected'}>Selected</option>
+        <option value="Rejected" selected={statusFilter === 'Rejected'}>Rejected</option>
+      </select>
+
+      <button type="submit" class="px-4 py-2 bg-[#0878E8] text-white text-xs font-bold rounded-xl hover:bg-[#0764c2] transition-colors cursor-pointer">
+        Apply Filters
+      </button>
+
+      {(roleFilter || statusFilter || search) && (
+        <a href="/admin/resumes" class="px-3 py-2 border border-gray-200 text-[#64748B] text-xs font-semibold rounded-xl hover:bg-gray-50 transition-colors">
+          Clear
+        </a>
+      )}
+    </form>
+
+    <!-- Export & Bulk Destructive Actions -->
+    <div class="flex flex-wrap items-center gap-2">
+      <a 
+        href={`/api/exports/candidates?format=xlsx${roleFilter ? `&roleId=${roleFilter}` : ''}${statusFilter ? `&status=${statusFilter}` : ''}`} 
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-manrope font-bold text-xs shadow-sm transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        Export Excel
+      </a>
+      <a 
+        href={`/api/exports/candidates?format=csv${roleFilter ? `&roleId=${roleFilter}` : ''}${statusFilter ? `&status=${statusFilter}` : ''}`} 
+        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#0B1F3A] font-semibold text-xs transition-colors"
+      >
+        CSV
+      </a>
+
+      <!-- Visual separation from regular export buttons -->
+      <div class="h-6 w-px bg-gray-200 mx-1 hidden sm:block"></div>
+
+      <!-- Delete All Candidates (Destructive Button) -->
+      <button 
+        type="button" 
+        id="btn-delete-all-candidates" 
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-manrope font-bold text-xs shadow-sm transition-colors cursor-pointer focus:ring-2 focus:ring-red-400 focus:outline-none"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+        Delete All Candidates
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Candidates Table -->
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    
+    <div class="p-4 px-6 border-b border-gray-100 bg-[#F7F9FC] flex items-center justify-between">
+      <span class="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+        Showing {candidates.length} Candidate Profiles
+      </span>
+      <span class="text-xs text-gray-400">Deterministic Keyword Match Score (Not AI)</span>
+    </div>
+
+    {candidates.length === 0 ? (
+      <div class="p-16 text-center text-[#64748B] text-sm">
+        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <p class="font-bold text-[#0B1F3A]">No candidates found matching criteria.</p>
+        <p class="text-xs text-gray-400 mt-1">Try resetting filters or submit a test resume through the internship & careers portal.</p>
+      </div>
+    ) : (
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-[#F7F9FC] text-[#64748B] text-[11px] font-bold uppercase tracking-wider border-b border-gray-100">
+            <tr>
+              <th class="py-3 px-6">Candidate</th>
+              <th class="py-3 px-6">Type</th>
+              <th class="py-3 px-6">Applied For</th>
+              <th class="py-3 px-6">Keyword Match</th>
+              <th class="py-3 px-6">Matched Keywords</th>
+              <th class="py-3 px-6">Education & College</th>
+              <th class="py-3 px-6">Experience</th>
+              <th class="py-3 px-6">Profiles</th>
+              <th class="py-3 px-6">Status</th>
+              <th class="py-3 px-6">Date</th>
+              <th class="py-3 px-6 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {candidates.map((c) => {
+              const roleTitle = (c.assigned_role_id && roleMap.get(c.assigned_role_id)) || 'Needs Review';
+              const appliedRoleText = c.applied_role || roleTitle;
+              const matchedKw = Array.isArray(c.resume_keywords) ? c.resume_keywords : [];
+              const isInternship = c.application_type === 'internship';
+              return (
+                <tr class="hover:bg-gray-50/60 transition-colors">
+                  <!-- Name & Email -->
+                  <td class="py-4 px-6">
+                    <a href={`/admin/candidates/${c.id}`} class="font-bold text-[#0B1F3A] hover:text-[#0878E8] transition-colors block">
+                      {c.full_name}
+                    </a>
+                    <span class="text-xs text-gray-500 block">{c.email}</span>
+                    <span class="text-[11px] text-gray-400 block">{c.phone}</span>
+                  </td>
+
+                  <!-- Application Type Badge -->
+                  <td class="py-4 px-6">
+                    <span class={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                      isInternship 
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                        : 'bg-blue-50 text-blue-700 border border-blue-200'
+                    }`}>
+                      <span class={`w-1.5 h-1.5 rounded-full ${isInternship ? 'bg-emerald-500' : 'bg-blue-500'}`}></span>
+                      {isInternship ? 'Internship' : 'Job'}
+                    </span>
+                  </td>
+
+                  <!-- Applied For -->
+                  <td class="py-4 px-6">
+                    <span class="font-medium text-[#0B1F3A] block text-xs">
+                      {isInternship ? 'Internship — ' : 'Job — '}{appliedRoleText}
+                    </span>
+                  </td>
+
+                  <!-- Match % -->
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-2">
+                      <div class="w-14 bg-gray-100 h-2 rounded-full overflow-hidden">
+                        <div 
+                          class={`h-full rounded-full ${c.match_score >= 60 ? 'bg-green-500' : c.match_score >= 40 ? 'bg-[#0878E8]' : 'bg-amber-500'}`} 
+                          style={`width: ${c.match_score}%`}
+                        ></div>
+                      </div>
+                      <span class="text-xs font-bold text-[#0B1F3A]">{c.match_score}%</span>
+                    </div>
+                  </td>
+
+                  <!-- Matched Keywords Chips (Green) -->
+                  <td class="py-4 px-6 max-w-xs">
+                    <div class="flex flex-wrap gap-1 max-w-[220px]">
+                      {matchedKw.slice(0, 3).map(kw => (
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-50 text-green-700 border border-green-200">
+                          {kw} ✓
+                        </span>
+                      ))}
+                      {matchedKw.length > 3 && (
+                        <span class="text-[10px] text-gray-400 font-semibold self-center">
+                          +{matchedKw.length - 3} more
+                        </span>
+                      )}
+                      {matchedKw.length === 0 && (
+                        <span class="text-xs text-gray-400 italic">None matched</span>
+                      )}
+                    </div>
+                  </td>
+
+                  <!-- Education -->
+                  <td class="py-4 px-6 text-xs text-[#64748B]">
+                    <span class="font-medium text-[#0B1F3A] block">{c.degree || 'Degree not specified'}</span>
+                    <span class="truncate max-w-[160px] block text-gray-400">{c.college || 'College not specified'}</span>
+                  </td>
+
+                  <!-- Experience -->
+                  <td class="py-4 px-6 text-xs font-medium text-[#0B1F3A]">
+                    {c.years_experience !== undefined ? `${c.years_experience} Yrs` : 'Fresher'}
+                  </td>
+
+                  <!-- Social Links -->
+                  <td class="py-4 px-6 text-xs">
+                    <div class="flex items-center gap-2">
+                      {c.linkedin_url && (
+                        <a href={c.linkedin_url} target="_blank" class="text-blue-600 hover:text-blue-800" title="LinkedIn Profile">
+                          <span class="font-bold text-[11px] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">in</span>
+                        </a>
+                      )}
+                      {c.github_url && (
+                        <a href={c.github_url} target="_blank" class="text-gray-700 hover:text-black" title="GitHub Profile">
+                          <span class="font-bold text-[11px] bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200">GH</span>
+                        </a>
+                      )}
+                      {!c.linkedin_url && !c.github_url && <span class="text-gray-400 text-xs">—</span>}
+                    </div>
+                  </td>
+
+                  <!-- Status Dropdown Trigger -->
+                  <td class="py-4 px-6">
+                    <select 
+                      data-candidate-id={c.id} 
+                      class="candidate-status-select text-xs font-semibold px-2.5 py-1 rounded-lg border border-gray-200 bg-white outline-none cursor-pointer focus:border-[#0878E8]"
+                    >
+                      <option value="New" selected={c.status === 'New'}>New</option>
+                      <option value="Needs Review" selected={c.status === 'Needs Review'}>Needs Review</option>
+                      <option value="Shortlisted" selected={c.status === 'Shortlisted'}>Shortlisted</option>
+                      <option value="Interviewing" selected={c.status === 'Interviewing'}>Interviewing</option>
+                      <option value="Selected" selected={c.status === 'Selected'}>Selected</option>
+                      <option value="Rejected" selected={c.status === 'Rejected'}>Rejected</option>
+                    </select>
+                  </td>
+
+                  <!-- Date -->
+                  <td class="py-4 px-6 text-xs text-[#64748B]">
+                    {new Date(c.created_at).toLocaleDateString('en-IN')}
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="py-4 px-6 text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                      <a 
+                        href={`/admin/candidates/${c.id}`} 
+                        class="p-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#0878E8] hover:border-[#0878E8] transition-colors" 
+                        title="View Full Profile & Matching"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                      </a>
+                      <a 
+                        href={c.resume_file_url} 
+                        target="_blank" 
+                        class="p-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#0878E8] hover:border-[#0878E8] transition-colors" 
+                        title="Download Protected Resume"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                      </a>
+                      <button 
+                        data-delete-id={c.id} 
+                        class="delete-candidate-btn p-1.5 rounded-lg border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors" 
+                        title="Delete Record"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+  </div>
+
+  <!-- MODAL STEP 1: INITIAL WARNING -->
+  <div id="modal-delete-candidates-step1" class="fixed inset-0 z-50 bg-[#0B1F3A]/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 transform transition-all">
+      <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="text-lg font-bold text-[#0B1F3A] text-center mb-2">Delete All Candidates?</h3>
+      <p class="text-xs text-gray-600 text-center mb-4 leading-relaxed">
+        This will permanently delete <strong class="text-red-600 font-bold">ALL candidate records</strong> and resume-related data from the system. This action cannot be undone.
+      </p>
+      
+      <div class="bg-red-50 border border-red-100 rounded-xl p-3.5 mb-6 text-center">
+        <span class="text-xs font-semibold text-red-700" id="step1-candidates-count-text">
+          You are about to delete <strong class="font-bold">{candidates.length}</strong> candidate records.
+        </span>
+      </div>
+
+      <div class="flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          id="btn-cancel-candidates-step1" 
+          class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-xs font-bold hover:bg-gray-50 transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          id="btn-continue-candidates-step1" 
+          class="px-5 py-2.5 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition-colors cursor-pointer shadow-sm"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL STEP 2: STRICT FINAL CONFIRMATION -->
+  <div id="modal-delete-candidates-step2" class="fixed inset-0 z-50 bg-[#0B1F3A]/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 transform transition-all">
+      <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </div>
+      <h3 class="text-lg font-bold text-red-600 text-center mb-1">Final Confirmation</h3>
+      <p class="text-xs text-gray-600 text-center mb-4 leading-relaxed">
+        Are you absolutely sure you want to permanently delete ALL candidates and resumes?
+      </p>
+
+      <!-- Impact Breakdown Box (Part 11) -->
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-3.5 mb-4 text-xs space-y-1.5 text-gray-700">
+        <div class="font-bold text-[#0B1F3A] mb-1">This action will delete:</div>
+        <div class="flex justify-between items-center py-0.5 border-b border-gray-200/60">
+          <span>Candidates:</span>
+          <span class="font-bold text-red-600" id="impact-candidates-count">{candidates.length}</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 border-b border-gray-200/60">
+          <span>Resume files:</span>
+          <span class="font-bold text-red-600" id="impact-files-count">...</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5">
+          <span>Keyword match records:</span>
+          <span class="font-bold text-red-600" id="impact-matches-count">...</span>
+        </div>
+      </div>
+
+      <!-- Typed confirmation input -->
+      <div class="mb-4">
+        <label for="input-confirm-delete-candidates" class="block text-xs font-semibold text-gray-700 mb-1.5">
+          To confirm, type <span class="font-mono font-bold text-red-600 select-all">DELETE ALL CANDIDATES</span> below:
+        </label>
+        <input 
+          type="text" 
+          id="input-confirm-delete-candidates" 
+          placeholder="Type DELETE ALL CANDIDATES" 
+          autocomplete="off"
+          class="w-full px-3.5 py-2.5 text-xs font-mono rounded-xl border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none transition-all uppercase"
+        />
+      </div>
+
+      <div id="delete-candidates-error" class="hidden mb-4 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium"></div>
+
+      <div class="flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          id="btn-cancel-candidates-step2" 
+          class="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-xs font-bold hover:bg-gray-50 transition-colors cursor-pointer"
+        >
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          id="btn-confirm-delete-all-candidates" 
+          disabled 
+          class="px-5 py-2.5 rounded-xl bg-red-600 text-white text-xs font-bold opacity-50 cursor-not-allowed transition-all inline-flex items-center gap-1.5"
+        >
+          <span id="btn-delete-candidates-spinner" class="hidden">
+            <svg class="animate-spin -ml-1 mr-1.5 h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+          </span>
+          <span id="btn-delete-candidates-text">Permanently Delete All</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Status update listeners
+    document.querySelectorAll('.candidate-status-select').forEach(el => {
+      el.addEventListener('change', async (e) => {
+        const target = e.target as HTMLSelectElement;
+        const candidateId = target.dataset.candidateId;
+        const status = target.value;
+
+        try {
+          const res = await fetch(`/api/admin/candidates/${candidateId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+          });
+          if (!res.ok) alert('Failed to update status.');
+        } catch {
+          alert('Network error updating status.');
+        }
+      });
+    });
+
+    // Delete individual candidate listener
+    document.querySelectorAll('.delete-candidate-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = (e.currentTarget as HTMLElement);
+        const candidateId = target.dataset.deleteId;
+        if (!confirm('Are you sure you want to permanently delete this candidate record and associated file?')) return;
+
+        try {
+          const res = await fetch(`/api/admin/candidates/${candidateId}`, { method: 'DELETE' });
+          if (res.ok) {
+            window.location.reload();
+          } else {
+            alert('Failed to delete candidate.');
+          }
+        } catch {
+          alert('Error deleting candidate.');
+        }
+      });
+    });
+
+    // ============================================================
+    // TWO-STEP BULK DELETE ALL CANDIDATES CONTROLLER
+    // ============================================================
+    const REQUIRED_PHRASE = 'DELETE ALL CANDIDATES';
+    const btnOpenModal = document.getElementById('btn-delete-all-candidates');
+    const modalStep1 = document.getElementById('modal-delete-candidates-step1');
+    const modalStep2 = document.getElementById('modal-delete-candidates-step2');
+    const btnCancelStep1 = document.getElementById('btn-cancel-candidates-step1');
+    const btnContinueStep1 = document.getElementById('btn-continue-candidates-step1');
+    const btnCancelStep2 = document.getElementById('btn-cancel-candidates-step2');
+    const inputConfirm = document.getElementById('input-confirm-delete-candidates') as HTMLInputElement | null;
+    const btnConfirmDelete = document.getElementById('btn-confirm-delete-all-candidates') as HTMLButtonElement | null;
+    const spinner = document.getElementById('btn-delete-candidates-spinner');
+    const btnText = document.getElementById('btn-delete-candidates-text');
+    const errorBox = document.getElementById('delete-candidates-error');
+
+    const step1CountText = document.getElementById('step1-candidates-count-text');
+    const impactCandidates = document.getElementById('impact-candidates-count');
+    const impactFiles = document.getElementById('impact-files-count');
+    const impactMatches = document.getElementById('impact-matches-count');
+
+    // 1. Open Step 1 Modal
+    btnOpenModal?.addEventListener('click', () => {
+      modalStep1?.classList.remove('hidden');
+      modalStep1?.classList.add('flex');
+
+      // Fetch fresh live impact summary in background
+      fetch('/api/admin/candidates/all').then(res => res.json()).then(data => {
+        if (step1CountText) step1CountText.innerHTML = `You are about to delete <strong class="font-bold">${data.candidatesCount}</strong> candidate records.`;
+        if (impactCandidates) impactCandidates.textContent = String(data.candidatesCount);
+        if (impactFiles) impactFiles.textContent = String(data.resumeFilesCount);
+        if (impactMatches) impactMatches.textContent = String(data.keywordMatchesCount);
+      }).catch(err => console.warn('Could not fetch impact summary ahead of modal:', err));
+    });
+
+    // 2. Cancel Step 1
+    btnCancelStep1?.addEventListener('click', () => {
+      modalStep1?.classList.add('hidden');
+      modalStep1?.classList.remove('flex');
+    });
+
+    // 3. Continue to Step 2
+    btnContinueStep1?.addEventListener('click', () => {
+      modalStep1?.classList.add('hidden');
+      modalStep1?.classList.remove('flex');
+
+      if (inputConfirm) {
+        inputConfirm.value = '';
+        inputConfirm.disabled = false;
+      }
+      if (btnConfirmDelete) {
+        btnConfirmDelete.disabled = true;
+        btnConfirmDelete.classList.add('opacity-50', 'cursor-not-allowed');
+        btnConfirmDelete.classList.remove('cursor-pointer', 'hover:bg-red-700');
+      }
+      if (errorBox) {
+        errorBox.classList.add('hidden');
+        errorBox.textContent = '';
+      }
+      if (spinner && btnText) {
+        spinner.classList.add('hidden');
+        btnText.textContent = 'Permanently Delete All';
+      }
+
+      modalStep2?.classList.remove('hidden');
+      modalStep2?.classList.add('flex');
+      setTimeout(() => inputConfirm?.focus(), 100);
+    });
+
+    // 4. Cancel Step 2
+    btnCancelStep2?.addEventListener('click', () => {
+      modalStep2?.classList.add('hidden');
+      modalStep2?.classList.remove('flex');
+      if (inputConfirm) inputConfirm.value = '';
+    });
+
+    // 5. Input Confirmation Validation (Strict exact match)
+    inputConfirm?.addEventListener('input', () => {
+      const isExactMatch = inputConfirm.value.trim() === REQUIRED_PHRASE;
+      if (btnConfirmDelete) {
+        if (isExactMatch) {
+          btnConfirmDelete.disabled = false;
+          btnConfirmDelete.classList.remove('opacity-50', 'cursor-not-allowed');
+          btnConfirmDelete.classList.add('cursor-pointer', 'hover:bg-red-700');
+        } else {
+          btnConfirmDelete.disabled = true;
+          btnConfirmDelete.classList.add('opacity-50', 'cursor-not-allowed');
+          btnConfirmDelete.classList.remove('cursor-pointer', 'hover:bg-red-700');
+        }
+      }
+    });
+
+    // Block Enter key unless valid
+    inputConfirm?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (inputConfirm.value.trim() === REQUIRED_PHRASE) {
+          btnConfirmDelete?.click();
+        }
+      }
+    });
+
+    // 6. Final Destructive Deletion Execution
+    btnConfirmDelete?.addEventListener('click', async () => {
+      if (inputConfirm?.value.trim() !== REQUIRED_PHRASE) return;
+
+      // Loading state
+      btnConfirmDelete.disabled = true;
+      if (inputConfirm) inputConfirm.disabled = true;
+      if (btnCancelStep2) (btnCancelStep2 as HTMLButtonElement).disabled = true;
+      if (spinner) spinner.classList.remove('hidden');
+      if (btnText) btnText.textContent = 'Deleting...';
+      if (errorBox) errorBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/admin/candidates/all', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ confirmation: REQUIRED_PHRASE })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          if (btnText) btnText.textContent = 'Deleted!';
+          // Show quick success state
+          setTimeout(() => {
+            window.location.reload();
+          }, 800);
+        } else {
+          throw new Error(data.error || 'Failed to delete candidates.');
+        }
+      } catch (err: any) {
+        if (errorBox) {
+          errorBox.textContent = err.message || 'An unexpected error occurred during bulk deletion.';
+          errorBox.classList.remove('hidden');
+        }
+        btnConfirmDelete.disabled = false;
+        if (inputConfirm) inputConfirm.disabled = false;
+        if (btnCancelStep2) (btnCancelStep2 as HTMLButtonElement).disabled = false;
+        if (spinner) spinner.classList.add('hidden');
+        if (btnText) btnText.textContent = 'Permanently Delete All';
+      }
+    });
+  </script>
+
+</AdminLayout>
+

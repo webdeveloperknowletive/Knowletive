@@ -1,0 +1,379 @@
+---
+import { db } from '../lib/db';
+
+const fallbackPoster = "/images/hero-students.jpg";
+
+const defaultTestimonials = [
+  {
+    video: "/videos/testimonials/session-review-final.mp4",
+    poster: "/videos/testimonials/posters/priya-sharma.jpg",
+    name: "Priya Sharma",
+    program: "Data Science & AI/ML"
+  },
+  {
+    video: "/videos/testimonials/shrushti-review.mp4",
+    poster: "/videos/testimonials/posters/rahul-mehta.jpg",
+    name: "Rahul Mehta",
+    program: "PEP Program"
+  },
+  {
+    video: "/videos/testimonials/certificate-reel.mp4",
+    poster: "/videos/testimonials/posters/sneha-desai.jpg",
+    name: "Sneha Desai",
+    program: "Data Analyst"
+  },
+  {
+    video: "/videos/testimonials/syllabus-review.mp4",
+    poster: "/videos/testimonials/posters/vikram-patil.jpg",
+    name: "Vikram Patil",
+    program: "Business Consulting"
+  }
+];
+
+interface TestimonialItem {
+  id: string;
+  video: string;
+  poster: string;
+  name: string;
+  program: string;
+  updatedAt?: string;
+}
+
+let testimonials: TestimonialItem[] = [];
+try {
+  const dbTestis = await db.getTestimonials(true);
+  if (Array.isArray(dbTestis) && dbTestis.length > 0) {
+    testimonials = dbTestis.map(t => {
+      const posterPath = t.poster_url || t.thumbnail_url || fallbackPoster;
+      const cacheBust = t.updated_at ? `?v=${encodeURIComponent(t.updated_at)}` : '';
+      return {
+        id: t.id,
+        video: t.video_url,
+        poster: posterPath + cacheBust,
+        name: t.student_name,
+        program: t.program,
+        updatedAt: t.updated_at
+      };
+    });
+  } else {
+    testimonials = defaultTestimonials.map((d, i) => ({
+      id: `default-${i}`,
+      video: d.video,
+      poster: d.poster,
+      name: d.name,
+      program: d.program
+    }));
+  }
+} catch (e) {
+  testimonials = defaultTestimonials.map((d, i) => ({
+    id: `default-${i}`,
+    video: d.video,
+    poster: d.poster,
+    name: d.name,
+    program: d.program
+  }));
+}
+---
+<section data-analytics-section="testimonials" id="testimonials" class="section-padding bg-white relative">
+  <div class="container-custom">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-xs tracking-widest uppercase mb-4 border border-[#0878E8]/20">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          Testimonials
+        </div>
+        <h2 class="fluid-h2 text-[#0B1F3A]">
+          Stories Behind<br/>
+          <span class="text-[#0878E8]">the Success</span>
+        </h2>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="slider-prev" class="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-[#0B1F3A] hover:border-[#0878E8] hover:text-[#0878E8] hover:bg-blue-50 transition-all focus:outline-none focus:ring-2 focus:ring-[#0878E8]" aria-label="Previous testimonials">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        <button id="slider-next" class="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-[#0B1F3A] hover:border-[#0878E8] hover:text-[#0878E8] hover:bg-blue-50 transition-all focus:outline-none focus:ring-2 focus:ring-[#0878E8]" aria-label="Next testimonials">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Carousel -->
+    {testimonials && testimonials.length > 0 ? (
+      <div id="testimonial-slider" class="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-8">
+        {testimonials.map((testi, index) => (
+        <div 
+          key={testi.id}
+          id={`story-card-${testi.id}`}
+          data-story-id={testi.id}
+          data-index={index}
+          class="story-card relative shrink-0 snap-center rounded-[24px] overflow-hidden bg-slate-100 cursor-pointer group transition-all duration-300 w-[85vw] max-w-[320px] md:w-[260px] lg:w-[280px] aspect-[9/16]"
+        >
+          
+          <!-- Guaranteed Visible Poster Image: Bound to this specific story item -->
+          <img 
+            id={`public-poster-${testi.id}`}
+            class="story-poster absolute inset-0 w-full h-full object-cover z-[5] transition-opacity duration-300 select-none pointer-events-none" 
+            src={testi.poster || fallbackPoster} 
+            alt={`${testi.name} - ${testi.program} story preview`} 
+            loading="eager"
+            fetchpriority="high"
+          />
+
+          <!-- Portrait Video Element -->
+          <video 
+            class="story-video absolute inset-0 w-full h-full object-cover bg-slate-900"
+            src={testi.video}
+            poster={testi.poster || fallbackPoster}
+            preload="metadata"
+            loop={false}
+            muted
+            playsinline
+          ></video>
+
+          <!-- Top Progress Bar -->
+          <div class="absolute top-0 left-0 right-0 p-3 z-20 flex gap-1">
+            <div class="h-1 bg-white/30 rounded-full flex-1 overflow-hidden">
+              <div class="story-progress h-full bg-white w-0 rounded-full"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Gradient Overlay (strictly bottom half for crisp text readability) -->
+          <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10 pointer-events-none"></div>
+
+          <!-- Content overlay -->
+          <div class="absolute bottom-0 left-0 right-0 p-5 z-20 flex flex-col gap-1 text-white">
+            <h3 class="font-manrope font-bold text-lg leading-tight drop-shadow-md">{testi.name}</h3>
+            <p class="text-xs text-white/90 font-medium drop-shadow-sm">{testi.program}</p>
+          </div>
+
+          <!-- Controls Overlay -->
+          <div class="absolute top-4 right-4 z-30 flex flex-col gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+            <button class="mute-btn w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition shadow-md" aria-label="Toggle mute">
+              <svg class="w-4 h-4 icon-unmuted hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M17.657 6.343a8 8 0 010 11.314M11 5L6 9H2v6h4l5 4V5z"></path></svg>
+              <svg class="w-4 h-4 icon-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+            </button>
+            <button class="play-btn w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition shadow-md" aria-label="Play/Pause">
+              <svg class="w-4 h-4 icon-play" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <svg class="w-4 h-4 icon-pause hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+          </div>
+          
+          <!-- Overlay state indicator (Center Play Button Icon before playback) -->
+          <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none transition-opacity duration-300 bg-black/10 group-hover:bg-transparent play-overlay">
+             <div class="w-16 h-16 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white shadow-2xl group-hover:scale-110 group-hover:bg-[#F47A16] transition-all duration-300">
+                <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+             </div>
+          </div>
+        </div>
+      ))}
+      </div>
+    ) : (
+      <div class="p-12 text-center text-gray-400 bg-gray-50 rounded-3xl border border-gray-100 max-w-md mx-auto">
+        <div class="w-12 h-12 bg-blue-50 text-[#0878E8] rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        </div>
+        <p class="text-sm font-semibold text-[#0B1F3A]">Student Stories Coming Soon</p>
+        <p class="text-xs text-gray-500 mt-1">Our latest student placement stories and review reels will be published here soon.</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+  }
+  .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+  }
+</style>
+
+<script>
+  const slider = document.getElementById('testimonial-slider');
+  const prevBtn = document.getElementById('slider-prev');
+  const nextBtn = document.getElementById('slider-next');
+  const cards = document.querySelectorAll('.story-card');
+  let activeIndex = -1;
+  let isMobile = window.matchMedia('(max-width: 768px)').matches;
+  let globalMuted = true;
+
+  if (slider && prevBtn && nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: slider.clientWidth / 2, behavior: 'smooth' });
+    });
+    
+    prevBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: -slider.clientWidth / 2, behavior: 'smooth' });
+    });
+  }
+
+  function pauseAllVideos() {
+    cards.forEach(card => {
+      const vid = card.querySelector('.story-video') as HTMLVideoElement;
+      if (vid && !vid.paused) {
+        vid.pause();
+        updateUI(card, false);
+      }
+    });
+  }
+
+  function playVideo(card: Element, withSound: boolean = false) {
+    pauseAllVideos();
+    const vid = card.querySelector('.story-video') as HTMLVideoElement;
+    if (!vid) return;
+
+    // Reset all other cards to poster state
+    cards.forEach(c => {
+      if (c !== card) {
+        const otherVid = c.querySelector('.story-video') as HTMLVideoElement;
+        const otherPoster = c.querySelector('.story-poster');
+        if (otherVid) {
+          otherVid.pause();
+          otherVid.currentTime = 0;
+        }
+        (c.querySelector('.story-progress') as HTMLElement).style.width = '0%';
+        otherPoster?.classList.remove('opacity-0');
+        updateUI(c, false);
+      }
+    });
+    
+    vid.muted = !withSound;
+    updateMuteUI(card, !withSound);
+
+    const playPromise = vid.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        updateUI(card, true);
+        activeIndex = parseInt((card as HTMLElement).dataset.index || '-1');
+      }).catch(err => {
+        // Fallback to muted playback if autoplay restrictions apply
+        vid.muted = true;
+        vid.play().then(() => {
+           updateUI(card, true);
+           updateMuteUI(card, true);
+        }).catch(() => {
+           updateUI(card, false);
+        });
+      });
+    }
+  }
+
+  function updateUI(card: Element, isPlaying: boolean) {
+    const playIcon = card.querySelector('.icon-play');
+    const pauseIcon = card.querySelector('.icon-pause');
+    const overlay = card.querySelector('.play-overlay');
+    const poster = card.querySelector('.story-poster');
+
+    if (isPlaying) {
+      poster?.classList.add('opacity-0');
+      playIcon?.classList.add('hidden');
+      pauseIcon?.classList.remove('hidden');
+      overlay?.classList.add('opacity-0');
+      card.classList.add('ring-2', 'ring-[#0878E8]', 'scale-[1.02]');
+    } else {
+      poster?.classList.remove('opacity-0');
+      playIcon?.classList.remove('hidden');
+      pauseIcon?.classList.add('hidden');
+      overlay?.classList.remove('opacity-0');
+      card.classList.remove('ring-2', 'ring-[#0878E8]', 'scale-[1.02]');
+    }
+  }
+
+  function updateMuteUI(card: Element, isMuted: boolean) {
+    const unmutedIcon = card.querySelector('.icon-unmuted');
+    const mutedIcon = card.querySelector('.icon-muted');
+    if (isMuted) {
+      mutedIcon?.classList.remove('hidden');
+      unmutedIcon?.classList.add('hidden');
+    } else {
+      mutedIcon?.classList.add('hidden');
+      unmutedIcon?.classList.remove('hidden');
+    }
+  }
+
+  cards.forEach((card, index) => {
+    const vid = card.querySelector('.story-video') as HTMLVideoElement;
+    const progress = card.querySelector('.story-progress') as HTMLElement;
+
+    // Desktop Hover: Preview with video
+    card.addEventListener('mouseenter', () => {
+      if (!isMobile) {
+        playVideo(card, !globalMuted);
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (!isMobile) {
+        vid.pause();
+        updateUI(card, false);
+      }
+    });
+
+    // Click / Tap to Play/Pause
+    card.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.mute-btn')) {
+        e.preventDefault();
+        vid.muted = !vid.muted;
+        globalMuted = vid.muted;
+        updateMuteUI(card, vid.muted);
+        return;
+      }
+      
+      if (target.closest('.play-btn')) {
+         e.preventDefault();
+      }
+
+      if (vid.paused) {
+        // When clicking explicitly, play with sound
+        playVideo(card, true);
+        globalMuted = false;
+      } else {
+        vid.pause();
+        updateUI(card, false);
+      }
+    });
+
+    vid.addEventListener('timeupdate', () => {
+      if (vid.duration) {
+        const percent = (vid.currentTime / vid.duration) * 100;
+        if (progress) progress.style.width = `${percent}%`;
+      }
+    });
+
+    vid.addEventListener('ended', () => {
+      const nextIndex = index + 1;
+      if (nextIndex < cards.length) {
+        const nextCard = cards[nextIndex];
+        nextCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        setTimeout(() => playVideo(nextCard, !globalMuted), 300);
+      } else {
+        updateUI(card, false);
+      }
+    });
+  });
+
+  // Pause videos when scrolled completely out of viewport
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          const card = entry.target;
+          const vid = card.querySelector('.story-video') as HTMLVideoElement;
+          if (vid && !vid.paused) {
+            vid.pause();
+            updateUI(card, false);
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    cards.forEach(card => observer.observe(card));
+  }
+
+  window.addEventListener('resize', () => {
+    isMobile = window.matchMedia('(max-width: 768px)').matches;
+  });
+</script>
