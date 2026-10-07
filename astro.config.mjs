@@ -3,13 +3,13 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://knowletive.com',
   output: 'server',
-  adapter: vercel(),
+  adapter: node(),
   redirects: {
     '/cet.html': '/cet',
     '/cetdocuments.html': '/cet-documents',
