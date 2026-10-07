@@ -1,0 +1,57 @@
+# Dependencies - installed fresh by Railpack
+**/node_modules
+node_modules
+
+# Build output - generated during deployment
+**/dist
+dist
+**/.astro
+
+# Git / repository metadata
+.git
+.github
+.gitignore
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local development / IDE files
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Logs / reports / caches
+**/*.log
+**/.cache
+.cache
+coverage
+playwright-report
+test-results
+
+# Temporary / generated files
+tmp
+temp
+**/tmp
+**/temp
+
+# Project backup folders - NOT needed to run the website
+backup_*/
+**/backup_*/
+
+# Your dated backup folders seen in this repository
+backup_before_admin_upgrade_2026-10-03_10-24
+backup_before_full_qa_2026-10-04_00-43
+backup_before_qa_fix_2026-10-03_11-12
+
+# Local scripts / tooling that are not needed by the production app
+setup.sh
+build.sh
+
+# Documentation / repository files not needed for the production build
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
