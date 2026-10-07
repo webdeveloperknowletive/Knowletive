@@ -6,11 +6,12 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
+  "dev": "astro dev",
+  "build": "astro build",
+  "start": "astro preview --host 0.0.0.0 --port 3000",
+  "preview": "astro preview",
+  "astro": "astro"
+},
   "dependencies": {
     "@astrojs/react": "^7.0.0",
     "@astrojs/sitemap": "^3.7.4",
