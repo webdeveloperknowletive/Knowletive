@@ -9,7 +9,9 @@ import node from '@astrojs/node';
 export default defineConfig({
   site: 'https://knowletive.com',
   output: 'server',
-  adapter: node(),
+  adapter: node({
+  mode: 'standalone'
+}),
   redirects: {
     '/cet.html': '/cet',
     '/cetdocuments.html': '/cet-documents',
