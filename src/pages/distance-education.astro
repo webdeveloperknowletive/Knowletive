@@ -1,0 +1,272 @@
+---
+// ============================================================
+// /distance-education
+// Conversion-Focused Landing Page: Distance Education Admission
+// Primary CTA: "Get Admission Guidance"
+// ============================================================
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LandingHeader from '../components/landing/LandingHeader.astro';
+import LandingLeadForm, { type FormField } from '../components/landing/LandingLeadForm.astro';
+import LandingFAQ from '../components/landing/LandingFAQ.astro';
+import StickyMobileCTA from '../components/landing/StickyMobileCTA.astro';
+import UTMTracker from '../components/landing/UTMTracker.astro';
+
+const serviceTitle = "Distance Education Admission Guidance";
+const primaryCta = "Get Admission Guidance";
+
+const customFields: FormField[] = [
+  {
+    name: "targetCourse",
+    label: "Interested Degree / Program",
+    type: "select",
+    required: true,
+    placeholder: "Select your desired program",
+    options: [
+      { value: "Distance MBA (Finance / Marketing / HR / IT / Operations)", label: "Online / Distance MBA (Master of Business Administration)" },
+      { value: "Distance MCA (Computer Applications)", label: "Online / Distance MCA (Master of Computer Applications)" },
+      { value: "Distance BBA (Bachelor of Business Administration)", label: "Distance BBA" },
+      { value: "Distance BCA (Bachelor of Computer Applications)", label: "Distance BCA" },
+      { value: "Distance M.Com / B.Com", label: "Commerce Degrees (M.Com / B.Com)" },
+      { value: "Distance MA / BA", label: "Arts & Humanities Degrees (MA / BA)" }
+    ]
+  },
+  {
+    name: "qualification",
+    label: "Highest Qualification Completed",
+    type: "select",
+    required: true,
+    placeholder: "Select your highest qualification",
+    options: [
+      { value: "12th Standard / HSC Passed", label: "12th Standard / HSC Passed" },
+      { value: "Diploma Completed", label: "3-Year Technical / Commercial Diploma" },
+      { value: "Graduation Completed (BA, B.Com, B.Sc, BBA, BCA, B.Tech)", label: "Graduate Degree Completed" },
+      { value: "Postgraduate Degree Completed", label: "Postgraduate Degree Completed" }
+    ]
+  }
+];
+
+const programs = [
+  {
+    title: "Distance / Online MBA",
+    duration: "2 Years (4 Semesters)",
+    eligibility: "Any Recognized Bachelor's Degree (Min 50%)",
+    specializations: "Marketing, Finance, HR, IT, Operations, Supply Chain, Healthcare",
+    desc: "Designed for working executives seeking promotion into management roles without interrupting employment."
+  },
+  {
+    title: "Distance / Online MCA",
+    duration: "2 Years (4 Semesters)",
+    eligibility: "BCA / B.Sc Computer Science or Mathematics at 10+2 / Graduation",
+    specializations: "Software Engineering, Cloud Computing, Data Science, Web Technologies",
+    desc: "AICTE-aligned curriculum covering software architecture, algorithms, and database management."
+  },
+  {
+    title: "Distance BBA & BCA",
+    duration: "3 Years (6 Semesters)",
+    eligibility: "10+2 / HSC Passed in Any Recognized Stream",
+    specializations: "General Management, E-Commerce, Computer Applications, Web Design",
+    desc: "Ideal for working individuals, athletes, or entrepreneurs building foundational academic credentials."
+  },
+  {
+    title: "Distance M.Com & MA",
+    duration: "2 Years (4 Semesters)",
+    eligibility: "Relevant Undergraduate Degree from Recognized University",
+    specializations: "Accounting, Economics, English Literature, Psychology, Political Science",
+    desc: "Affordable postgraduate degrees for government exam eligibility, teaching qualifications, and career growth."
+  }
+];
+
+const inclusions = [
+  { title: "UGC-DEB Accreditation Check", detail: "Verification that the selected university and program hold active UGC-DEB approvals." },
+  { title: "Fee & Payment Plan Guidance", detail: "Transparent comparison of semester fees, examination charges, and zero-interest EMI options." },
+  { title: "Application & Document Filing", detail: "Complete assistance with uploading attested mark sheets, ID proofs, and migration certificates." },
+  { title: "LMS & Study Portal Orientation", detail: "Guidance on navigating digital study materials, e-libraries, and recorded video lectures." },
+  { title: "Examination Mode Advisory", detail: "Clarity on online remote proctored vs. offline center-based semester examination schedules." },
+  { title: "Dedicated Student Desk", detail: "Continuous support throughout your semesters for hall tickets, re-registration, and marksheets." }
+];
+
+const faqs = [
+  {
+    question: "Are distance degrees recognized for government jobs and corporate employment?",
+    answer: "Yes. As per UGC and Ministry of Education notifications, degrees awarded by UGC-DEB recognized universities through distance or online mode are legally equivalent to regular on-campus degrees for employment, higher studies, and competitive government examinations."
+  },
+  {
+    question: "Does Knowletive award the degree directly?",
+    answer: "No. Knowletive is an authorized educational admission guidance and student facilitation partner. The official degree, marks card, and enrollment certificate are awarded directly by the UGC-DEB approved university you enroll in."
+  },
+  {
+    question: "Do I need to attend daily physical classes?",
+    answer: "No. Distance and online programs offer self-paced learning via online Learning Management Systems (LMS), weekend recorded/live lectures, and digital study materials."
+  },
+  {
+    question: "How are semester examinations conducted?",
+    answer: "Depending on the chosen university, exams are conducted either through online AI-proctored systems from home or at designated offline examination centers across major cities in Maharashtra and India."
+  },
+  {
+    question: "Can I pay university fees in semester installments?",
+    answer: "Yes, almost all partner universities offer flexible semester-wise fee payments or 0% interest EMI options."
+  }
+];
+---
+
+<BaseLayout 
+  title="Distance Education Admission Guidance in Pune | UGC-DEB Degrees — Knowletive"
+  description="Authorized distance education admission guidance in Pune. Enroll in UGC-DEB recognized online MBA, MCA, BBA, and BCA programs with Knowletive."
+>
+  <UTMTracker />
+  <LandingHeader primaryCtaText={primaryCta} serviceTitle={serviceTitle} />
+
+  <!-- HERO SECTION -->
+  <section id="overview" class="page-header-spacing pb-16 bg-[#072B6F] text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(#0878E8 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+    <div class="container-custom relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Left: Headline & Pitch -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#F47A16] font-bold text-xs uppercase tracking-wider mb-5">
+            <span class="w-2 h-2 rounded-full bg-[#F47A16] animate-pulse"></span>
+            UGC-DEB Recognized University Degrees
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-manrope font-extrabold tracking-tight text-white mb-5 leading-tight">
+            Earn Your Degree <br/>
+            <span class="text-[#F47A16]">Without Pausing Your Job.</span>
+          </h1>
+
+          <p class="text-blue-100 text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-6 leading-relaxed">
+            Upgrade your qualifications with accredited Distance & Online MBA, MCA, BBA, or BCA programs from India's premier UGC-DEB approved universities with complete counseling support.
+          </p>
+
+          <!-- Transparent Role Disclaimer -->
+          <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 max-w-xl text-left text-xs text-blue-200/90 leading-relaxed mb-8">
+            <strong class="text-white block mb-0.5">🎓 Official University Facilitation:</strong>
+            Knowletive provides authentic university comparison, documentation support, and admission processing. All degree certificates and grade sheets are awarded directly by UGC-DEB recognized universities.
+          </div>
+
+          <!-- Secondary Actions -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+            <a href="#lead-form" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-xl">
+              {primaryCta}
+            </a>
+            <a 
+              href="https://wa.me/919970600116?text=Hi%20Knowletive%2C%20I%20would%20like%20guidance%20for%20Distance%20Education%20admission." 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs border border-white/20 transition-all"
+            >
+              <svg class="w-4 h-4 text-[#25D366] fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="lg:col-span-5">
+          <LandingLeadForm 
+            serviceId="distance-education"
+            serviceName={serviceTitle}
+            primaryCta={primaryCta}
+            headline="Check Eligibility & Fees"
+            subheadline="Select your target program to receive university options and fee structures."
+            customFields={customFields}
+            compact={true}
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: PROGRAMS LISTING -->
+  <section id="programs" class="section-padding bg-gray-50" data-analytics-section="programs">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-xs uppercase tracking-wider mb-3">
+          Degrees & Specializations
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          Popular Distance Programs
+        </h2>
+        <p class="text-[#64748B] text-sm md:text-base">
+          100% online coursework with flexible examination options.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {programs.map((prog) => (
+          <div class="card-premium border border-gray-200 bg-white p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold font-mono text-[#F47A16]">{prog.duration}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">UGC-DEB Approved</span>
+              </div>
+              <h3 class="text-xl font-bold font-manrope text-[#0B1F3A] mb-2">{prog.title}</h3>
+              <p class="text-xs text-gray-500 mb-2"><strong>Eligibility:</strong> {prog.eligibility}</p>
+              <p class="text-xs text-[#0878E8] font-medium mb-4"><strong>Specializations:</strong> {prog.specializations}</p>
+              <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed mb-6">{prog.desc}</p>
+            </div>
+
+            <a href="#lead-form" class="btn-primary w-full py-2.5 text-xs font-bold text-center justify-center">
+              Request University Options & Fees →
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: INCLUSIONS & SUPPORT -->
+  <section id="benefits" class="section-padding bg-white" data-analytics-section="benefits">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-2xl sm:text-3xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          Our Student Facilitation Services
+        </h2>
+        <p class="text-[#64748B] text-sm">
+          Complete assistance from initial university selection to graduation support.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        {inclusions.map((item) => (
+          <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#0878E8] flex items-center justify-center mb-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="font-manrope font-bold text-base text-[#0B1F3A] mb-1">{item.title}</h3>
+            <p class="text-xs text-[#64748B] leading-relaxed">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: FAQS -->
+  <LandingFAQ faqs={faqs} title="Frequently Asked Questions on Distance Education" />
+
+  <!-- SECTION 5: FINAL CTA -->
+  <section class="section-padding bg-gray-50 border-t border-gray-200 text-center" data-analytics-section="final-cta">
+    <div class="container-custom max-w-3xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-4">
+        Ready to Earn Your UGC-Approved Degree?
+      </h2>
+      <p class="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto mb-8">
+        Submit your details and let our academic advisors match you with the best-fit university program.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#lead-form" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-md">
+          {primaryCta}
+        </a>
+        <a href="tel:+919970600116" class="btn-secondary w-full sm:w-auto px-6 py-3.5 text-xs font-bold">
+          Call +91 99706 00116
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <StickyMobileCTA primaryCtaText={primaryCta} serviceName={serviceTitle} />
+</BaseLayout>
+

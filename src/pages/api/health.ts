@@ -1,21 +1,56 @@
 // ============================================================
 // GET /api/health
-// System Health & Database Connectivity Check
+// System Health & Supabase Database / Storage Connectivity Check
 // ============================================================
 
 import type { APIRoute } from 'astro';
-import { db } from '../../lib/db';
+import { db, getSupabase } from '../../lib/db';
+import { storage } from '../../lib/storage';
 
 export const GET: APIRoute = async () => {
   try {
+    const isSupabase = db.isSupabaseConnected();
+    let supabaseStatus = isSupabase ? 'connected' : 'local_fallback';
+    let storageStatus = 'local';
+    let missingTables: string[] = [];
+
+    const client = getSupabase();
+    if (client) {
+      try {
+        // Test primary tables
+        const checkTables = ['profiles', 'candidates', 'leads', 'jobs', 'internships', 'testimonials', 'applications'];
+        for (const tbl of checkTables) {
+          const { error } = await client.from(tbl).select('id').limit(1);
+          if (error && (error.code === 'PGRST205' || error.message?.includes('Could not find the table'))) {
+            missingTables.push(tbl);
+          }
+        }
+
+        // Test Storage buckets
+        const { data: buckets } = await client.storage.listBuckets();
+        if (buckets) {
+          storageStatus = buckets.map(b => b.name).join(', ') || 'no_buckets';
+        }
+      } catch (e: any) {
+        supabaseStatus = `degraded: ${e.message}`;
+      }
+    }
+
     const stats = await db.getDashboardStats();
+
     return new Response(JSON.stringify({
       status: 'ok',
       server: 'online',
-      database: 'connected',
+      database: supabaseStatus,
+      storage: storageStatus,
+      storageMode: storage.isSupabaseConfigured() ? 'supabase' : 'local',
+      missingMigrations: missingTables.length > 0 ? missingTables : 'none',
       metrics: {
         totalResumes: stats.totalResumes,
-        totalLeads: stats.totalLeads
+        totalApplications: stats.totalApplications,
+        totalLeads: stats.totalLeads,
+        activeJobs: stats.activeJobs,
+        activeInternships: stats.activeInternships
       },
       timestamp: new Date().toISOString()
     }), {

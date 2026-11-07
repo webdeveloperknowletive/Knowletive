@@ -40,6 +40,12 @@ export const GET: APIRoute = async ({ params, request }) => {
   const absolutePath = path.resolve(BASE_UPLOADS_DIR, safePath);
 
   if (!absolutePath.startsWith(BASE_UPLOADS_DIR) || !fs.existsSync(absolutePath)) {
+    // If not found on local disk, check if Supabase Storage has it in public media bucket
+    const supabaseUrl = process.env.SUPABASE_URL;
+    if (supabaseUrl && !supabaseUrl.includes('your-project-id')) {
+      const publicStorageUrl = `${supabaseUrl}/storage/v1/object/public/media/${safePath.replace(/\\/g, '/')}`;
+      return Response.redirect(publicStorageUrl, 307);
+    }
     return new Response('File not found', { status: 404 });
   }
 

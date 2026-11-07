@@ -1,0 +1,316 @@
+---
+// ============================================================
+// /ebooks
+// Conversion-Focused Landing Page: Ebook Selling & Digital Library
+// Primary CTA: "Explore Ebooks"
+// ============================================================
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LandingHeader from '../components/landing/LandingHeader.astro';
+import LandingLeadForm, { type FormField } from '../components/landing/LandingLeadForm.astro';
+import LandingFAQ from '../components/landing/LandingFAQ.astro';
+import StickyMobileCTA from '../components/landing/StickyMobileCTA.astro';
+import UTMTracker from '../components/landing/UTMTracker.astro';
+
+const serviceTitle = "Ebook Selling";
+const primaryCta = "Explore Ebooks";
+
+const ebooks = [
+  {
+    id: "career-guide",
+    title: "Knowletive Comprehensive Career & IT Roadmap Guide",
+    edition: "2026 - 2027 Edition",
+    author: "Knowletive Academic Research Team",
+    pages: "58 Pages",
+    format: "PDF Document",
+    language: "English",
+    price: "Free Community Edition",
+    isFree: true,
+    audience: "Students, Graduates & IT Aspirants",
+    desc: "Complete breakdown of high-demand technology streams, step-by-step programming roadmaps, interview preparation milestones, and corporate hiring standards.",
+    downloadUrl: "/downloads/Knowletive_Career_Guide.pdf"
+  },
+  {
+    id: "fullstack-handbook",
+    title: "Full-Stack Developer Job-Ready Architecture Handbook",
+    edition: "Practical Industry Edition",
+    author: "Knowletive Engineering Faculty",
+    pages: "94 Pages",
+    format: "PDF Document",
+    language: "English",
+    price: "₹199 / Request Access",
+    isFree: false,
+    audience: "Engineering Students & Junior Developers",
+    desc: "Production guidelines on RESTful APIs, relational vs NoSQL schema designs, JWT security, Docker microservices, and live Git deployment best practices."
+  },
+  {
+    id: "data-science-playbook",
+    title: "Data Science & AI/ML Technical Interview Playbook",
+    edition: "Interview Masterclass Series",
+    author: "Knowletive Data Mentors",
+    pages: "86 Pages",
+    format: "PDF Document",
+    language: "English",
+    price: "₹249 / Request Access",
+    isFree: false,
+    audience: "Data Analysts, Python & AI Aspirants",
+    desc: "Top 120+ real interview coding questions in Python, Pandas, SQL joins, probability distributions, regression algorithms, and machine learning pipelines."
+  },
+  {
+    id: "cet-blueprint",
+    title: "Maharashtra CET 2027 Engineering & MBA Admission Blueprint",
+    edition: "State Entrance Edition",
+    author: "Knowletive Admission Counseling Cell",
+    pages: "64 Pages",
+    format: "PDF Document",
+    language: "English",
+    price: "₹149 / Request Access",
+    isFree: false,
+    audience: "MHT-CET & MBA-CET Candidates & Parents",
+    desc: "Multi-year cutoff benchmarks across Pune and Mumbai colleges, CAP round preference filling algorithms, document checklists, and TFWS guidelines."
+  }
+];
+
+const customFields: FormField[] = [
+  {
+    name: "ebookTitle",
+    label: "Select Ebook / Guide",
+    type: "select",
+    required: true,
+    placeholder: "Choose the ebook you wish to access",
+    options: [
+      { value: "Knowletive Comprehensive Career & IT Roadmap Guide (Free)", label: "Career & IT Roadmap Guide (Free Download)" },
+      { value: "Full-Stack Developer Job-Ready Architecture Handbook", label: "Full-Stack Developer Architecture Handbook" },
+      { value: "Data Science & AI/ML Technical Interview Playbook", label: "Data Science & AI/ML Interview Playbook" },
+      { value: "Maharashtra CET 2027 Engineering & MBA Admission Blueprint", label: "CET 2027 Admission Blueprint" }
+    ]
+  },
+  {
+    name: "currentStatus",
+    label: "Current Stage / Profession",
+    type: "select",
+    required: true,
+    placeholder: "Select your background",
+    options: [
+      { value: "College Student", label: "College Student (Engineering / BCA / B.Sc)" },
+      { value: "Recent Graduate / Job Seeker", label: "Recent Graduate / Job Seeker" },
+      { value: "Working Professional", label: "Working Professional" },
+      { value: "Parent", label: "Parent" }
+    ]
+  }
+];
+
+const faqs = [
+  {
+    question: "How do I receive my ebook after submitting the request?",
+    answer: "Free community editions are available for immediate download right on the page and via confirmation link. For specialized paid handbooks, our team delivers the encrypted PDF directly to your registered email address within 1 hour."
+  },
+  {
+    question: "What format are the ebooks provided in?",
+    answer: "All ebooks are formatted as high-resolution, DRM-safe PDF files, readable seamlessly on desktop, iPad, tablet, Kindle, or mobile phones."
+  },
+  {
+    question: "Can I share the downloaded ebook with others?",
+    answer: "Our ebooks are licensed for individual personal and educational use. Unauthorized re-distribution, reselling, or commercial publication is strictly prohibited."
+  },
+  {
+    question: "What is the refund policy for premium digital ebooks?",
+    answer: "If you experience any technical corruption with the digital download that our team cannot resolve within 24 hours, we provide an immediate 100% refund."
+  }
+];
+---
+
+<BaseLayout 
+  title="Career & Tech Ebooks Library | Download Guides — Knowletive"
+  description="Explore Knowletive's curated tech & career ebook collection. Free comprehensive career guides, full-stack handbooks, and CET admission blueprints."
+>
+  <UTMTracker />
+  <LandingHeader primaryCtaText={primaryCta} serviceTitle={serviceTitle} />
+
+  <!-- HERO SECTION -->
+  <section id="overview" class="page-header-spacing pb-16 bg-[#0B1F3A] text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(#0878E8 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+    <div class="container-custom relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Left: Headline & Pitch -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#F47A16] font-bold text-xs uppercase tracking-wider mb-5">
+            <span class="w-2 h-2 rounded-full bg-[#F47A16] animate-pulse"></span>
+            Knowletive Digital Knowledge Center
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-manrope font-extrabold tracking-tight text-white mb-5 leading-tight">
+            Curated Career & Technical <br/>
+            <span class="text-[#F47A16]">Ebooks and Guides.</span>
+          </h1>
+
+          <p class="text-blue-100 text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
+            Written by senior engineers and academic counselors. Practical roadmaps, architectural best practices, and interview blueprints designed to save you hundreds of hours of trial and error.
+          </p>
+
+          <!-- Highlights -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-left max-w-lg mx-auto lg:mx-0 mb-8 text-xs text-blue-100">
+            <div class="bg-white/10 p-3 rounded-xl border border-white/10">
+              <strong class="text-white block font-bold text-sm">Instant Access</strong>
+              Direct PDF downloads & email delivery.
+            </div>
+            <div class="bg-white/10 p-3 rounded-xl border border-white/10">
+              <strong class="text-white block font-bold text-sm">Verified Content</strong>
+              Written by active technical mentors.
+            </div>
+            <div class="bg-white/10 p-3 rounded-xl border border-white/10">
+              <strong class="text-white block font-bold text-sm">Lifetime Updates</strong>
+              Free future errata & edition updates.
+            </div>
+          </div>
+
+          <!-- Secondary Actions -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+            <a href="#catalogue" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-xl">
+              {primaryCta}
+            </a>
+            <a 
+              href="https://wa.me/919970600116?text=Hi%20Knowletive%2C%20I%20would%20like%20to%20know%20more%20about%20your%20career%20and%20tech%20ebooks." 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs border border-white/20 transition-all"
+            >
+              <svg class="w-4 h-4 text-[#25D366] fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Inquire on WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="lg:col-span-5">
+          <LandingLeadForm 
+            serviceId="ebooks"
+            serviceName={serviceTitle}
+            primaryCta={primaryCta}
+            headline="Request Ebook Access"
+            subheadline="Select the ebook to receive instant access and delivery instructions."
+            customFields={customFields}
+            compact={true}
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: EBOOK CATALOGUE -->
+  <section id="catalogue" class="section-padding bg-gray-50" data-analytics-section="catalogue">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-xs uppercase tracking-wider mb-3">
+          Catalogue & Downloads
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          Available Ebooks & Resources
+        </h2>
+        <p class="text-[#64748B] text-sm md:text-base">
+          Review details, page count, and intended audience for each publication.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {ebooks.map((b) => (
+          <div class="card-premium border border-gray-200 bg-white p-6 sm:p-8 flex flex-col justify-between hover:shadow-lg transition-all">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class={`px-3 py-1 rounded-full text-xs font-bold ${b.isFree ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-blue-50 text-[#0878E8] border border-blue-200'}`}>
+                  {b.price}
+                </span>
+                <span class="text-xs font-medium text-gray-400 font-mono">{b.pages} • {b.format}</span>
+              </div>
+
+              <h3 class="text-xl font-bold font-manrope text-[#0B1F3A] mb-2 leading-snug">
+                {b.title}
+              </h3>
+              
+              <p class="text-xs text-gray-500 mb-4">
+                Author: <strong class="text-[#072B6F]">{b.author}</strong> | Audience: {b.audience}
+              </p>
+
+              <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed mb-6">
+                {b.desc}
+              </p>
+            </div>
+
+            <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+              {b.isFree ? (
+                <a 
+                  href="#lead-form" 
+                  class="btn-primary w-full py-2.5 text-xs font-bold text-center justify-center shadow-sm"
+                >
+                  Download Free Copy →
+                </a>
+              ) : (
+                <a 
+                  href="#lead-form" 
+                  class="w-full py-2.5 rounded-xl bg-[#072B6F] hover:bg-[#0B1F3A] text-white text-xs font-bold text-center transition-colors"
+                >
+                  Request Ebook Access →
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: DELIVERY & REFUND POLICIES -->
+  <section class="section-padding bg-white" data-analytics-section="policy">
+    <div class="container-custom max-w-4xl mx-auto">
+      <div class="card-premium border border-gray-200 bg-[#F7F9FC] p-8">
+        <h3 class="text-lg font-bold font-manrope text-[#0B1F3A] mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-[#0878E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          Digital Delivery, Usage & Refund Terms
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-[#64748B] leading-relaxed">
+          <div>
+            <strong class="text-[#0B1F3A] block mb-1">Instant Delivery</strong>
+            Free resources download immediately upon form save. Paid resources are delivered to your email inbox within 60 minutes.
+          </div>
+          <div>
+            <strong class="text-[#0B1F3A] block mb-1">Single-User License</strong>
+            Digital documents are watermarked and licensed for individual personal study. Commercial re-distribution is prohibited.
+          </div>
+          <div>
+            <strong class="text-[#0B1F3A] block mb-1">Fair Refund Assurance</strong>
+            If file corruption prevents viewing and cannot be replaced within 24 hours, you receive a prompt full refund upon request.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: FAQS -->
+  <LandingFAQ faqs={faqs} title="Frequently Asked Questions on Knowletive Ebooks" />
+
+  <!-- SECTION 5: FINAL CTA -->
+  <section class="section-padding bg-gray-50 border-t border-gray-200 text-center" data-analytics-section="final-cta">
+    <div class="container-custom max-w-3xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-4">
+        Start Reading and Accelerate Your Learning
+      </h2>
+      <p class="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto mb-8">
+        Choose your title above and submit the quick form to receive your copy immediately.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#lead-form" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-md">
+          {primaryCta}
+        </a>
+        <a href="tel:+919970600116" class="btn-secondary w-full sm:w-auto px-6 py-3.5 text-xs font-bold">
+          Call +91 99706 00116
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <StickyMobileCTA primaryCtaText={primaryCta} serviceName={serviceTitle} />
+</BaseLayout>
+

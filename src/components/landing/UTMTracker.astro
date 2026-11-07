@@ -1,0 +1,57 @@
+---
+// UTM Attribution Tracker for Landing Pages
+// Captures utm_* params and preserves them across internal navigation
+---
+
+<script>
+  (function() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+      let utmData: Record<string, string> = {};
+
+      const stored = sessionStorage.getItem('k_utm');
+      if (stored) {
+        try { utmData = JSON.parse(stored); } catch {}
+      }
+
+      let hasNew = false;
+      utmKeys.forEach(k => {
+        const val = urlParams.get(k);
+        if (val) {
+          utmData[k] = val.slice(0, 100);
+          hasNew = true;
+        }
+      });
+
+      if (hasNew) {
+        sessionStorage.setItem('k_utm', JSON.stringify(utmData));
+      }
+
+      // Automatically fill any hidden UTM fields in forms on page
+      function populateUtmFields() {
+        document.querySelectorAll('form').forEach(form => {
+          Object.entries(utmData).forEach(([key, val]) => {
+            let input = form.querySelector(`input[name="${key}"]`) as HTMLInputElement | null;
+            if (!input) {
+              input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = key;
+              form.appendChild(input);
+            }
+            input.value = val;
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', populateUtmFields);
+      } else {
+        populateUtmFields();
+      }
+    } catch (e) {
+      // Non-blocking fail-safe
+    }
+  })();
+</script>
+

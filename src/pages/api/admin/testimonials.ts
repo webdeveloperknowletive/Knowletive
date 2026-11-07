@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { db } from '../../../lib/db';
+import { storage } from '../../../lib/storage';
 import { isAdmin, getSafeCorsHeaders } from '../../../lib/auth';
 import type { Testimonial } from '../../../lib/types';
 
@@ -95,14 +96,8 @@ export const POST: APIRoute = async ({ request }) => {
           });
         }
 
-        if (!fs.existsSync(PUBLIC_UPLOADS_DIR)) {
-          fs.mkdirSync(PUBLIC_UPLOADS_DIR, { recursive: true });
-        }
-
-        const safeVideoName = `${crypto.randomUUID()}${ext}`;
-        const videoBuffer = Buffer.from(await videoFile.arrayBuffer());
-        fs.writeFileSync(path.join(PUBLIC_UPLOADS_DIR, safeVideoName), videoBuffer);
-        videoUrl = `/uploads/testimonials/${safeVideoName}`;
+        const uploadRes = await storage.saveMediaFile(videoFile, 'testimonials');
+        videoUrl = uploadRes.fileUrl;
       }
 
       // 2. Process Poster Thumbnail Image upload
@@ -123,14 +118,8 @@ export const POST: APIRoute = async ({ request }) => {
           });
         }
 
-        if (!fs.existsSync(PUBLIC_UPLOADS_DIR)) {
-          fs.mkdirSync(PUBLIC_UPLOADS_DIR, { recursive: true });
-        }
-
-        const safePosterName = `${crypto.randomUUID()}${ext}`;
-        const posterBuffer = Buffer.from(await posterFile.arrayBuffer());
-        fs.writeFileSync(path.join(PUBLIC_UPLOADS_DIR, safePosterName), posterBuffer);
-        posterUrl = `/uploads/testimonials/${safePosterName}`;
+        const uploadRes = await storage.saveMediaFile(posterFile, 'testimonials');
+        posterUrl = uploadRes.fileUrl;
       }
     } else {
       const body = await request.json();
@@ -373,21 +362,13 @@ export const DELETE: APIRoute = async ({ url, request }) => {
     });
   }
 
-  // Clean up uploaded files if located in /uploads/testimonials/
-  if (target.video_url && target.video_url.startsWith('/uploads/testimonials/')) {
-    const videoFileName = path.basename(target.video_url);
-    const videoDiskPath = path.join(PUBLIC_UPLOADS_DIR, videoFileName);
-    if (fs.existsSync(videoDiskPath)) {
-      try { fs.unlinkSync(videoDiskPath); } catch {}
-    }
+  // Clean up uploaded files (Supabase Storage or local)
+  if (target.video_url) {
+    await storage.deleteMediaFile(target.video_url);
   }
 
-  if (target.poster_url && target.poster_url.startsWith('/uploads/testimonials/')) {
-    const posterFileName = path.basename(target.poster_url);
-    const posterDiskPath = path.join(PUBLIC_UPLOADS_DIR, posterFileName);
-    if (fs.existsSync(posterDiskPath)) {
-      try { fs.unlinkSync(posterDiskPath); } catch {}
-    }
+  if (target.poster_url) {
+    await storage.deleteMediaFile(target.poster_url);
   }
 
   await db.deleteTestimonial(id);

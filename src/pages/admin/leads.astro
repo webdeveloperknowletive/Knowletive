@@ -9,10 +9,18 @@ import { db } from '../../lib/db';
 
 const url = Astro.url;
 const leadTypeFilter = url.searchParams.get('leadType') || '';
+const serviceFilter = url.searchParams.get('service') || '';
 const statusFilter = url.searchParams.get('status') || '';
 const search = url.searchParams.get('search') || '';
 
-const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter, search });
+let leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter, search });
+if (serviceFilter) {
+  const sf = serviceFilter.toLowerCase();
+  leads = leads.filter(l => 
+    (l.service_interest || '').toLowerCase().includes(sf) ||
+    (l.landing_page || '').toLowerCase().includes(sf)
+  );
+}
 ---
 
 <AdminLayout title="Leads & Inquiries" activeNav="leads">
@@ -21,16 +29,28 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
   <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
     
     <form method="GET" class="flex flex-wrap items-center gap-3 flex-1">
-      <div class="relative min-w-[220px] flex-1">
+      <div class="relative min-w-[200px] flex-1">
         <input 
           type="text" 
           name="search" 
           value={search} 
-          placeholder="Search name, email, phone..." 
+          placeholder="Search name, email, phone, UTM..." 
           class="w-full px-3.5 py-2 pl-9 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] focus:ring-1 focus:ring-[#0878E8] outline-none transition-all"
         />
         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
+
+      <!-- Service Filter -->
+      <select name="service" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
+        <option value="">All Services</option>
+        <option value="Career Counseling" selected={serviceFilter === 'Career Counseling'}>Career Counseling</option>
+        <option value="CET 2027" selected={serviceFilter.includes('CET')}>CET 2027 Admission</option>
+        <option value="IT Training" selected={serviceFilter.includes('IT Training')}>IT Training & Internship</option>
+        <option value="Ebook" selected={serviceFilter.includes('Ebook')}>Ebooks</option>
+        <option value="Data" selected={serviceFilter.includes('Data')}>Data Solutions</option>
+        <option value="Distance Education" selected={serviceFilter.includes('Distance')}>Distance Education</option>
+        <option value="Coachgenie" selected={serviceFilter === 'Coachgenie'}>Coachgenie</option>
+      </select>
 
       <!-- Lead Type Filter -->
       <select name="leadType" class="px-3 py-2 text-xs rounded-xl border border-gray-200 focus:border-[#0878E8] outline-none bg-white text-[#0B1F3A]">
@@ -43,6 +63,7 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
         <option value="Job" selected={leadTypeFilter === 'Job'}>Job</option>
         <option value="Internship" selected={leadTypeFilter === 'Internship'}>Internship</option>
         <option value="eBook" selected={leadTypeFilter === 'eBook'}>Free eBook</option>
+        <option value="Other" selected={leadTypeFilter === 'Other'}>Other Services</option>
       </select>
 
       <!-- Status Filter -->
@@ -61,7 +82,7 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
         Apply Filters
       </button>
 
-      {(leadTypeFilter || statusFilter || search) && (
+      {(leadTypeFilter || serviceFilter || statusFilter || search) && (
         <a href="/admin/leads" class="px-3 py-2 border border-gray-200 text-[#64748B] text-xs font-semibold rounded-xl hover:bg-gray-50 transition-colors">
           Clear
         </a>
@@ -133,10 +154,12 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
                       data-lead-source={l.source || 'Website'}
                       data-lead-phone={l.phone}
                       data-lead-email={l.email || ''}
-                      data-lead-interest={l.opportunity_type || l.course_interest || l.service_interest || 'General'}
+                      data-lead-interest={l.service_interest || l.opportunity_type || l.course_interest || 'General'}
                       data-lead-role={l.preferred_role || l.career_goal || ''}
-                      data-lead-education={l.degree || l.education || ''}
-                      data-lead-college={l.college || ''}
+                      data-lead-education={l.degree || l.education || l.qualification || ''}
+                      data-lead-college={l.college || l.company_name || ''}
+                      data-lead-landing={l.landing_page || ''}
+                      data-lead-utm={l.utm_source ? `${l.utm_source}${l.utm_medium ? ' / ' + l.utm_medium : ''}${l.utm_campaign ? ' (' + l.utm_campaign + ')' : ''}` : ''}
                       data-lead-message={l.message || ''}
                       data-lead-status={l.status}
                       data-lead-date={new Date(l.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -207,10 +230,12 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
                       data-lead-source={l.source || 'Website'}
                       data-lead-phone={l.phone}
                       data-lead-email={l.email || ''}
-                      data-lead-interest={l.opportunity_type || l.course_interest || l.service_interest || 'General'}
+                      data-lead-interest={l.service_interest || l.opportunity_type || l.course_interest || 'General'}
                       data-lead-role={l.preferred_role || l.career_goal || ''}
-                      data-lead-education={l.degree || l.education || ''}
-                      data-lead-college={l.college || ''}
+                      data-lead-education={l.degree || l.education || l.qualification || ''}
+                      data-lead-college={l.college || l.company_name || ''}
+                      data-lead-landing={l.landing_page || ''}
+                      data-lead-utm={l.utm_source ? `${l.utm_source}${l.utm_medium ? ' / ' + l.utm_medium : ''}${l.utm_campaign ? ' (' + l.utm_campaign + ')' : ''}` : ''}
                       data-lead-message={l.message || ''}
                       data-lead-status={l.status}
                       data-lead-date={new Date(l.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -272,7 +297,7 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
 
         <div class="border border-gray-100 rounded-xl p-4 space-y-3">
           <div>
-            <span class="text-gray-500 font-medium block">Interest / Opportunity</span>
+            <span class="text-gray-500 font-medium block">Interest / Service</span>
             <span id="modal-lead-interest" class="font-bold text-[#0B1F3A] text-sm block mt-0.5"></span>
           </div>
           <div>
@@ -280,8 +305,12 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
             <span id="modal-lead-role" class="font-semibold text-gray-700 block mt-0.5"></span>
           </div>
           <div>
-            <span class="text-gray-500 font-medium block">Education & College</span>
+            <span class="text-gray-500 font-medium block">Education / Organization</span>
             <span id="modal-lead-education" class="font-semibold text-gray-700 block mt-0.5"></span>
+          </div>
+          <div id="modal-lead-attribution-box" class="pt-2 border-t border-gray-100 hidden">
+            <span class="text-gray-500 font-medium block">Campaign / Landing Page</span>
+            <span id="modal-lead-attribution" class="font-mono text-gray-700 block mt-0.5 text-[11px]"></span>
           </div>
         </div>
 
@@ -333,6 +362,8 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
         const role = target.dataset.leadRole || 'Not specified';
         const education = target.dataset.leadEducation || '';
         const college = target.dataset.leadCollege || '';
+        const landing = target.dataset.leadLanding || '';
+        const utm = target.dataset.leadUtm || '';
         const message = target.dataset.leadMessage || 'No message attached.';
         const status = target.dataset.leadStatus || 'New';
         const date = target.dataset.leadDate || '';
@@ -348,6 +379,8 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
         const elInterest = document.getElementById('modal-lead-interest');
         const elRole = document.getElementById('modal-lead-role');
         const elEdu = document.getElementById('modal-lead-education');
+        const elAttrBox = document.getElementById('modal-lead-attribution-box');
+        const elAttr = document.getElementById('modal-lead-attribution');
         const elMsg = document.getElementById('modal-lead-message');
         const elStatus = document.getElementById('modal-lead-status-pill');
 
@@ -366,6 +399,16 @@ const leads = await db.getLeads({ leadType: leadTypeFilter, status: statusFilter
         if (elInterest) elInterest.textContent = interest;
         if (elRole) elRole.textContent = role;
         if (elEdu) elEdu.textContent = `${education || 'N/A'}${college ? ` · ${college}` : ''}`;
+        
+        if (elAttrBox && elAttr) {
+          if (landing || utm) {
+            elAttrBox.classList.remove('hidden');
+            elAttr.textContent = `${landing ? `Page: ${landing}` : ''}${landing && utm ? ' | ' : ''}${utm ? `UTM: ${utm}` : ''}`;
+          } else {
+            elAttrBox.classList.add('hidden');
+          }
+        }
+
         if (elMsg) elMsg.textContent = message;
         if (elStatus) elStatus.textContent = status;
 

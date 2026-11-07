@@ -24,9 +24,14 @@ build/
 *.log
 local_data.json
 local_database.json
+.data/
+public/uploads/
+
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+.vercel/

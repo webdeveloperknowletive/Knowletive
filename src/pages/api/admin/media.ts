@@ -44,15 +44,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: `File type ${ext} is not allowed. Accepted: JPG, PNG, WEBP, MP4, WEBM.` }), { status: 400 });
     }
 
-    if (!fs.existsSync(MEDIA_UPLOAD_DIR)) {
-      fs.mkdirSync(MEDIA_UPLOAD_DIR, { recursive: true });
-    }
-
-    const safeName = `${crypto.randomUUID()}${ext}`;
-    const filePath = path.join(MEDIA_UPLOAD_DIR, safeName);
-
-    const buffer = Buffer.from(await file.arrayBuffer());
-    fs.writeFileSync(filePath, buffer);
+    const uploadResult = await storage.saveMediaFile(file, 'media');
 
     let type: 'image' | 'video' | 'poster' | 'document' = 'image';
     if (file.type.startsWith('video/') || ext === '.mp4' || ext === '.webm') {
@@ -62,7 +54,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const item: MediaItem = {
-      id: crypto.randomUUID(),
+      id: uploadResult.fileId,
       type,
       media_type: type,
       title: title || file.name,
@@ -70,10 +62,10 @@ export const POST: APIRoute = async ({ request }) => {
       category: category as any,
       is_published: isPublished,
       display_order: displayOrder,
-      file_url: `/uploads/media/${safeName}`,
-      file_name: file.name,
-      mime_type: file.type || 'application/octet-stream',
-      file_size: file.size,
+      file_url: uploadResult.fileUrl,
+      file_name: uploadResult.originalFileName,
+      mime_type: uploadResult.mimeType,
+      file_size: uploadResult.fileSize,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
@@ -117,6 +109,11 @@ export const PATCH: APIRoute = async ({ request }) => {
 export const DELETE: APIRoute = async ({ url }) => {
   const id = url.searchParams.get('id');
   if (!id) return new Response(JSON.stringify({ error: 'Missing ID' }), { status: 400 });
+
+  const existing = await db.getMediaById(id);
+  if (existing?.file_url) {
+    await storage.deleteMediaFile(existing.file_url);
+  }
 
   await db.deleteMedia(id);
   return new Response(JSON.stringify({ success: true }), {

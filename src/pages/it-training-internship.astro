@@ -1,0 +1,404 @@
+---
+// ============================================================
+// /it-training-internship
+// Conversion-Focused Landing Page: IT Training & Internship
+// Primary CTA: "Enquire About Programs"
+// ============================================================
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LandingHeader from '../components/landing/LandingHeader.astro';
+import LandingLeadForm, { type FormField } from '../components/landing/LandingLeadForm.astro';
+import LandingFAQ from '../components/landing/LandingFAQ.astro';
+import StickyMobileCTA from '../components/landing/StickyMobileCTA.astro';
+import UTMTracker from '../components/landing/UTMTracker.astro';
+
+const serviceTitle = "IT Training and Internship";
+const primaryCta = "Enquire About Programs";
+
+const customFields: FormField[] = [
+  {
+    name: "courseInterest",
+    label: "Program of Interest",
+    type: "select",
+    required: true,
+    placeholder: "Select your program",
+    options: [
+      { value: "Full Stack Java Development", label: "Java Full Stack Development (Spring Boot, React, Microservices)" },
+      { value: "MERN Stack Web Development", label: "MERN Stack Web Development (MongoDB, Express, React, Node.js)" },
+      { value: "Data Science & AI/ML", label: "Data Science & AI/ML (Python, Machine Learning, Deep Learning)" },
+      { value: "Data Analysis & Business Intelligence", label: "Data Analysis & BI (SQL, Python, Power BI, Advanced Excel)" },
+      { value: "Cloud & DevOps Engineering", label: "Cloud & DevOps Engineering (AWS, Docker, Kubernetes, CI/CD)" },
+      { value: "Digital Marketing & Performance Growth", label: "Digital Marketing & SEO Growth" }
+    ]
+  },
+  {
+    name: "currentStatus",
+    label: "Education / Experience Level",
+    type: "select",
+    required: true,
+    placeholder: "Select your background",
+    options: [
+      { value: "Final Year Student (Engineering/BCA/MCA/BSc)", label: "Final Year College Student (Need Internship & Project)" },
+      { value: "Recent Graduate / Fresher (Looking for IT Job)", label: "Recent Graduate / Fresher (Building Portfolio)" },
+      { value: "Non-IT to IT Career Switcher", label: "Non-IT to IT Career Switcher" },
+      { value: "Junior Developer Upskilling", label: "Working Professional Upskilling" }
+    ]
+  }
+];
+
+const programs = [
+  {
+    title: "Java Full Stack Development",
+    duration: "4 - 6 Months",
+    tags: ["Core Java", "Spring Boot", "Hibernate", "React", "MySQL", "Microservices"],
+    desc: "Enterprise backend architecture paired with modern interactive frontends. Build full production-grade applications from scratch."
+  },
+  {
+    title: "MERN Stack Web Development",
+    duration: "4 - 5 Months",
+    tags: ["React.js", "Node.js", "Express", "MongoDB", "REST APIs", "Tailwind"],
+    desc: "Fast, modern JavaScript stack for SaaS and startup engineering. Master asynchronous workflows and full-stack cloud deployments."
+  },
+  {
+    title: "Data Science & AI/ML",
+    duration: "5 - 6 Months",
+    tags: ["Python", "Pandas", "Scikit-Learn", "TensorFlow", "NLP", "LLM Basics"],
+    desc: "From exploratory data analysis and mathematical modeling to machine learning algorithms and deployment pipelines."
+  },
+  {
+    title: "Data Analysis & BI",
+    duration: "3 - 4 Months",
+    tags: ["Advanced SQL", "Power BI", "Excel", "Tableau", "EDA", "Statistics"],
+    desc: "Transform unstructured business records into executive dashboards, actionable KPI models, and data-driven business reports."
+  },
+  {
+    title: "Cloud & DevOps Engineering",
+    duration: "4 Months",
+    tags: ["AWS Cloud", "Docker", "Kubernetes", "Linux", "CI/CD Pipelines", "Terraform"],
+    desc: "Automate code deployments, manage cloud infrastructure, and orchestrate containerized microservices in modern cloud ecosystems."
+  }
+];
+
+const problems = [
+  {
+    icon: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4",
+    title: "Theory Without Real Code",
+    desc: "College syllabi often emphasize rote textbook syntax while modern product companies demand production git workflows, APIs, and debugging."
+  },
+  {
+    icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
+    title: "Generic, Cloned Resumes",
+    desc: "Hundreds of applicants submit identical clone projects (To-Do apps, clone websites) that fail to impress recruiters during technical screening."
+  },
+  {
+    icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+    title: "The 'No Experience' Trap",
+    desc: "Job postings demand 1-2 years of experience, but colleges don't offer industrial exposure. An authorized industrial internship bridges this gap."
+  },
+  {
+    icon: "M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+    title: "Fake Guarantee Traps",
+    desc: "Misleading '100% placement guarantee' institutes charge inflated fees without mentoring students on algorithmic fundamentals or interview skills."
+  }
+];
+
+const inclusions = [
+  { title: "Live Mentor-Led Sessions", detail: "Interactive weekend & weekday batches with industry developers, not pre-recorded tapes." },
+  { title: "Industrial Internship Project", detail: "Real-world project work following Git version control, sprint reviews, and deployment." },
+  { title: "Internship Certificate", detail: "Official completion certificate and project verification letter upon successful review." },
+  { title: "Technical Mock Interviews", detail: "1-on-1 coding and system design mock rounds with detailed constructive feedback." },
+  { title: "Resume & GitHub Polish", detail: "Direct guidance on showcasing complex projects, architecture diagrams, and clean code." },
+  { title: "Interview Scheduling Assistance", detail: "Curated referrals and placement drive notifications through Knowletive's network." }
+];
+
+const faqs = [
+  {
+    question: "Is this a training course or an internship?",
+    answer: "Our program integrates both: Phase 1 provides comprehensive, mentor-led skill training on core concepts; Phase 2 is an authorized industrial internship where you work on team projects, follow agile sprints, and deploy real applications."
+  },
+  {
+    question: "Do you guarantee 100% job placement?",
+    answer: "No, and we advise caution with anyone who does. We provide verified training, portfolio-grade project development, technical interview preparation, and placement referral assistance. Final hiring depends on the candidate's performance in technical interviews."
+  },
+  {
+    question: "Do I receive a certificate upon completion?",
+    answer: "Yes. Upon completing your modules, submitting code reviews, and delivering the capstone industrial project, you receive Knowletive's Training & Industrial Internship Certificate with a verifiable credential."
+  },
+  {
+    question: "Are classes available online or offline in Pune?",
+    answer: "We offer both classroom batches at our Baner, Pune center and live interactive online batches with dedicated mentor doubt-solving sessions."
+  },
+  {
+    question: "What are the prerequisites for joining?",
+    answer: "Basic logical thinking and enthusiasm to code. For web and data programs, our mentors start from programming foundations before progressing to advanced frameworks."
+  }
+];
+---
+
+<BaseLayout 
+  title="IT Training and Internship in Pune | Full Stack, Data Science, Cloud — Knowletive"
+  description="Practical IT training and industrial internship in Pune. Learn Java Full Stack, MERN Stack, Data Science, and Cloud with live projects and career assistance."
+>
+  <UTMTracker />
+  <LandingHeader primaryCtaText={primaryCta} serviceTitle={serviceTitle} />
+
+  <!-- HERO SECTION -->
+  <section id="overview" class="page-header-spacing pb-16 bg-[#072B6F] text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(#0878E8 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+    <div class="container-custom relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Left: Headline & Pitch -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#F47A16] font-bold text-xs uppercase tracking-wider mb-5">
+            <span class="w-2 h-2 rounded-full bg-[#F47A16] animate-pulse"></span>
+            Hands-on Technical Skills & Internship Program
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-manrope font-extrabold tracking-tight text-white mb-5 leading-tight">
+            Build Real Software. <br/>
+            <span class="text-[#F47A16]">Launch Your IT Career</span> in Pune.
+          </h1>
+
+          <p class="text-blue-100 text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-6 leading-relaxed">
+            Master Full Stack Java, MERN, Data Science, or Cloud DevOps under senior engineers. Complete verified industrial projects and earn your internship credentials.
+          </p>
+
+          <!-- Honest Distinction Reassurance -->
+          <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 max-w-xl text-left text-xs text-blue-200/90 leading-relaxed mb-8">
+            <strong class="text-white block mb-0.5">💡 Transparent Professional Standard:</strong>
+            We clearly distinguish training, internships, and employment. We don't make unrealistic '100% placement guarantees.' We provide authentic skills, portfolio reviews, and rigorous interview preparation that actually converts.
+          </div>
+
+          <!-- Secondary Actions -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+            <a href="#lead-form" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-xl">
+              {primaryCta}
+            </a>
+            <a 
+              href="https://wa.me/919970600116?text=Hi%20Knowletive%2C%20I%20would%20like%20to%20inquire%20about%20IT%20Training%20and%20Internship%20programs." 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs border border-white/20 transition-all"
+            >
+              <svg class="w-4 h-4 text-[#25D366] fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="lg:col-span-5">
+          <LandingLeadForm 
+            serviceId="it-training"
+            serviceName={serviceTitle}
+            primaryCta={primaryCta}
+            headline="Request Program Curriculum"
+            subheadline="Get syllabus, batch schedules, and fee details sent to you."
+            customFields={customFields}
+            compact={true}
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: PROBLEMS -->
+  <section id="problems" class="section-padding bg-[#F7F9FC]" data-analytics-section="problems">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-2xl sm:text-3xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          The Gap Between Degree and IT Employment
+        </h2>
+        <p class="text-[#64748B] text-sm md:text-base">
+          Why engineering and CS graduates struggle during technical interviews despite having degrees.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {problems.map((prob) => (
+          <div class="bg-white p-6 rounded-2xl border border-gray-200/80 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#0878E8] flex items-center justify-center mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={prob.icon}></path></svg>
+            </div>
+            <h3 class="font-manrope font-bold text-base text-[#0B1F3A] mb-2">{prob.title}</h3>
+            <p class="text-xs text-[#64748B] leading-relaxed">{prob.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: CONFIRMED PROGRAMS CATALOGUE -->
+  <section id="solution" class="section-padding bg-white" data-analytics-section="programs">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[#0878E8] font-bold text-xs uppercase tracking-wider mb-3">
+          Curriculum & Specializations
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          Available Training & Internship Tracks
+        </h2>
+        <p class="text-[#64748B] text-sm md:text-base">
+          Carefully aligned with hiring frameworks in Pune, Bangalore, and Hyderabad tech hubs.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {programs.map((prog) => (
+          <div class="card-premium border border-gray-200 flex flex-col justify-between p-6">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-[#F47A16] uppercase tracking-wider font-mono">{prog.duration}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-[#0878E8]">Industrial Project Included</span>
+              </div>
+              <h3 class="text-lg font-bold font-manrope text-[#0B1F3A] mb-2">{prog.title}</h3>
+              <p class="text-xs text-[#64748B] leading-relaxed mb-4">{prog.desc}</p>
+              
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                {prog.tags.map(tag => (
+                  <span class="px-2 py-0.5 rounded-md bg-gray-100 text-[#0B1F3A] text-[11px] font-medium">{tag}</span>
+                ))}
+              </div>
+            </div>
+
+            <a href="#lead-form" class="w-full py-2.5 rounded-xl border border-gray-200 hover:border-[#0878E8] hover:text-[#0878E8] text-xs font-bold text-center block transition-colors">
+              Request Syllabus & Details →
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: WHAT IS INCLUDED -->
+  <section id="benefits" class="section-padding bg-[#F7F9FC]" data-analytics-section="benefits">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-2xl sm:text-3xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          What Is Included in Every Track
+        </h2>
+        <p class="text-[#64748B] text-sm">
+          Everything required to build a competitive engineering portfolio.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        {inclusions.map((item) => (
+          <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <div class="w-8 h-8 rounded-lg bg-orange-50 text-[#F47A16] flex items-center justify-center mb-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="font-manrope font-bold text-base text-[#0B1F3A] mb-1">{item.title}</h3>
+            <p class="text-xs text-[#64748B] leading-relaxed">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: HOW IT WORKS -->
+  <section id="process" class="section-padding bg-white" data-analytics-section="process">
+    <div class="container-custom max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl sm:text-3xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          From Enrollment to Job Readiness
+        </h2>
+        <p class="text-[#64748B] text-sm">Four practical phases of the Knowletive internship.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-[#072B6F] text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">1</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">Foundations</h3>
+          <p class="text-xs text-[#64748B]">Core syntax, algorithmic logic, data structures, and Git.</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-[#0878E8] text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">2</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">Frameworks</h3>
+          <p class="text-xs text-[#64748B]">Enterprise tools (Spring Boot, React, AWS, Docker).</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-[#F47A16] text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">3</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">Live Internship</h3>
+          <p class="text-xs text-[#64748B]">Sprint-based project development and cloud deployment.</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-emerald-600 text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">4</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">Mock Interviews</h3>
+          <p class="text-xs text-[#64748B]">1-on-1 coding rounds and placement referral drives.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: WHY KNOWLETIVE & PRICING -->
+  <section class="section-padding bg-[#0B1F3A] text-white" data-analytics-section="why-knowletive">
+    <div class="container-custom">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div class="lg:col-span-7">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold mb-4 leading-tight">
+            Baner, Pune Training Hub With Active Tech Mentors
+          </h2>
+          <p class="text-blue-100 text-sm leading-relaxed mb-6">
+            Knowletive has trained students and freshers across Maharashtra. Our curriculum is maintained and taught by working software developers, not theoretical lecturers.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-blue-100">
+            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+              <strong class="text-white block text-sm mb-1">Real Industrial Project</strong>
+              Every project runs with authentic schema models, API tests, and Git PR code reviews.
+            </div>
+            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+              <strong class="text-white block text-sm mb-1">Verifiable Credentials</strong>
+              Internship certification with unique credential verification codes for your resume.
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="bg-white/10 border border-white/15 p-6 sm:p-8 rounded-2xl backdrop-blur-md">
+            <h3 class="text-lg font-bold font-manrope mb-3 text-[#F47A16]">Tuition & EMI Availability</h3>
+            <p class="text-xs text-blue-100 leading-relaxed mb-4">
+              • Program Fees: Transparently shared based on duration (3-month vs 6-month specialized tracks).
+              <br/>
+              • Flexible installment plans available for students.
+              <br/>
+              • Inquire today to check eligibility for upcoming batch discounts.
+            </p>
+            <a href="#lead-form" class="btn-primary w-full py-3 text-xs font-bold text-center justify-center">
+              {primaryCta}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: FAQS -->
+  <LandingFAQ faqs={faqs} title="Frequently Asked Questions on IT Training & Internship" />
+
+  <!-- SECTION 8: FINAL CTA -->
+  <section class="section-padding bg-gray-50 border-t border-gray-200 text-center" data-analytics-section="final-cta">
+    <div class="container-custom max-w-3xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-4">
+        Ready to Transform Into a Job-Ready Developer?
+      </h2>
+      <p class="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto mb-8">
+        Submit your enquiry now to get the full curriculum, upcoming batch dates, and project details.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#lead-form" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-md">
+          {primaryCta}
+        </a>
+        <a href="tel:+919970600116" class="btn-secondary w-full sm:w-auto px-6 py-3.5 text-xs font-bold">
+          Call +91 99706 00116
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <StickyMobileCTA primaryCtaText={primaryCta} serviceName={serviceTitle} />
+</BaseLayout>
+

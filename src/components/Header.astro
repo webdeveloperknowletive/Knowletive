@@ -13,19 +13,25 @@ import MobileMenu from './MobileMenu.astro';
     <nav class="hidden md:flex items-center gap-8">
       <ul class="flex items-center gap-8 font-inter font-medium text-sm text-[#0B1F3A]">
         <li class="relative group">
-          <a href="/services" class="flex items-center gap-1 hover:text-[#0878E8] transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[#F47A16] hover:after:w-full after:transition-all">
+          <a href="/services" class="flex items-center gap-1 hover:text-[#0878E8] transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[#F47A16] hover:after:w-full after:transition-all focus:outline-none focus:ring-2 focus:ring-[#0878E8] rounded-md px-1 py-0.5">
             Services
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <svg class="w-4 h-4 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
           </a>
-          <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-            <div class="py-2">
-              <a href="/services/it-training-placement" class="block px-4 py-2 text-sm text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8]">IT Training & Placement</a>
-              <a href="/services/industrial-internship" class="block px-4 py-2 text-sm text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8]">Industrial Internship</a>
-              <a href="/services/it-projects-freshers" class="block px-4 py-2 text-sm text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8]">IT Projects for Freshers</a>
-              <a href="/services/overseas-education" class="block px-4 py-2 text-sm text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8]">Overseas Education</a>
-              <a href="/services/distance-learning" class="block px-4 py-2 text-sm text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8]">Distance Learning</a>
-              <a href="/services/vocational-courses" class="block px-4 py-2 text-sm text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8]">Vocational Courses</a>
-              <a href="/services/career-admission-counselling" class="block px-4 py-2 text-sm text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8]">Career & Admission Counselling</a>
+          <div class="absolute top-full left-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-focus-within:opacity-100 group-hover:visible group-focus-within:visible transition-all duration-200 translate-y-2 group-hover:translate-y-0 group-focus-within:translate-y-0 overflow-hidden">
+            <div class="py-2.5 px-1.5 text-xs">
+              <span class="block px-3 py-1 font-bold text-[10px] text-gray-400 uppercase tracking-wider font-mono">Specialized Service Pages</span>
+              <a href="/career-counseling" class="block px-3 py-2 rounded-xl text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8] transition-colors font-medium">Career Counseling</a>
+              <a href="/cet-2027-admission-counseling" class="block px-3 py-2 rounded-xl text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8] transition-colors font-medium">CET 2027 Admission Counseling</a>
+              <a href="/it-training-internship" class="block px-3 py-2 rounded-xl text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8] transition-colors font-medium">IT Training & Internship</a>
+              <a href="/ebooks" class="block px-3 py-2 rounded-xl text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8] transition-colors font-medium">Ebooks & Guides</a>
+              <a href="/data-solutions" class="block px-3 py-2 rounded-xl text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8] transition-colors font-medium">Data Solutions (B2B Datasets)</a>
+              <a href="/distance-education" class="block px-3 py-2 rounded-xl text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8] transition-colors font-medium">Distance Education Admission</a>
+              <a href="/coachgenie" class="block px-3 py-2 rounded-xl text-[#0B1F3A] hover:bg-blue-50 hover:text-[#0878E8] transition-colors font-medium">Coachgenie Mentorship</a>
+              <div class="border-t border-gray-100 mt-1 pt-1">
+                <a href="/services" class="block px-3 py-1.5 rounded-xl text-[#F47A16] hover:bg-orange-50 font-bold text-[11px] transition-colors">
+                  Explore All Services Overview →
+                </a>
+              </div>
             </div>
           </div>
         </li>

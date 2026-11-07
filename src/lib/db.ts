@@ -1,39 +1,118 @@
 // ============================================================
 // Knowletive Database Layer
-// Supports Supabase PostgreSQL + High-Integrity Local Data Store
+// Unified Supabase PostgreSQL + Resilient Local Mirror Store
 // ============================================================
 
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import type { AnalyticsSession, AnalyticsPageview, AnalyticsSection, AnalyticsEvent, 
-  Profile, JobRole, RoleKeyword, Candidate, Application, ApplicationType, ApplicationStatus, ApplicationWithCandidate, ResumeKeywordMatch, 
+import type { 
+  AnalyticsSession, AnalyticsPageview, AnalyticsSection, AnalyticsEvent, 
+  Profile, JobRole, RoleKeyword, Candidate, Application, ApplicationType, 
+  ApplicationStatus, ApplicationWithCandidate, ResumeKeywordMatch, 
   Lead, Job, Internship, Testimonial, MediaItem 
 } from './types';
 import { hashPassword } from './auth';
-import { storage } from './storage';
 
 const DATA_DIR = path.resolve('.data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 
-// Supabase environment check
-const SUPABASE_URL = process.env.SUPABASE_URL || '';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
-const useSupabase = Boolean(SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('your-project-id'));
-
-let supabaseClient: SupabaseClient | null = null;
-if (useSupabase) {
-  try {
-    supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log('[DB] Connected to Supabase:', SUPABASE_URL);
-  } catch (err) {
-    console.warn('[DB] Supabase initialization failed, falling back to local store:', err);
+function getEnv(key: string): string {
+  if (process.env[key]) return process.env[key]!;
+  if (typeof import.meta !== 'undefined' && (import.meta as any).env?.[key]) {
+    return (import.meta as any).env[key];
   }
+  return '';
+}
+
+// Supabase environment check & initialization
+export function isSupabaseConfigured(): boolean {
+  const url = getEnv('SUPABASE_URL');
+  const key = getEnv('SUPABASE_SERVICE_ROLE_KEY') || getEnv('SUPABASE_SECRET_KEY') || getEnv('SUPABASE_ANON_KEY') || getEnv('SUPABASE_PUBLISHABLE_KEY');
+  return Boolean(url && key && !url.includes('your-project-id'));
+}
+
+let _supabaseClient: SupabaseClient | null = null;
+export function getSupabase(): SupabaseClient | null {
+  if (!isSupabaseConfigured()) return null;
+  if (!_supabaseClient) {
+    try {
+      const url = getEnv('SUPABASE_URL');
+      const key = getEnv('SUPABASE_SERVICE_ROLE_KEY') || getEnv('SUPABASE_SECRET_KEY') || getEnv('SUPABASE_ANON_KEY') || getEnv('SUPABASE_PUBLISHABLE_KEY');
+      _supabaseClient = createClient(url, key, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false
+        }
+      });
+      console.log('[DB] Connected to Supabase:', url);
+    } catch (err) {
+      console.warn('[DB] Supabase initialization failed, falling back to local store:', err);
+    }
+  }
+  return _supabaseClient;
+}
+
+// Track missing columns and tables to adapt seamlessly across schema versions
+const knownMissingColumns: Record<string, Set<string>> = {};
+const knownMissingTables = new Set<string>();
+
+/**
+ * Resilient upsert that strips columns not yet created in PostgreSQL
+ * and logs when tables need migrations.
+ */
+async function safeUpsert<T extends Record<string, any>>(table: string, record: T): Promise<T> {
+  const client = getSupabase();
+  if (!client || knownMissingTables.has(table)) {
+    return record;
+  }
+
+  let payload = { ...record };
+  if (knownMissingColumns[table]) {
+    for (const col of knownMissingColumns[table]) {
+      delete payload[col];
+    }
+  }
+
+  let { data, error } = await client.from(table).upsert(payload).select().single();
+
+  while (error) {
+    if (error.code === 'PGRST205' || error.message?.includes('Could not find the table')) {
+      console.warn(`[DB] Supabase table '${table}' does not exist yet in schema cache. Run migrations/006_supabase_fix_all.sql to enable remote persistence.`);
+      knownMissingTables.add(table);
+      return record;
+    }
+
+    const match = error.message?.match(/Could not find the '([\w]+)' column/i) ||
+                  error.message?.match(/column (?:[\w]+\.)?([\w]+) does not exist/i) ||
+                  (error.details && error.details.match(/column (?:[\w]+\.)?([\w]+) does not exist/i));
+
+    if (match && match[1] && match[1] in payload) {
+      const missingCol = match[1];
+      console.warn(`[DB] Supabase table '${table}' is missing column '${missingCol}'. Stripping for compatibility and retrying...`);
+      if (!knownMissingColumns[table]) knownMissingColumns[table] = new Set();
+      knownMissingColumns[table].add(missingCol);
+      delete payload[missingCol];
+
+      const retry = await client.from(table).upsert(payload).select().single();
+      data = retry.data;
+      error = retry.error;
+    } else {
+      break;
+    }
+  }
+
+  if (error) {
+    console.error(`[DB] Upsert into '${table}' failed:`, error.message);
+    throw error;
+  }
+
+  return { ...record, ...data };
 }
 
 // -------------------------------------------------------------
-// LOCAL DATA STORE INTERFACE (For Local Dev & Fallback)
+// LOCAL DATA STORE INTERFACE (For Local Dev & Resilient Mirror)
 // -------------------------------------------------------------
 interface LocalDatabase {
   profiles: Profile[];
@@ -56,19 +135,17 @@ interface LocalDatabase {
 function getInitialData(): LocalDatabase {
   const now = new Date().toISOString();
   
-  // Default Admin profile
   const adminId = '00000000-0000-0000-0000-000000000001';
   const defaultAdmin: Profile = {
     id: adminId,
-    email: process.env.DEFAULT_ADMIN_EMAIL || 'admin@knowletive.com',
+    email: getEnv('DEFAULT_ADMIN_EMAIL') || 'admin@knowletive.com',
     full_name: 'Knowletive Administrator',
     role: 'admin',
-    password_hash: hashPassword(process.env.DEFAULT_ADMIN_PASSWORD || ''),
+    password_hash: hashPassword(getEnv('DEFAULT_ADMIN_PASSWORD') || ''),
     created_at: now,
     updated_at: now
   };
 
-  // Default Job Roles
   const roles: JobRole[] = [
     {
       id: '11111111-1111-1111-1111-111111111101',
@@ -124,92 +201,23 @@ function getInitialData(): LocalDatabase {
       is_active: true,
       created_at: now,
       updated_at: now
-    },
-    {
-      id: '11111111-1111-1111-1111-111111111106',
-      role_name: 'Digital Marketing',
-      slug: 'digital-marketing',
-      category: 'Growth & Marketing',
-      description: 'Specializes in SEO, performance marketing, Meta/Google ads, analytics, and content generation.',
-      match_threshold: 40,
-      is_active: true,
-      created_at: now,
-      updated_at: now
-    },
-    {
-      id: '11111111-1111-1111-1111-111111111107',
-      role_name: 'Banking & Finance',
-      slug: 'banking',
-      category: 'Banking & Operations',
-      description: 'Banking operations, financial analysis, compliance, retail lending, and credit assessments.',
-      match_threshold: 35,
-      is_active: true,
-      created_at: now,
-      updated_at: now
-    },
-    {
-      id: '11111111-1111-1111-1111-111111111108',
-      role_name: 'Python Developer',
-      slug: 'python-developer',
-      category: 'Software Engineering',
-      description: 'Backend engineering, automated pipelines, REST APIs, and scripts using Python.',
-      match_threshold: 40,
-      is_active: true,
-      created_at: now,
-      updated_at: now
     }
   ];
 
-  // Default Keywords with weights
   const keywords: RoleKeyword[] = [
-    // Data Analyst
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'sql', weight: 5, is_active: true, created_at: now },
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'power bi', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'powerbi', weight: 5, is_active: true, created_at: now },
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'excel', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'advanced excel', weight: 4, is_active: true, created_at: now },
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'tableau', weight: 4, is_active: true, created_at: now },
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'python', weight: 3, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'pandas', weight: 3, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'numpy', weight: 3, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'dashboard', weight: 3, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'eda', weight: 3, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'data cleaning', weight: 3, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'statistics', weight: 3, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111101', keyword: 'data analysis', weight: 4, is_active: true, created_at: now },
-
-    // Data Scientist
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'machine learning', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'deep learning', weight: 5, is_active: true, created_at: now },
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'python', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'tensorflow', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'pytorch', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'scikit-learn', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'nlp', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111102', keyword: 'pandas', weight: 3, is_active: true, created_at: now },
-
-    // MERN Developer
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111103', keyword: 'react', weight: 5, is_active: true, created_at: now },
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111103', keyword: 'node', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111103', keyword: 'express', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111103', keyword: 'mongodb', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111103', keyword: 'javascript', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111103', keyword: 'rest api', weight: 3, is_active: true, created_at: now },
-
-    // Java Full Stack
     { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111104', keyword: 'java', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111104', keyword: 'spring boot', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111104', keyword: 'microservices', weight: 4, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111104', keyword: 'mysql', weight: 3, is_active: true, created_at: now },
-
-    // Cloud / DevOps
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111105', keyword: 'aws', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111105', keyword: 'docker', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111105', keyword: 'kubernetes', weight: 5, is_active: true, created_at: now },
-    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111105', keyword: 'ci/cd', weight: 4, is_active: true, created_at: now }
+    { id: crypto.randomUUID(), job_role_id: '11111111-1111-1111-1111-111111111105', keyword: 'aws', weight: 5, is_active: true, created_at: now }
   ];
 
-  // Default Testimonials
   const testimonials: Testimonial[] = [
     {
       id: '22222222-2222-2222-2222-222222222201',
@@ -218,50 +226,14 @@ function getInitialData(): LocalDatabase {
       caption: 'Secured an offer as Associate Data Scientist after hands-on project portfolio coaching.',
       video_url: '/videos/testimonials/session-review-final.mp4',
       poster_url: '/videos/testimonials/posters/priya-sharma.jpg',
+      thumbnail_url: '/videos/testimonials/posters/priya-sharma.jpg',
       display_order: 1,
-      is_published: true,
-      created_at: now,
-      updated_at: now
-    },
-    {
-      id: '22222222-2222-2222-2222-222222222202',
-      student_name: 'Rahul Mehta',
-      program: 'PEP Program',
-      caption: 'The Professional Employability Program transformed my corporate readiness and interview skills.',
-      video_url: '/videos/testimonials/shrushti-review.mp4',
-      poster_url: '/videos/testimonials/posters/rahul-mehta.jpg',
-      display_order: 2,
-      is_published: true,
-      created_at: now,
-      updated_at: now
-    },
-    {
-      id: '22222222-2222-2222-2222-222222222203',
-      student_name: 'Sneha Desai',
-      program: 'Data Analyst',
-      caption: 'Mastered Power BI and SQL dashboards. Cleared MNC technical rounds in the 1st attempt.',
-      video_url: '/videos/testimonials/certificate-reel.mp4',
-      poster_url: '/videos/testimonials/posters/sneha-desai.jpg',
-      display_order: 3,
-      is_published: true,
-      created_at: now,
-      updated_at: now
-    },
-    {
-      id: '22222222-2222-2222-2222-222222222204',
-      student_name: 'Vikram Patil',
-      program: 'Business Consulting',
-      caption: 'Incredible guidance on business strategy, case interview prep, and corporate communication.',
-      video_url: '/videos/testimonials/syllabus-review.mp4',
-      poster_url: '/videos/testimonials/posters/vikram-patil.jpg',
-      display_order: 4,
       is_published: true,
       created_at: now,
       updated_at: now
     }
   ];
 
-  // Default Jobs & Internships
   const jobs: Job[] = [
     {
       id: '33333333-3333-3333-3333-333333333301',
@@ -271,22 +243,8 @@ function getInitialData(): LocalDatabase {
       location: 'Pune, India',
       type: 'Full-time',
       experience: '0-2 Years',
-      description: 'Responsible for data cleansing, automated Excel/Power BI reporting, SQL querying, and communicating actionable insights to department leaders.',
+      description: 'Responsible for data cleansing, automated Excel/Power BI reporting, SQL querying, and communicating actionable insights.',
       skills_required: ['SQL', 'Power BI', 'Excel', 'Python'],
-      is_active: true,
-      created_at: now,
-      updated_at: now
-    },
-    {
-      id: '33333333-3333-3333-3333-333333333302',
-      title: 'Associate MERN Stack Developer',
-      job_role_id: '11111111-1111-1111-1111-111111111103',
-      company: 'Tech Partner Solutions',
-      location: 'Pune / Remote',
-      type: 'Full-time',
-      experience: '0-1 Years',
-      description: 'Develop modern client applications with React and Node.js REST services. Participate in sprint planning and code reviews.',
-      skills_required: ['React', 'Node.js', 'Express', 'MongoDB', 'JavaScript'],
       is_active: true,
       created_at: now,
       updated_at: now
@@ -301,21 +259,8 @@ function getInitialData(): LocalDatabase {
       department: 'Analytics Lab',
       location: 'Baner, Pune',
       duration: '3-6 Months',
-      description: 'Hands-on live industry projects analyzing consumer trends, building Power BI executive dashboards, and executing SQL extraction queries.',
+      description: 'Hands-on live industry projects analyzing consumer trends, building Power BI executive dashboards, and executing SQL queries.',
       skills_required: ['Excel', 'SQL', 'Power BI'],
-      is_active: true,
-      created_at: now,
-      updated_at: now
-    },
-    {
-      id: '44444444-4444-4444-4444-444444444402',
-      title: 'Full Stack Web Development Intern',
-      job_role_id: '11111111-1111-1111-1111-111111111103',
-      department: 'Software Engineering',
-      location: 'Baner, Pune',
-      duration: '3-6 Months',
-      description: 'Build UI modules with React & Tailwind, write backend REST APIs with Express & MongoDB, and gain live deployment experience.',
-      skills_required: ['HTML/CSS', 'JavaScript', 'React', 'Node.js'],
       is_active: true,
       created_at: now,
       updated_at: now
@@ -339,115 +284,129 @@ function getInitialData(): LocalDatabase {
 
 function readLocalDb(): LocalDatabase {
   if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+    try { fs.mkdirSync(DATA_DIR, { recursive: true }); } catch {}
   }
 
   if (!fs.existsSync(DB_FILE)) {
     const initial = getInitialData();
-    fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf8');
+    try { fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf8'); } catch {}
     return initial;
   }
 
   try {
     const raw = fs.readFileSync(DB_FILE, 'utf8');
     const data: LocalDatabase = JSON.parse(raw);
-    let mutated = false;
-
-    if (!data.applications) {
-      data.applications = [];
-      mutated = true;
-    }
-
-    // Auto-migrate if existing candidates do not yet have an application entry
-    if (data.applications.length === 0 && data.candidates && data.candidates.length > 0) {
-      data.applications = data.candidates.map(c => ({
-        id: c.id,
-        candidate_id: c.id,
-        application_type: (c.application_type as ApplicationType) || 'job',
-        job_id: c.job_id || null,
-        internship_id: c.internship_id || null,
-        applied_role: c.applied_role || c.preferred_role || 'General Application',
-        status: (c.status as ApplicationStatus) || 'New',
-        resume_url: c.resume_file_url,
-        resume_file_name: c.resume_file_name,
-        resume_file_size: c.resume_file_size,
-        match_score: c.match_score,
-        matched_keywords: c.resume_keywords,
-        skills: c.skills,
-        source: c.source || 'Website Careers',
-        created_at: c.created_at,
-        updated_at: c.updated_at
-      }));
-      mutated = true;
-    }
-
-    if (mutated) {
-      writeLocalDb(data);
-    }
-
+    if (!data.applications) data.applications = [];
     return data;
   } catch (err) {
-    console.error('[DB] Failed to parse db.json, re-initializing fallback:', err);
     const initial = getInitialData();
-    fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf8');
+    try { fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf8'); } catch {}
     return initial;
   }
 }
 
 function writeLocalDb(data: LocalDatabase): void {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    const tempFile = DB_FILE + '.tmp';
+    fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf8');
+    fs.renameSync(tempFile, DB_FILE);
+  } catch (err) {
+    console.warn('[DB] Local DB write warning (non-fatal in serverless):', err);
   }
-  const tempFile = DB_FILE + '.tmp';
-  fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf8');
-  fs.renameSync(tempFile, DB_FILE);
 }
 
 // -------------------------------------------------------------
 // UNIFIED DATABASE API
 // -------------------------------------------------------------
 export const db = {
+  isSupabaseConnected(): boolean {
+    return isSupabaseConfigured() && getSupabase() !== null;
+  },
+
   // --- PROFILES / AUTH ---
   async getProfileByEmail(email: string): Promise<Profile | null> {
     const cleanEmail = email.toLowerCase().trim();
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('profiles').select('*').eq('email', cleanEmail).single();
-      return data || null;
+    const defaultEmail = (getEnv('DEFAULT_ADMIN_EMAIL') || 'admin@knowletive.com').toLowerCase().trim();
+    const client = getSupabase();
+
+    if (client) {
+      const { data } = await client.from('profiles').select('*').ilike('email', cleanEmail).limit(1);
+      if (data && data[0]) {
+        const prof = { ...data[0] } as Profile;
+        // If password_hash is missing in table, attach default admin hash if it's the admin
+        if (!prof.password_hash && prof.email.toLowerCase().trim() === defaultEmail) {
+          prof.password_hash = hashPassword(getEnv('DEFAULT_ADMIN_PASSWORD') || '');
+        }
+        return prof;
+      }
     }
+
     const local = readLocalDb();
-    return local.profiles.find(p => p.email.toLowerCase() === cleanEmail) || null;
+    const localProf = local.profiles.find(p => p.email.toLowerCase() === cleanEmail) || null;
+    if (localProf) return localProf;
+
+    // Auto-seed default admin if matches
+    if (cleanEmail === defaultEmail) {
+      const defaultAdmin: Profile = {
+        id: '00000000-0000-0000-0000-000000000001',
+        email: getEnv('DEFAULT_ADMIN_EMAIL') || 'admin@knowletive.com',
+        full_name: 'Knowletive Administrator',
+        role: 'admin',
+        password_hash: hashPassword(getEnv('DEFAULT_ADMIN_PASSWORD') || ''),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      if (client) {
+        try { await safeUpsert('profiles', defaultAdmin); } catch {}
+      }
+      return defaultAdmin;
+    }
+
+    return null;
   },
 
   async getProfileById(id: string): Promise<Profile | null> {
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('profiles').select('*').eq('id', id).single();
-      return data || null;
+    const defaultEmail = (getEnv('DEFAULT_ADMIN_EMAIL') || 'admin@knowletive.com').toLowerCase().trim();
+    const client = getSupabase();
+
+    if (client) {
+      const { data } = await client.from('profiles').select('*').eq('id', id).single();
+      if (data) {
+        const prof = { ...data } as Profile;
+        if (!prof.password_hash && prof.email.toLowerCase().trim() === defaultEmail) {
+          prof.password_hash = hashPassword(getEnv('DEFAULT_ADMIN_PASSWORD') || '');
+        }
+        return prof;
+      }
     }
     const local = readLocalDb();
     return local.profiles.find(p => p.id === id) || null;
   },
 
   async saveProfile(profile: Profile): Promise<Profile> {
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('profiles').upsert(profile).select().single();
-      if (error) throw error;
-      return data;
-    }
     const local = readLocalDb();
     const idx = local.profiles.findIndex(p => p.id === profile.id);
     if (idx >= 0) local.profiles[idx] = profile;
     else local.profiles.push(profile);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      await safeUpsert('profiles', profile);
+    }
     return profile;
   },
 
   // --- JOB ROLES ---
   async getJobRoles(activeOnly = true): Promise<JobRole[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('job_roles').select('*');
+    const client = getSupabase();
+    if (client) {
+      let q = client.from('job_roles').select('*');
       if (activeOnly) q = q.eq('is_active', true);
       const { data } = await q.order('role_name');
-      return data || [];
+      if (data && data.length > 0) return data;
     }
     const local = readLocalDb();
     let res = local.job_roles;
@@ -456,9 +415,10 @@ export const db = {
   },
 
   async getJobRoleById(id: string): Promise<JobRole | null> {
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('job_roles').select('*').eq('id', id).single();
-      return data || null;
+    const client = getSupabase();
+    if (client) {
+      const { data } = await client.from('job_roles').select('*').eq('id', id).single();
+      if (data) return data;
     }
     const local = readLocalDb();
     return local.job_roles.find(r => r.id === id) || null;
@@ -466,23 +426,22 @@ export const db = {
 
   async saveJobRole(role: JobRole): Promise<JobRole> {
     role.updated_at = new Date().toISOString();
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('job_roles').upsert(role).select().single();
-      if (error) throw error;
-      return data;
-    }
     const local = readLocalDb();
     const idx = local.job_roles.findIndex(r => r.id === role.id);
     if (idx >= 0) local.job_roles[idx] = role;
     else local.job_roles.push(role);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      await safeUpsert('job_roles', role);
+    }
     return role;
   },
 
   async deleteJobRole(id: string): Promise<boolean> {
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('job_roles').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      await client.from('job_roles').delete().eq('id', id);
     }
     const local = readLocalDb();
     local.job_roles = local.job_roles.filter(r => r.id !== id);
@@ -493,11 +452,12 @@ export const db = {
 
   // --- ROLE KEYWORDS ---
   async getKeywordsByRole(roleId: string, activeOnly = true): Promise<RoleKeyword[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('role_keywords').select('*').eq('job_role_id', roleId);
+    const client = getSupabase();
+    if (client) {
+      let q = client.from('role_keywords').select('*').eq('job_role_id', roleId);
       if (activeOnly) q = q.eq('is_active', true);
       const { data } = await q.order('weight', { ascending: false });
-      return data || [];
+      if (data) return data;
     }
     const local = readLocalDb();
     let res = local.role_keywords.filter(k => k.job_role_id === roleId);
@@ -506,11 +466,12 @@ export const db = {
   },
 
   async getAllKeywords(activeOnly = true): Promise<RoleKeyword[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('role_keywords').select('*');
+    const client = getSupabase();
+    if (client) {
+      let q = client.from('role_keywords').select('*');
       if (activeOnly) q = q.eq('is_active', true);
       const { data } = await q;
-      return data || [];
+      if (data) return data;
     }
     const local = readLocalDb();
     let res = local.role_keywords;
@@ -519,23 +480,22 @@ export const db = {
   },
 
   async saveRoleKeyword(kw: RoleKeyword): Promise<RoleKeyword> {
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('role_keywords').upsert(kw).select().single();
-      if (error) throw error;
-      return data;
-    }
     const local = readLocalDb();
     const idx = local.role_keywords.findIndex(k => k.id === kw.id);
     if (idx >= 0) local.role_keywords[idx] = kw;
     else local.role_keywords.push(kw);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      await safeUpsert('role_keywords', kw);
+    }
     return kw;
   },
 
   async deleteRoleKeyword(id: string): Promise<boolean> {
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('role_keywords').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      await client.from('role_keywords').delete().eq('id', id);
     }
     const local = readLocalDb();
     local.role_keywords = local.role_keywords.filter(k => k.id !== id);
@@ -545,27 +505,36 @@ export const db = {
 
   // --- CANDIDATES ---
   async getCandidates(filters?: { roleId?: string; status?: string; search?: string }): Promise<Candidate[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('candidates').select('*');
-      if (filters?.roleId) q = q.eq('assigned_role_id', filters.roleId);
-      if (filters?.status) q = q.eq('status', filters.status);
-      const { data } = await q.order('is_read', { ascending: true }).order('created_at', { ascending: false });
-      let res = data || [];
-      if (filters?.search) {
-        const s = filters.search.toLowerCase();
-        res = res.filter(c => c.full_name.toLowerCase().includes(s) || c.email.toLowerCase().includes(s) || c.phone.includes(s));
+    const client = getSupabase();
+    let list: Candidate[] = [];
+
+    if (client) {
+      try {
+        let q = client.from('candidates').select('*');
+        if (filters?.roleId) q = q.eq('assigned_role_id', filters.roleId);
+        if (filters?.status) q = q.eq('status', filters.status);
+        const { data, error } = await q.order('created_at', { ascending: false });
+        if (!error && data) {
+          list = data;
+        }
+      } catch (err) {
+        console.warn('[DB] Supabase getCandidates error:', err);
       }
-      return res;
     }
-    const local = readLocalDb();
-    let res = [...local.candidates];
-    if (filters?.roleId) res = res.filter(c => c.assigned_role_id === filters.roleId || c.applied_role_id === filters.roleId);
-    if (filters?.status) res = res.filter(c => c.status === filters.status);
+
+    if (list.length === 0) {
+      const local = readLocalDb();
+      list = [...local.candidates];
+      if (filters?.roleId) list = list.filter(c => c.assigned_role_id === filters.roleId || c.applied_role_id === filters.roleId);
+      if (filters?.status) list = list.filter(c => c.status === filters.status);
+    }
+
     if (filters?.search) {
       const s = filters.search.toLowerCase();
-      res = res.filter(c => c.full_name.toLowerCase().includes(s) || c.email.toLowerCase().includes(s) || c.phone.includes(s));
+      list = list.filter(c => c.full_name.toLowerCase().includes(s) || c.email.toLowerCase().includes(s) || c.phone.includes(s));
     }
-    return res.sort((a, b) => {
+
+    return list.sort((a, b) => {
       const aRead = a.is_read !== false;
       const bRead = b.is_read !== false;
       if (aRead !== bRead) return aRead ? 1 : -1;
@@ -574,9 +543,12 @@ export const db = {
   },
 
   async getCandidateById(id: string): Promise<Candidate | null> {
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('candidates').select('*').eq('id', id).single();
-      return data || null;
+    const client = getSupabase();
+    if (client) {
+      try {
+        const { data, error } = await client.from('candidates').select('*').eq('id', id).single();
+        if (!error && data) return data;
+      } catch {}
     }
     const local = readLocalDb();
     return local.candidates.find(c => c.id === id) || null;
@@ -593,17 +565,19 @@ export const db = {
   async findCandidateByEmailOrPhone(email?: string, phone?: string): Promise<Candidate | null> {
     const normEmail = (email || '').trim().toLowerCase();
     const cleanPhone = (phone || '').replace(/\D/g, '');
-    if (supabaseClient) {
+    const client = getSupabase();
+
+    if (client) {
       if (normEmail) {
-        const { data } = await supabaseClient.from('candidates').select('*').ilike('email', normEmail).limit(1);
+        const { data } = await client.from('candidates').select('*').ilike('email', normEmail).limit(1);
         if (data && data[0]) return data[0];
       }
       if (cleanPhone.length >= 7) {
-        const { data } = await supabaseClient.from('candidates').select('*').ilike('phone', `%${cleanPhone.slice(-10)}%`).limit(1);
+        const { data } = await client.from('candidates').select('*').ilike('phone', `%${cleanPhone.slice(-10)}%`).limit(1);
         if (data && data[0]) return data[0];
       }
-      return null;
     }
+
     const local = readLocalDb();
     return local.candidates.find(c => {
       const cEmail = (c.email || '').trim().toLowerCase();
@@ -619,31 +593,42 @@ export const db = {
     if (candidate.is_read === undefined) {
       candidate.is_read = false;
     }
-    // Deduplicate candidate profile: link to existing profile if found by email or phone
+
+    // Deduplicate candidate profile by email or phone
     const existing = await this.findCandidateByEmailOrPhone(candidate.email, candidate.phone);
     if (existing && existing.id !== candidate.id) {
       candidate.id = existing.id;
       if (existing.created_at) candidate.created_at = existing.created_at;
     }
 
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('candidates').upsert(candidate).select().single();
-      if (error) throw error;
-      return data;
-    }
+    // Local mirror
     const local = readLocalDb();
     const idx = local.candidates.findIndex(c => c.id === candidate.id);
     if (idx >= 0) local.candidates[idx] = candidate;
     else local.candidates.unshift(candidate);
     writeLocalDb(local);
+
+    // Save persistently to Supabase
+    if (isSupabaseConfigured()) {
+      const saved = await safeUpsert('candidates', candidate);
+      return { ...candidate, ...saved };
+    }
+
     return candidate;
   },
 
   async deleteCandidate(id: string): Promise<boolean> {
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('candidates').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      try {
+        await client.from('candidates').delete().eq('id', id);
+        await client.from('applications').delete().eq('candidate_id', id);
+        await client.from('resume_keyword_matches').delete().eq('candidate_id', id);
+      } catch (err) {
+        console.warn('[DB] Supabase deleteCandidate warning:', err);
+      }
     }
+
     const local = readLocalDb();
     local.candidates = local.candidates.filter(c => c.id !== id);
     local.applications = (local.applications || []).filter(a => a.candidate_id !== id);
@@ -652,12 +637,12 @@ export const db = {
     return true;
   },
 
-
   // --- RESUME KEYWORD MATCHES ---
   async getCandidateMatches(candidateId: string): Promise<ResumeKeywordMatch[]> {
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('resume_keyword_matches').select('*').eq('candidate_id', candidateId);
-      return data || [];
+    const client = getSupabase();
+    if (client) {
+      const { data } = await client.from('resume_keyword_matches').select('*').eq('candidate_id', candidateId);
+      if (data && data.length > 0) return data;
     }
     const local = readLocalDb();
     return local.resume_keyword_matches.filter(m => m.candidate_id === candidateId);
@@ -665,15 +650,20 @@ export const db = {
 
   async saveCandidateMatches(matches: ResumeKeywordMatch[]): Promise<void> {
     if (!matches.length) return;
-    if (supabaseClient) {
-      await supabaseClient.from('resume_keyword_matches').upsert(matches);
-      return;
-    }
     const local = readLocalDb();
     const cId = matches[0].candidate_id;
     local.resume_keyword_matches = local.resume_keyword_matches.filter(m => m.candidate_id !== cId);
     local.resume_keyword_matches.push(...matches);
     writeLocalDb(local);
+
+    const client = getSupabase();
+    if (client) {
+      try {
+        await client.from('resume_keyword_matches').upsert(matches);
+      } catch (err) {
+        console.warn('[DB] Supabase saveCandidateMatches warning:', err);
+      }
+    }
   },
 
   // --- APPLICATIONS (JOBS & INTERNSHIPS) ---
@@ -685,41 +675,57 @@ export const db = {
     status?: string;
     search?: string;
   }): Promise<ApplicationWithCandidate[]> {
-    const local = readLocalDb();
-    let apps = [...(local.applications || [])];
+    let apps: Application[] = [];
+    const client = getSupabase();
 
-    if (filters?.type) {
-      apps = apps.filter(a => a.application_type === filters.type);
-    }
-    if (filters?.jobId) {
-      apps = apps.filter(a => a.job_id === filters.jobId);
-    }
-    if (filters?.internshipId) {
-      apps = apps.filter(a => a.internship_id === filters.internshipId);
-    }
-    if (filters?.candidateId) {
-      apps = apps.filter(a => a.candidate_id === filters.candidateId);
-    }
-    if (filters?.status) {
-      const s = filters.status.toLowerCase().trim();
-      apps = apps.filter(a => (a.status || '').toLowerCase().trim() === s);
+    if (client && !knownMissingTables.has('applications')) {
+      try {
+        let q = client.from('applications').select('*');
+        if (filters?.type) q = q.eq('application_type', filters.type);
+        if (filters?.jobId) q = q.eq('job_id', filters.jobId);
+        if (filters?.internshipId) q = q.eq('internship_id', filters.internshipId);
+        if (filters?.candidateId) q = q.eq('candidate_id', filters.candidateId);
+        if (filters?.status) q = q.ilike('status', filters.status.trim());
+        const { data, error } = await q.order('created_at', { ascending: false });
+        if (!error && data) {
+          apps = data;
+        } else if (error && (error.code === 'PGRST205' || error.message?.includes('Could not find the table'))) {
+          knownMissingTables.add('applications');
+        }
+      } catch (err) {
+        console.warn('[DB] Supabase getApplications error:', err);
+      }
     }
 
-    const candidateMap = new Map((local.candidates || []).map(c => [c.id, c]));
-    const jobMap = new Map((local.jobs || []).map(j => [j.id, j]));
-    const internshipMap = new Map((local.internships || []).map(i => [i.id, i]));
+    if (apps.length === 0) {
+      const local = readLocalDb();
+      apps = [...(local.applications || [])];
+      if (filters?.type) apps = apps.filter(a => a.application_type === filters.type);
+      if (filters?.jobId) apps = apps.filter(a => a.job_id === filters.jobId);
+      if (filters?.internshipId) apps = apps.filter(a => a.internship_id === filters.internshipId);
+      if (filters?.candidateId) apps = apps.filter(a => a.candidate_id === filters.candidateId);
+      if (filters?.status) {
+        const s = filters.status.toLowerCase().trim();
+        apps = apps.filter(a => (a.status || '').toLowerCase().trim() === s);
+      }
+    }
 
-    let results: ApplicationWithCandidate[] = apps.map(a => {
-      const candidate = candidateMap.get(a.candidate_id);
-      const job = a.job_id ? jobMap.get(a.job_id) : undefined;
-      const internship = a.internship_id ? internshipMap.get(a.internship_id) : undefined;
-      return {
-        ...a,
-        candidate,
-        job,
-        internship
-      };
-    });
+    const [candidates, jobs, internships] = await Promise.all([
+      this.getCandidates(),
+      this.getJobs(false),
+      this.getInternships(false)
+    ]);
+
+    const candidateMap = new Map(candidates.map(c => [c.id, c]));
+    const jobMap = new Map(jobs.map(j => [j.id, j]));
+    const internshipMap = new Map(internships.map(i => [i.id, i]));
+
+    let results: ApplicationWithCandidate[] = apps.map(a => ({
+      ...a,
+      candidate: candidateMap.get(a.candidate_id),
+      job: a.job_id ? jobMap.get(a.job_id) : undefined,
+      internship: a.internship_id ? internshipMap.get(a.internship_id) : undefined
+    }));
 
     if (filters?.search) {
       const q = filters.search.toLowerCase().trim();
@@ -738,13 +744,35 @@ export const db = {
   },
 
   async getApplicationById(id: string): Promise<ApplicationWithCandidate | null> {
-    const local = readLocalDb();
-    const app = (local.applications || []).find(a => a.id === id);
+    const client = getSupabase();
+    let app: Application | null = null;
+
+    if (client && !knownMissingTables.has('applications')) {
+      try {
+        const { data, error } = await client.from('applications').select('*').eq('id', id).single();
+        if (!error && data) app = data;
+      } catch {}
+    }
+
+    if (!app) {
+      const local = readLocalDb();
+      app = (local.applications || []).find(a => a.id === id) || null;
+    }
+
     if (!app) return null;
-    const candidate = (local.candidates || []).find(c => c.id === app.candidate_id);
-    const job = app.job_id ? (local.jobs || []).find(j => j.id === app.job_id) : undefined;
-    const internship = app.internship_id ? (local.internships || []).find(i => i.id === app.internship_id) : undefined;
-    return { ...app, candidate, job, internship };
+
+    const [candidate, job, internship] = await Promise.all([
+      this.getCandidateById(app.candidate_id),
+      app.job_id ? this.getJobById(app.job_id) : Promise.resolve(null),
+      app.internship_id ? this.getInternshipById(app.internship_id) : Promise.resolve(null)
+    ]);
+
+    return {
+      ...app,
+      candidate: candidate || undefined,
+      job: job || undefined,
+      internship: internship || undefined
+    };
   },
 
   async saveApplication(application: Application): Promise<Application> {
@@ -752,22 +780,45 @@ export const db = {
     if (!application.created_at) {
       application.created_at = application.updated_at;
     }
+
     const local = readLocalDb();
     if (!local.applications) local.applications = [];
     const idx = local.applications.findIndex(a => a.id === application.id);
     if (idx >= 0) local.applications[idx] = application;
     else local.applications.unshift(application);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      try {
+        await safeUpsert('applications', application);
+      } catch (err: any) {
+        console.warn('[DB] Supabase saveApplication fallback note:', err.message);
+      }
+    }
+
     return application;
   },
 
   async updateApplicationStatus(id: string, status: ApplicationStatus, notes?: string): Promise<Application | null> {
+    const now = new Date().toISOString();
+    const client = getSupabase();
+
+    if (client && !knownMissingTables.has('applications')) {
+      try {
+        const updatePayload: Record<string, any> = { status, updated_at: now };
+        if (notes !== undefined) updatePayload.admin_notes = notes;
+        await client.from('applications').update(updatePayload).eq('id', id);
+      } catch (err) {
+        console.warn('[DB] Failed to update application in Supabase:', err);
+      }
+    }
+
     const local = readLocalDb();
     if (!local.applications) return null;
     const idx = local.applications.findIndex(a => a.id === id);
     if (idx === -1) return null;
     local.applications[idx].status = status;
-    local.applications[idx].updated_at = new Date().toISOString();
+    local.applications[idx].updated_at = now;
     if (notes !== undefined) {
       local.applications[idx].admin_notes = notes;
     }
@@ -776,35 +827,54 @@ export const db = {
   },
 
   async deleteApplication(id: string): Promise<boolean> {
+    const client = getSupabase();
+    if (client && !knownMissingTables.has('applications')) {
+      try {
+        await client.from('applications').delete().eq('id', id);
+      } catch (err) {
+        console.warn('[DB] Failed to delete application from Supabase:', err);
+      }
+    }
+
     const local = readLocalDb();
-    if (!local.applications) return true;
-    local.applications = local.applications.filter(a => a.id !== id);
-    writeLocalDb(local);
+    if (local.applications) {
+      local.applications = local.applications.filter(a => a.id !== id);
+      writeLocalDb(local);
+    }
     return true;
   },
 
   // --- LEADS ---
   async getLeads(filters?: { leadType?: string; status?: string; search?: string }): Promise<Lead[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('leads').select('*');
-      if (filters?.leadType) q = q.eq('lead_type', filters.leadType);
-      if (filters?.status) q = q.eq('status', filters.status);
-      const { data } = await q.order('is_read', { ascending: true }).order('created_at', { ascending: false });
-      let res = data || [];
-      if (filters?.search) {
-        const s = filters.search.toLowerCase();
-        res = res.filter(l => l.first_name.toLowerCase().includes(s) || l.last_name.toLowerCase().includes(s) || l.email.toLowerCase().includes(s) || l.phone.includes(s));
+    const client = getSupabase();
+    let res: Lead[] = [];
+
+    if (client) {
+      try {
+        let q = client.from('leads').select('*');
+        if (filters?.leadType) q = q.eq('lead_type', filters.leadType);
+        if (filters?.status) q = q.eq('status', filters.status);
+        const { data, error } = await q.order('created_at', { ascending: false });
+        if (!error && data) {
+          res = data;
+        }
+      } catch (err) {
+        console.warn('[DB] Supabase getLeads error:', err);
       }
-      return res;
     }
-    const local = readLocalDb();
-    let res = [...local.leads];
-    if (filters?.leadType) res = res.filter(l => l.lead_type === filters.leadType);
-    if (filters?.status) res = res.filter(l => l.status === filters.status);
+
+    if (res.length === 0) {
+      const local = readLocalDb();
+      res = [...local.leads];
+      if (filters?.leadType) res = res.filter(l => l.lead_type === filters.leadType);
+      if (filters?.status) res = res.filter(l => l.status === filters.status);
+    }
+
     if (filters?.search) {
       const s = filters.search.toLowerCase();
       res = res.filter(l => (l.first_name + ' ' + l.last_name).toLowerCase().includes(s) || l.email.toLowerCase().includes(s) || l.phone.includes(s));
     }
+
     return res.sort((a, b) => {
       const aRead = a.is_read !== false;
       const bRead = b.is_read !== false;
@@ -814,9 +884,12 @@ export const db = {
   },
 
   async getLeadById(id: string): Promise<Lead | null> {
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('leads').select('*').eq('id', id).single();
-      return data || null;
+    const client = getSupabase();
+    if (client) {
+      try {
+        const { data, error } = await client.from('leads').select('*').eq('id', id).single();
+        if (!error && data) return data;
+      } catch {}
     }
     const local = readLocalDb();
     return local.leads.find(l => l.id === id) || null;
@@ -831,16 +904,22 @@ export const db = {
   },
 
   async getUnreadCounts(): Promise<{ candidates: number; leads: number }> {
-    if (supabaseClient) {
-      const [{ count: cCount }, { count: lCount }] = await Promise.all([
-        supabaseClient.from('candidates').select('*', { count: 'exact', head: true }).eq('is_read', false),
-        supabaseClient.from('leads').select('*', { count: 'exact', head: true }).eq('is_read', false)
-      ]);
-      return {
-        candidates: cCount || 0,
-        leads: lCount || 0
-      };
+    const client = getSupabase();
+    if (client) {
+      try {
+        const [{ count: cCount, error: cErr }, { count: lCount, error: lErr }] = await Promise.all([
+          client.from('candidates').select('*', { count: 'exact', head: true }).eq('is_read', false),
+          client.from('leads').select('*', { count: 'exact', head: true }).eq('is_read', false)
+        ]);
+        if (!cErr && !lErr) {
+          return {
+            candidates: cCount || 0,
+            leads: lCount || 0
+          };
+        }
+      } catch {}
     }
+
     const local = readLocalDb();
     const candidates = (local.candidates || []).filter(c => c.is_read === false).length;
     const leads = (local.leads || []).filter(l => l.is_read === false).length;
@@ -852,23 +931,29 @@ export const db = {
     if (lead.is_read === undefined) {
       lead.is_read = false;
     }
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('leads').upsert(lead).select().single();
-      if (error) throw error;
-      return data;
-    }
+
     const local = readLocalDb();
     const idx = local.leads.findIndex(l => l.id === lead.id);
     if (idx >= 0) local.leads[idx] = lead;
     else local.leads.unshift(lead);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      const saved = await safeUpsert('leads', lead);
+      return { ...lead, ...saved };
+    }
+
     return lead;
   },
 
   async deleteLead(id: string): Promise<boolean> {
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('leads').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      try {
+        await client.from('leads').delete().eq('id', id);
+      } catch (err) {
+        console.warn('[DB] Supabase deleteLead error:', err);
+      }
     }
     const local = readLocalDb();
     local.leads = local.leads.filter(l => l.id !== id);
@@ -876,15 +961,16 @@ export const db = {
     return true;
   },
 
-
-
   // --- JOBS ---
   async getJobs(activeOnly = true): Promise<Job[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('jobs').select('*');
-      if (activeOnly) q = q.eq('is_active', true);
-      const { data } = await q.order('created_at', { ascending: false });
-      return data || [];
+    const client = getSupabase();
+    if (client) {
+      try {
+        let q = client.from('jobs').select('*');
+        if (activeOnly) q = q.eq('is_active', true);
+        const { data, error } = await q.order('created_at', { ascending: false });
+        if (!error && data && data.length > 0) return data;
+      } catch {}
     }
     const local = readLocalDb();
     let res = local.jobs;
@@ -892,25 +978,36 @@ export const db = {
     return res.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   },
 
+  async getJobById(id: string): Promise<Job | null> {
+    const client = getSupabase();
+    if (client) {
+      try {
+        const { data } = await client.from('jobs').select('*').eq('id', id).single();
+        if (data) return data;
+      } catch {}
+    }
+    const jobs = await this.getJobs(false);
+    return jobs.find(j => j.id === id) || null;
+  },
+
   async saveJob(job: Job): Promise<Job> {
     job.updated_at = new Date().toISOString();
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('jobs').upsert(job).select().single();
-      if (error) throw error;
-      return data;
-    }
     const local = readLocalDb();
     const idx = local.jobs.findIndex(j => j.id === job.id);
     if (idx >= 0) local.jobs[idx] = job;
     else local.jobs.unshift(job);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      await safeUpsert('jobs', job);
+    }
     return job;
   },
 
   async deleteJob(id: string): Promise<boolean> {
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('jobs').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      try { await client.from('jobs').delete().eq('id', id); } catch {}
     }
     const local = readLocalDb();
     local.jobs = local.jobs.filter(j => j.id !== id);
@@ -920,11 +1017,14 @@ export const db = {
 
   // --- INTERNSHIPS ---
   async getInternships(activeOnly = true): Promise<Internship[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('internships').select('*');
-      if (activeOnly) q = q.eq('is_active', true);
-      const { data } = await q.order('created_at', { ascending: false });
-      return data || [];
+    const client = getSupabase();
+    if (client) {
+      try {
+        let q = client.from('internships').select('*');
+        if (activeOnly) q = q.eq('is_active', true);
+        const { data, error } = await q.order('created_at', { ascending: false });
+        if (!error && data && data.length > 0) return data;
+      } catch {}
     }
     const local = readLocalDb();
     let res = local.internships;
@@ -932,25 +1032,36 @@ export const db = {
     return res.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   },
 
+  async getInternshipById(id: string): Promise<Internship | null> {
+    const client = getSupabase();
+    if (client) {
+      try {
+        const { data } = await client.from('internships').select('*').eq('id', id).single();
+        if (data) return data;
+      } catch {}
+    }
+    const internships = await this.getInternships(false);
+    return internships.find(i => i.id === id) || null;
+  },
+
   async saveInternship(internship: Internship): Promise<Internship> {
     internship.updated_at = new Date().toISOString();
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('internships').upsert(internship).select().single();
-      if (error) throw error;
-      return data;
-    }
     const local = readLocalDb();
     const idx = local.internships.findIndex(i => i.id === internship.id);
     if (idx >= 0) local.internships[idx] = internship;
     else local.internships.unshift(internship);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      await safeUpsert('internships', internship);
+    }
     return internship;
   },
 
   async deleteInternship(id: string): Promise<boolean> {
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('internships').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      try { await client.from('internships').delete().eq('id', id); } catch {}
     }
     const local = readLocalDb();
     local.internships = local.internships.filter(i => i.id !== id);
@@ -960,11 +1071,14 @@ export const db = {
 
   // --- TESTIMONIALS ---
   async getTestimonials(publishedOnly = true): Promise<Testimonial[]> {
-    if (supabaseClient) {
-      let q = supabaseClient.from('testimonials').select('*');
-      if (publishedOnly) q = q.eq('is_published', true);
-      const { data } = await q.order('display_order', { ascending: true });
-      return data || [];
+    const client = getSupabase();
+    if (client) {
+      try {
+        let q = client.from('testimonials').select('*');
+        if (publishedOnly) q = q.eq('is_published', true);
+        const { data, error } = await q.order('display_order', { ascending: true });
+        if (!error && data && data.length > 0) return data;
+      } catch {}
     }
     const local = readLocalDb();
     let res = local.testimonials;
@@ -973,9 +1087,12 @@ export const db = {
   },
 
   async getTestimonialById(id: string): Promise<Testimonial | null> {
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('testimonials').select('*').eq('id', id).single();
-      return data || null;
+    const client = getSupabase();
+    if (client) {
+      try {
+        const { data } = await client.from('testimonials').select('*').eq('id', id).single();
+        if (data) return data;
+      } catch {}
     }
     const local = readLocalDb();
     return local.testimonials.find(t => t.id === id) || null;
@@ -983,7 +1100,6 @@ export const db = {
 
   async saveTestimonial(testimonial: Testimonial): Promise<Testimonial> {
     testimonial.updated_at = new Date().toISOString();
-    // Keep poster_url and thumbnail_url mutually aligned per record
     if (testimonial.thumbnail_url && !testimonial.poster_url) {
       testimonial.poster_url = testimonial.thumbnail_url;
     }
@@ -991,16 +1107,16 @@ export const db = {
       testimonial.thumbnail_url = testimonial.poster_url;
     }
 
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('testimonials').upsert(testimonial).select().single();
-      if (error) throw error;
-      return data;
-    }
     const local = readLocalDb();
     const idx = local.testimonials.findIndex(t => t.id === testimonial.id);
     if (idx >= 0) local.testimonials[idx] = testimonial;
     else local.testimonials.push(testimonial);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      const saved = await safeUpsert('testimonials', testimonial);
+      return { ...testimonial, ...saved };
+    }
     return testimonial;
   },
 
@@ -1013,9 +1129,9 @@ export const db = {
   },
 
   async deleteTestimonial(id: string): Promise<boolean> {
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('testimonials').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      try { await client.from('testimonials').delete().eq('id', id); } catch {}
     }
     const local = readLocalDb();
     local.testimonials = local.testimonials.filter(t => t.id !== id);
@@ -1026,21 +1142,24 @@ export const db = {
   // --- MEDIA LIBRARY ---
   async getMedia(category?: string, publishedOnly: boolean = false): Promise<MediaItem[]> {
     const normalizedCategory = category ? category.toLowerCase().trim() : '';
+    const client = getSupabase();
 
-    if (supabaseClient) {
-      let query = supabaseClient.from('media_library').select('*');
-      if (normalizedCategory) {
-        if (normalizedCategory.includes('activit')) {
-          query = query.or('category.ilike.%activit%,category.eq.activities,category.eq.Activities Gallery');
-        } else {
-          query = query.ilike('category', `%${normalizedCategory}%`);
+    if (client) {
+      try {
+        let query = client.from('media_library').select('*');
+        if (normalizedCategory) {
+          if (normalizedCategory.includes('activit')) {
+            query = query.or('category.ilike.%activit%,category.eq.activities,category.eq.Activities Gallery');
+          } else {
+            query = query.ilike('category', `%${normalizedCategory}%`);
+          }
         }
-      }
-      if (publishedOnly) {
-        query = query.eq('is_published', true);
-      }
-      const { data } = await query.order('display_order', { ascending: true }).order('created_at', { ascending: false });
-      return data || [];
+        if (publishedOnly) {
+          query = query.eq('is_published', true);
+        }
+        const { data, error } = await query.order('display_order', { ascending: true }).order('created_at', { ascending: false });
+        if (!error && data) return data;
+      } catch {}
     }
 
     const local = readLocalDb();
@@ -1068,34 +1187,41 @@ export const db = {
   },
 
   async getMediaById(id: string): Promise<MediaItem | null> {
-    if (supabaseClient) {
-      const { data } = await supabaseClient.from('media_library').select('*').eq('id', id).single();
-      return data || null;
+    const client = getSupabase();
+    if (client) {
+      try {
+        const { data } = await client.from('media_library').select('*').eq('id', id).single();
+        if (data) return data;
+      } catch {}
     }
     const local = readLocalDb();
     return (local.media_library || []).find(m => m.id === id) || null;
   },
 
   async saveMedia(item: MediaItem): Promise<MediaItem> {
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('media_library').upsert(item).select().single();
-      if (error) throw error;
-      return data;
-    }
     const local = readLocalDb();
     if (!local.media_library) local.media_library = [];
     local.media_library.unshift(item);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      const saved = await safeUpsert('media_library', item);
+      return { ...item, ...saved };
+    }
     return item;
   },
 
   async updateMedia(id: string, updates: Partial<MediaItem>): Promise<MediaItem | null> {
     const now = new Date().toISOString();
-    if (supabaseClient) {
-      const { data, error } = await supabaseClient.from('media_library').update({ ...updates, updated_at: now }).eq('id', id).select().single();
-      if (error) throw error;
-      return data;
+    const client = getSupabase();
+
+    if (client) {
+      try {
+        const { data, error } = await client.from('media_library').update({ ...updates, updated_at: now }).eq('id', id).select().single();
+        if (!error && data) return data;
+      } catch {}
     }
+
     const local = readLocalDb();
     if (!local.media_library) return null;
     const idx = local.media_library.findIndex(m => m.id === id);
@@ -1106,38 +1232,26 @@ export const db = {
   },
 
   async deleteMedia(id: string): Promise<boolean> {
-    let deletedItem: MediaItem | undefined;
-    if (supabaseClient) {
-      const { error } = await supabaseClient.from('media_library').delete().eq('id', id);
-      return !error;
+    const client = getSupabase();
+    if (client) {
+      try { await client.from('media_library').delete().eq('id', id); } catch {}
     }
     const local = readLocalDb();
-    if (!local.media_library) return true;
-    deletedItem = local.media_library.find(m => m.id === id);
-    local.media_library = local.media_library.filter(m => m.id !== id);
-    writeLocalDb(local);
-
-    // Clean up local disk file if it exists in public/uploads/media
-    if (deletedItem && deletedItem.file_url && deletedItem.file_url.startsWith('/uploads/media/')) {
-      try {
-        const localFilePath = path.resolve('public' + deletedItem.file_url);
-        if (fs.existsSync(localFilePath)) {
-          fs.unlinkSync(localFilePath);
-        }
-      } catch (e) {
-        console.warn('Could not delete media file from disk:', e);
-      }
+    if (local.media_library) {
+      local.media_library = local.media_library.filter(m => m.id !== id);
+      writeLocalDb(local);
     }
     return true;
   },
 
   // --- DASHBOARD KPIS ---
   async getDashboardStats() {
-    const [candidates, leads, jobs, internships] = await Promise.all([
+    const [candidates, leads, jobs, internships, applications] = await Promise.all([
       this.getCandidates(),
       this.getLeads(),
       this.getJobs(false),
-      this.getInternships(false)
+      this.getInternships(false),
+      this.getApplications()
     ]);
 
     const now = new Date();
@@ -1163,10 +1277,8 @@ export const db = {
     const interview = candidates.filter(c => norm(c.status) === 'interview').length;
     const rejected = candidates.filter(c => norm(c.status) === 'rejected').length;
 
-    const local = readLocalDb();
-    const apps = local.applications || [];
-    const directJobApps = apps.filter(a => a.application_type === 'job').length;
-    const directInternshipApps = apps.filter(a => a.application_type === 'internship').length;
+    const directJobApps = applications.filter(a => a.application_type === 'job').length;
+    const directInternshipApps = applications.filter(a => a.application_type === 'internship').length;
 
     const courseInquiries = leads.filter(l => norm(l.lead_type) === 'course').length;
     const counselingLeads = leads.filter(l => norm(l.lead_type) === 'counseling').length;
@@ -1180,7 +1292,7 @@ export const db = {
 
     return {
       totalResumes: candidates.length,
-      totalApplications: apps.length,
+      totalApplications: applications.length,
       directJobApplications: directJobApps,
       directInternshipApplications: directInternshipApps,
       newResumesToday,
@@ -1208,21 +1320,53 @@ export const db = {
 
   // --- ANALYTICS ---
   async getAnalyticsSessions(): Promise<AnalyticsSession[]> {
+    const client = getSupabase();
+    if (client && !knownMissingTables.has('analytics_sessions')) {
+      try {
+        const { data, error } = await client.from('analytics_sessions').select('*').order('started_at', { ascending: false });
+        if (!error && data) return data;
+      } catch {}
+    }
     const local = readLocalDb();
     return local.analytics_sessions || [];
   },
+
   async getAnalyticsPageviews(): Promise<AnalyticsPageview[]> {
+    const client = getSupabase();
+    if (client && !knownMissingTables.has('analytics_pageviews')) {
+      try {
+        const { data, error } = await client.from('analytics_pageviews').select('*').order('started_at', { ascending: false });
+        if (!error && data) return data;
+      } catch {}
+    }
     const local = readLocalDb();
     return local.analytics_pageviews || [];
   },
+
   async getAnalyticsSections(): Promise<AnalyticsSection[]> {
+    const client = getSupabase();
+    if (client && !knownMissingTables.has('analytics_sections')) {
+      try {
+        const { data, error } = await client.from('analytics_sections').select('*').order('viewed_at', { ascending: false });
+        if (!error && data) return data;
+      } catch {}
+    }
     const local = readLocalDb();
     return local.analytics_sections || [];
   },
+
   async getAnalyticsEvents(): Promise<AnalyticsEvent[]> {
+    const client = getSupabase();
+    if (client && !knownMissingTables.has('analytics_events')) {
+      try {
+        const { data, error } = await client.from('analytics_events').select('*').order('created_at', { ascending: false });
+        if (!error && data) return data;
+      } catch {}
+    }
     const local = readLocalDb();
     return local.analytics_events || [];
   },
+
   async saveAnalyticsSession(session: AnalyticsSession): Promise<void> {
     const local = readLocalDb();
     if (!local.analytics_sessions) local.analytics_sessions = [];
@@ -1230,7 +1374,12 @@ export const db = {
     if (idx >= 0) local.analytics_sessions[idx] = session;
     else local.analytics_sessions.push(session);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      try { await safeUpsert('analytics_sessions', session); } catch {}
+    }
   },
+
   async saveAnalyticsPageview(pv: AnalyticsPageview): Promise<void> {
     const local = readLocalDb();
     if (!local.analytics_pageviews) local.analytics_pageviews = [];
@@ -1241,7 +1390,12 @@ export const db = {
       local.analytics_pageviews.push(pv);
     }
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      try { await safeUpsert('analytics_pageviews', pv); } catch {}
+    }
   },
+
   async saveAnalyticsSection(sec: AnalyticsSection): Promise<void> {
     const local = readLocalDb();
     if (!local.analytics_sections) local.analytics_sections = [];
@@ -1252,11 +1406,20 @@ export const db = {
       local.analytics_sections.push(sec);
     }
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      try { await safeUpsert('analytics_sections', sec); } catch {}
+    }
   },
+
   async saveAnalyticsEvent(evt: AnalyticsEvent): Promise<void> {
     const local = readLocalDb();
     if (!local.analytics_events) local.analytics_events = [];
     local.analytics_events.push(evt);
     writeLocalDb(local);
+
+    if (isSupabaseConfigured()) {
+      try { await safeUpsert('analytics_events', evt); } catch {}
+    }
   }
 };

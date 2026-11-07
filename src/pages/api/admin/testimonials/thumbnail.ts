@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { db } from '../../../../lib/db';
+import { storage } from '../../../../lib/storage';
 import { isAdmin, getSafeCorsHeaders } from '../../../../lib/auth';
 
 const PUBLIC_UPLOADS_DIR = path.resolve('public/uploads/testimonials');
@@ -63,14 +64,8 @@ export const POST: APIRoute = async ({ request }) => {
           });
         }
 
-        if (!fs.existsSync(PUBLIC_UPLOADS_DIR)) {
-          fs.mkdirSync(PUBLIC_UPLOADS_DIR, { recursive: true });
-        }
-
-        const safePosterName = `${crypto.randomUUID()}${ext}`;
-        const posterBuffer = Buffer.from(await posterFile.arrayBuffer());
-        fs.writeFileSync(path.join(PUBLIC_UPLOADS_DIR, safePosterName), posterBuffer);
-        newThumbnailUrl = `/uploads/testimonials/${safePosterName}`;
+        const uploadRes = await storage.saveMediaFile(posterFile, 'testimonials');
+        newThumbnailUrl = uploadRes.fileUrl;
       }
     } else {
       const body = await request.json();
@@ -99,12 +94,8 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Clean up old custom uploaded file if unique to this story
-    if (story.poster_url && story.poster_url.startsWith('/uploads/testimonials/') && story.poster_url !== newThumbnailUrl) {
-      const oldFileName = path.basename(story.poster_url);
-      const oldFilePath = path.join(PUBLIC_UPLOADS_DIR, oldFileName);
-      if (fs.existsSync(oldFilePath)) {
-        try { fs.unlinkSync(oldFilePath); } catch {}
-      }
+    if (story.poster_url && story.poster_url !== newThumbnailUrl) {
+      await storage.deleteMediaFile(story.poster_url);
     }
 
     // Save strictly to this target story record only

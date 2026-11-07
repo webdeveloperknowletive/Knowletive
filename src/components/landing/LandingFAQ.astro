@@ -1,0 +1,100 @@
+---
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs: FAQItem[];
+  title?: string;
+  subtitle?: string;
+}
+
+const { 
+  faqs, 
+  title = "Frequently Asked Questions",
+  subtitle = "Clear answers to common questions about our service, process, and deliverables."
+} = Astro.props;
+---
+
+<section id="faqs" class="section-padding bg-white border-t border-gray-100" data-analytics-section="faqs">
+  <div class="container-custom max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-xs tracking-wider uppercase mb-3 border border-[#0878E8]/20">
+        FAQs
+      </div>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+        {title}
+      </h2>
+      <p class="text-[#64748B] text-sm md:text-base max-w-2xl mx-auto">
+        {subtitle}
+      </p>
+    </div>
+
+    <!-- Accordion List -->
+    <div class="space-y-3.5" role="region" aria-label="Frequently Asked Questions Accordion">
+      {faqs.map((faq, index) => (
+        <div class="faq-item border border-gray-200 rounded-2xl bg-white overflow-hidden transition-all duration-200 hover:border-blue-200">
+          <button 
+            type="button" 
+            id={`faq-btn-${index}`}
+            aria-expanded="false" 
+            aria-controls={`faq-answer-${index}`}
+            class="faq-toggle w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0878E8] focus:ring-offset-2 transition-colors rounded-2xl"
+          >
+            <span class="font-manrope font-bold text-[#0B1F3A] text-sm sm:text-base pr-2 leading-snug">
+              {faq.question}
+            </span>
+            <span class="faq-icon shrink-0 w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-[#0878E8] transition-transform duration-300">
+              <svg class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </span>
+          </button>
+          <div 
+            id={`faq-answer-${index}`}
+            role="region" 
+            aria-labelledby={`faq-btn-${index}`}
+            class="faq-content hidden px-5 sm:px-6 pb-6 text-xs sm:text-sm text-[#64748B] leading-relaxed border-t border-gray-100 pt-3"
+          >
+            <p>{faq.answer}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupFaqs() {
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      const toggle = item.querySelector('.faq-toggle');
+      const content = item.querySelector('.faq-content');
+      const icon = item.querySelector('.faq-icon svg');
+
+      if (!toggle || !content) return;
+
+      toggle.addEventListener('click', () => {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        
+        // Toggle current
+        toggle.setAttribute('aria-expanded', String(!isExpanded));
+        if (isExpanded) {
+          content.classList.add('hidden');
+          icon?.classList.remove('rotate-180');
+        } else {
+          content.classList.remove('hidden');
+          icon?.classList.add('rotate-180');
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFaqs);
+  } else {
+    setupFaqs();
+  }
+</script>
+

@@ -1,0 +1,241 @@
+---
+// ============================================================
+// /coachgenie
+// Conversion-Focused Landing Page: Coachgenie by Knowletive
+// Primary CTA: "Enquire About Coachgenie"
+// ============================================================
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LandingHeader from '../components/landing/LandingHeader.astro';
+import LandingLeadForm, { type FormField } from '../components/landing/LandingLeadForm.astro';
+import LandingFAQ from '../components/landing/LandingFAQ.astro';
+import StickyMobileCTA from '../components/landing/StickyMobileCTA.astro';
+import UTMTracker from '../components/landing/UTMTracker.astro';
+
+const serviceTitle = "Coachgenie by Knowletive";
+const primaryCta = "Enquire About Coachgenie";
+
+const customFields: FormField[] = [
+  {
+    name: "currentStatus",
+    label: "I Am A",
+    type: "select",
+    required: true,
+    placeholder: "Select your profile",
+    options: [
+      { value: "Student / Job Seeker seeking 1-on-1 coaching", label: "Student / Job Seeker (Seeking 1-on-1 Mentorship & Mock Interviews)" },
+      { value: "Working Professional aiming for promotion/switch", label: "Working Professional (Aiming for Senior Role Transition)" },
+      { value: "Institutional / College Representative", label: "College / Training Institute (Exploring Student Coaching)" },
+      { value: "Industry Mentor / Coach", label: "Industry Mentor (Interested in Coaching Network)" }
+    ]
+  },
+  {
+    name: "message",
+    label: "What Specific Coaching Support Are You Seeking?",
+    type: "textarea",
+    required: true,
+    placeholder: "e.g. Technical mock interview practice, personalized coding mentor, resume review, leadership interview prep..."
+  }
+];
+
+const pillars = [
+  {
+    title: "1-on-1 Technical Mock Interviews",
+    desc: "Rigorous coding, system design, and algorithmic problem-solving sessions evaluated by active engineering leads with line-by-line feedback."
+  },
+  {
+    title: "Personalized Skill Roadmaps",
+    desc: "No cookie-cutter courses. Custom milestones built around your target companies, tech stack preferences, and current knowledge gaps."
+  },
+  {
+    title: "Behavioral & Leadership Readiness",
+    desc: "Master STAR method storytelling, scenario-based problem solving, salary negotiation tactics, and managerial evaluation rounds."
+  },
+  {
+    title: "Resume & Portfolio Teardown",
+    desc: "Detailed audit of your GitHub repositories, production deployments, and resume impact metrics to ensure high recruiter callback rates."
+  }
+];
+
+const faqs = [
+  {
+    question: "What is Coachgenie?",
+    answer: "Coachgenie is Knowletive's premium 1-on-1 mentorship and career acceleration initiative designed to bridge the gap between classroom training and elite tech interviews through dedicated industry mentors."
+  },
+  {
+    question: "Who are the mentors and coaches in Coachgenie?",
+    answer: "Our mentors are experienced practitioners and technical leads working across enterprise IT, product companies, and analytics firms in Pune, Bangalore, and leading tech ecosystems."
+  },
+  {
+    question: "Is Coachgenie suitable for complete beginners?",
+    answer: "Coachgenie accommodates both beginners seeking foundational direction and experienced developers looking to crack senior or specialized engineering roles."
+  },
+  {
+    question: "How are sessions conducted and scheduled?",
+    answer: "Sessions are conducted 1-on-1 via secure video meeting platforms at flexible times (including evenings and weekends) arranged between you and your assigned mentor."
+  },
+  {
+    question: "What are the fees for Coachgenie?",
+    answer: "Pricing depends on your customized mentorship scope (single mock interview vs. structured multi-week career transformation cohort). Details and options are shared during your initial discovery call."
+  }
+];
+---
+
+<BaseLayout 
+  title="Coachgenie | 1-on-1 Tech Mentorship & Interview Coaching — Knowletive"
+  description="Accelerate your tech career with Coachgenie by Knowletive. 1-on-1 mentorship, live technical mock interviews, and personalized career roadmaps in Pune."
+>
+  <UTMTracker />
+  <LandingHeader primaryCtaText={primaryCta} serviceTitle={serviceTitle} />
+
+  <!-- HERO SECTION -->
+  <section id="overview" class="page-header-spacing pb-16 bg-[#0B1F3A] text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(#0878E8 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+    <div class="container-custom relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Left: Headline & Pitch -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#F47A16] font-bold text-xs uppercase tracking-wider mb-5">
+            <span class="w-2 h-2 rounded-full bg-[#F47A16] animate-pulse"></span>
+            Knowletive Mentor Acceleration Program
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-manrope font-extrabold tracking-tight text-white mb-5 leading-tight">
+            1-on-1 Mentorship <br/>
+            <span class="text-[#F47A16]">That Transforms Your Career.</span>
+          </h1>
+
+          <p class="text-blue-100 text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-6 leading-relaxed">
+            Crack elite technical interviews with personalized coaching from experienced industry practitioners. Live mock interviews, system design teardowns, and actionable feedback.
+          </p>
+
+          <!-- Honest Status Notice -->
+          <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 max-w-xl text-left text-xs text-blue-200/90 leading-relaxed mb-8">
+            <strong class="text-white block mb-0.5">🚀 Cohort & Private Mentorship Access:</strong>
+            Coachgenie pairs aspiring developers and professionals directly with working tech mentors. Inquire today to check mentor availability and discuss your customized coaching objectives.
+          </div>
+
+          <!-- Secondary Actions -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+            <a href="#lead-form" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-xl">
+              {primaryCta}
+            </a>
+            <a 
+              href="https://wa.me/919970600116?text=Hi%20Knowletive%2C%20I%20would%20like%20to%20learn%20more%20about%20Coachgenie%20mentorship." 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs border border-white/20 transition-all"
+            >
+              <svg class="w-4 h-4 text-[#25D366] fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="lg:col-span-5">
+          <LandingLeadForm 
+            serviceId="coachgenie"
+            serviceName={serviceTitle}
+            primaryCta={primaryCta}
+            headline="Inquire About Coachgenie Mentorship"
+            subheadline="Tell us your target role and goals to match with an appropriate coach."
+            customFields={customFields}
+            compact={true}
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: PILLARS -->
+  <section id="pillars" class="section-padding bg-gray-50" data-analytics-section="pillars">
+    <div class="container-custom">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0878E8]/10 text-[#0878E8] font-bold text-xs uppercase tracking-wider mb-3">
+          Mentorship Framework
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          Core Pillars of Coachgenie
+        </h2>
+        <p class="text-[#64748B] text-sm md:text-base">
+          Personalized human guidance structured for maximum real-world interview impact.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {pillars.map((pil, idx) => (
+          <div class="card-premium border border-gray-200 bg-white p-6 sm:p-8">
+            <span class="text-xs font-mono font-bold text-[#F47A16] block mb-2">Pillar 0{idx + 1}</span>
+            <h3 class="text-xl font-bold font-manrope text-[#0B1F3A] mb-3">{pil.title}</h3>
+            <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed">{pil.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: ONBOARDING PROCESS -->
+  <section class="section-padding bg-white" data-analytics-section="process">
+    <div class="container-custom max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl sm:text-3xl font-manrope font-extrabold text-[#0B1F3A] mb-3">
+          Coachgenie Mentorship Journey
+        </h2>
+        <p class="text-[#64748B] text-sm">Four structured milestones from assessment to mastery.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-[#0B1F3A] text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">1</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">Diagnostic Review</h3>
+          <p class="text-xs text-[#64748B]">Assess your code, resume, and current interview benchmarks.</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-[#0878E8] text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">2</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">Mentor Match</h3>
+          <p class="text-xs text-[#64748B]">Paired with a specialized tech practitioner in your field.</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-[#F47A16] text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">3</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">1-on-1 Sprints</h3>
+          <p class="text-xs text-[#64748B]">Targeted mock rounds and deep-dive code reviews.</p>
+        </div>
+        <div class="text-center p-4">
+          <div class="w-12 h-12 rounded-full bg-emerald-600 text-white font-manrope font-bold text-sm flex items-center justify-center mx-auto mb-3 shadow-md">4</div>
+          <h3 class="font-bold text-sm text-[#0B1F3A] mb-1">Interview Readiness</h3>
+          <p class="text-xs text-[#64748B]">Enter recruitment rounds with confidence and polish.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: FAQS -->
+  <LandingFAQ faqs={faqs} title="Frequently Asked Questions on Coachgenie" />
+
+  <!-- SECTION 5: FINAL CTA -->
+  <section class="section-padding bg-gray-50 border-t border-gray-200 text-center" data-analytics-section="final-cta">
+    <div class="container-custom max-w-3xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-manrope font-extrabold text-[#0B1F3A] mb-4">
+        Ready to Work With a Dedicated Mentor?
+      </h2>
+      <p class="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto mb-8">
+        Submit your background and target tech roles to check coach availability.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#lead-form" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-sm shadow-md">
+          {primaryCta}
+        </a>
+        <a href="tel:+919970600116" class="btn-secondary w-full sm:w-auto px-6 py-3.5 text-xs font-bold">
+          Call +91 99706 00116
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <StickyMobileCTA primaryCtaText={primaryCta} serviceName={serviceTitle} />
+</BaseLayout>
+

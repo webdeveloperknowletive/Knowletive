@@ -263,43 +263,49 @@ export const POST: APIRoute = async ({ request }) => {
       updated_at: now
     };
 
-    // 8. Save candidate profile to database
-    await db.saveCandidate(candidate);
+    // 8. Save candidate, application, and keyword matches to database
+    try {
+      await db.saveCandidate(candidate);
 
-    // 9. Save dedicated Application record
-    const applicationId = crypto.randomUUID();
-    const application = {
-      id: applicationId,
-      candidate_id: candidate.id,
-      application_type: applicationType,
-      job_id: applicationType === 'job' && jobId ? jobId : null,
-      internship_id: applicationType === 'internship' && internshipId ? internshipId : null,
-      applied_role: appliedRole,
-      status: 'New' as const,
-      resume_url: uploadResult.downloadUrl,
-      resume_file_name: uploadResult.originalFileName,
-      resume_file_size: uploadResult.fileSize,
-      match_score: matchAnalysis.topScore,
-      matched_keywords: candidate.resume_keywords,
-      skills: candidate.skills,
-      source: candidate.source,
-      created_at: now,
-      updated_at: now
-    };
+      // 9. Save dedicated Application record
+      const applicationId = crypto.randomUUID();
+      const application = {
+        id: applicationId,
+        candidate_id: candidate.id,
+        application_type: applicationType,
+        job_id: applicationType === 'job' && jobId ? jobId : null,
+        internship_id: applicationType === 'internship' && internshipId ? internshipId : null,
+        applied_role: appliedRole,
+        status: 'New' as const,
+        resume_url: uploadResult.downloadUrl,
+        resume_file_name: uploadResult.originalFileName,
+        resume_file_size: uploadResult.fileSize,
+        match_score: matchAnalysis.topScore,
+        matched_keywords: candidate.resume_keywords,
+        skills: candidate.skills,
+        source: candidate.source,
+        created_at: now,
+        updated_at: now
+      };
 
-    await db.saveApplication(application);
+      await db.saveApplication(application);
 
-    const keywordMatchesToSave: ResumeKeywordMatch[] = matchAnalysis.keywordMatchesToPersist.map(m => ({
-      id: crypto.randomUUID(),
-      candidate_id: candidate.id,
-      job_role_id: m.job_role_id,
-      keyword: m.keyword,
-      matched: m.matched,
-      weight: m.weight,
-      created_at: now
-    }));
+      const keywordMatchesToSave: ResumeKeywordMatch[] = matchAnalysis.keywordMatchesToPersist.map(m => ({
+        id: crypto.randomUUID(),
+        candidate_id: candidate.id,
+        job_role_id: m.job_role_id,
+        keyword: m.keyword,
+        matched: m.matched,
+        weight: m.weight,
+        created_at: now
+      }));
 
-    await db.saveCandidateMatches(keywordMatchesToSave);
+      await db.saveCandidateMatches(keywordMatchesToSave);
+    } catch (saveErr) {
+      console.error('[Upload] Database save failed; cleaning up uploaded resume to prevent orphaned file:', saveErr);
+      await storage.deleteResume(uploadResult.storagePath || uploadResult.fileId);
+      throw saveErr;
+    }
 
     const corsHeaders = getSafeCorsHeaders(request, 'POST, OPTIONS');
 
